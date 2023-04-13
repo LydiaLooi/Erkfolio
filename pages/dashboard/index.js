@@ -52,8 +52,9 @@ function DashboardHome() {
                 <p><label>Name: </label><input name='name' type="text" placeholder="Name" /></p>
                 <p><label>Image: </label><input name='image' type="file" placeholder="Image" /></p>
                 <button type="submit">Submit</button>
-                <button onClick={() => auth.signOut()}>Sign out</button>
             </form>
+            <button onClick={() => auth.signOut()}>Sign out</button>
+
         </div>
     )
 }
