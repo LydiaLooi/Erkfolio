@@ -19,12 +19,12 @@ function DashboardHome() {
         const description = form.current[1]?.value;
         const tags = form.current[2]?.value;
         const date_created = form.current[3]?.value;
-        const pinned = form.current[4]?.value;
+        const pinned = form.current[4]?.checked;
         const image = form.current[5]?.files[0];
 
         let tagsArray = [];
 
-        tagsArray = tags.split(",")
+        tagsArray = tags.split(",").map(tag => tag.trim());
 
         const storageRef = ref(storage, `${artCollection}/${image.name}`)
 
@@ -60,11 +60,11 @@ function DashboardHome() {
             <p>You're logged in!</p>
             <form ref={form} onSubmit={submitArt}>
 
-                <p><label>Title*: </label><input name='title' type="text" placeholder="Title" required /></p>
+                <p><label>Name*: </label><input name='name' type="text" placeholder="Name" required /></p>
                 <p><label>Description: </label><input name='description' type="text" placeholder="Description" /></p>
                 <p><label>Tags: </label><input name='tags' type="text" placeholder="Tags" /></p>
                 <p><label>Date created*: </label><input name='date_created' type="date" required /></p>
-                <p><label>Pinned: </label><input name='pinned' type="checkbox" placeholder="False" /></p>
+                <p><label>Pinned: </label><input name='pinned' type="checkbox" placeholder="false" /></p>
                 <p><label>Image*: </label><input name='image' type="file" placeholder="Image" required /></p>
                 <button type="submit">Submit</button>
             </form>

@@ -37,6 +37,10 @@
     padding-top: 1px;
 }
 
+.marginBottom50px {
+    margin-bottom: 50px;
+}
+
 .list {
     list-style: none;
     padding: 0;
@@ -49,4 +53,13 @@
 
 .lightText {
     color: #666;
+}
+
+.underline {
+    text-align: center;
+    mask-image: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, #362BCF 25%, #170F40 75%, rgba(255, 255, 255, 0) 100%);
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.1), inset 0 -1px #E79F5E;
+    padding-right: 100px;
+    padding-left: 100px;
+    padding-top: 10px;
 }

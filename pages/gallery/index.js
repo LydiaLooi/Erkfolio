@@ -1,49 +1,34 @@
 import Head from 'next/head';
 import Image from 'next/image'
 import Layout from '../../components/layout';
-import utilStyles from '../../styles/utils.module.css';
 import GalleryLayout from '../../components/gallery_layout';
 import { useEffect, useState } from 'react';
-import { collection, getDocs } from 'firebase/firestore/lite';
+import { collection, getDocs, orderBy, query, where } from 'firebase/firestore/lite';
 import { db } from '../../lib/firebase';
+import ArtGallery from '../../components/gallery';
+import utilStyles from '../../styles/utils.module.css'
 
 
-function ArtGallery({ testData }) {
-    return (
-        <section>
-            <div className="wrapper">
-                <div className="gallery">
 
-                    {testData.map(({ name, url }) => (
-                        <Image
-                            key={url}
-                            src={url}
-                            height={500}
-                            width={500}
-                            alt={name}
-                        />
-                    ))}
-
-                </div>
-            </div>
-        </section>
-    )
-}
 
 export default function GalleryHome() {
 
     const [artData, setArtCollection] = useState([]);
 
     useEffect(() => {
-        getAllArt();
+        getAllArtOrderedByRecency();
     }, []);
 
-    async function getAllArt() {
-        const querySnapshot = await getDocs(collection(db, 'art'));
+    async function getAllArtOrderedByRecency() {
+        const querySnapshot = await getDocs(query(collection(db, 'art'), orderBy('date_created', 'desc')));
         setArtCollection(querySnapshot.docs.map((doc) => doc.data()));
     }
 
-    console.log(artData);
+    async function filterResults() {
+        const querySnapshot = await getDocs(query(collection(db, 'art'), where('tagsArray', 'array-contains', 'omori')));
+        setArtCollection(querySnapshot.docs.map((doc) => doc.data()));
+    }
+
 
     return (
         <div>
@@ -51,9 +36,14 @@ export default function GalleryHome() {
                 <Head>
                     <title>Gallery</title>
                 </Head>
+                {/* <button onClick={filterResults}>lmao</button> */}
+
+
             </Layout>
             <GalleryLayout>
-                <ArtGallery testData={artData} />
+                <h2 className={utilStyles.underline}>Gallery</h2>
+
+                <ArtGallery artData={artData} />
             </GalleryLayout>
         </div>
     );
