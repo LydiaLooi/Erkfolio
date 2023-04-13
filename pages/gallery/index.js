@@ -8,7 +8,7 @@ import { collection, getDocs } from 'firebase/firestore/lite';
 import { db } from '../../lib/firebase';
 
 
-function TestCollectionData({ testData }) {
+function ArtGallery({ testData }) {
     return (
         <section>
             <div className="wrapper">
@@ -30,20 +30,20 @@ function TestCollectionData({ testData }) {
     )
 }
 
-export default function Gallery() {
+export default function GalleryHome() {
 
-    const [testData, setTestCollection] = useState([]);
+    const [artData, setArtCollection] = useState([]);
 
     useEffect(() => {
-        getTestCollection();
+        getAllArt();
     }, []);
 
-    async function getTestCollection() {
-        const querySnapshot = await getDocs(collection(db, 'test-collection'));
-        setTestCollection(querySnapshot.docs.map((doc) => doc.data()));
+    async function getAllArt() {
+        const querySnapshot = await getDocs(collection(db, 'art'));
+        setArtCollection(querySnapshot.docs.map((doc) => doc.data()));
     }
 
-    console.log(testData);
+    console.log(artData);
 
     return (
         <div>
@@ -53,7 +53,7 @@ export default function Gallery() {
                 </Head>
             </Layout>
             <GalleryLayout>
-                <TestCollectionData testData={testData} />
+                <ArtGallery testData={artData} />
             </GalleryLayout>
         </div>
     );
