@@ -13,21 +13,20 @@ function TestCollectionData({ testData }) {
         <section>
             <div className="wrapper">
                 <div className="gallery">
-                    <ul>
-                        {testData.map(({ name, url }) => (
-                            <li key={url}>
-                                <Image
-                                    src={url}
-                                    height={500}
-                                    width={500}
-                                    alt={name}
-                                />
-                            </li>
-                        ))}
-                    </ul>
+
+                    {testData.map(({ name, url }) => (
+                        <Image
+                            key={url}
+                            src={url}
+                            height={500}
+                            width={500}
+                            alt={name}
+                        />
+                    ))}
+
                 </div>
             </div>
-        </section >
+        </section>
     )
 }
 

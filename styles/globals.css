@@ -35,14 +35,15 @@ nav {
     max-width: 960px;
     mask-image: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, #362BCF 25%, #170F40 75%, rgba(255, 255, 255, 0) 100%);
     margin: 0 auto;
-    padding: 30px 0;
+    padding: 10px 0;
 }
 
 nav ul {
     text-align: center;
     background: linear-gradient(90deg, #080410 0%, #080410 25%, #080410 75%, #080410 100%);
     box-shadow: 0 0 25px rgba(0, 0, 0, 0.1), inset 0 0 1px #E79F5E;
-    padding-right: 40px;
+    padding-right: 100px;
+    padding-left: 100px;
 
 
 }
@@ -74,94 +75,21 @@ https://codepen.io/rrenula/pen/nJmQed
 */
 
 .wrapper {
-    width: 90%;
+    width: 80%;
     margin: 0px auto;
 }
 
-div.gallery {
-    margin-top: 0px;
-
+.gallery {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
-div.gallery ul {
-    list-style-type: none;
-
-}
-
-/* animation */
-div.gallery ul li,
-div.gallery li img {
-    -webkit-transition: all 0.1s ease-in-out;
-    -moz-transition: all 0.1s ease-in-out;
-    -o-transition: all 0.1s ease-in-out;
-    transition: all 0.1s ease-in-out;
-}
-
-div.gallery ul li {
-    position: relative;
-    float: left;
-    width: 380px;
-    height: 380px;
-    margin: 15px;
+.gallery img {
+    width: 400px;
+    height: 400px;
+    margin: 10px;
     padding: 0px;
     z-index: 0;
-
-}
-
-/* Make sure z-index is higher on hover */
-/* Ensure that hover image overlapped the others */
-div.gallery ul li:hover {
-    z-index: 5;
-}
-
-/* Image is position nicely under li */
-div.gallery ul li img {
-    position: absolute;
-    /* Take your picture out of the flow */
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    /* Make the picture taking the size of it's parent */
-    width: 100%;
-    /* This if for the object-fit */
-    height: 100%;
-    /* This if for the object-fit */
     object-fit: cover;
-    /* Equivalent of the background-size: cover; of a background-image */
-    object-position: center;
-
-}
-
-
-div.gallery ul li img:hover {
-    cursor: pointer;
-    /* width: 220px;
-    height: 220px;
-    margin-top: -130px;
-    margin-left: -130px;
-    top: 67%;
-    left: 67%; */
-}
-
-/* Responsive hack */
-@media only screen and (min-width: 499px) and (max-width: 1212px) {
-    .wrapper {
-        width: 500px;
-    }
-}
-
-@media only screen and (max-width: 498px) {
-    .wrapper {
-        width: 300px;
-        margin: 0;
-    }
-
-    div.gallery ul {
-        list-style-type: none;
-        margin: 0;
-        padding: 0;
-    }
-
-
 }
