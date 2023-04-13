@@ -13,39 +13,30 @@ function TopProfile(isHome) {
 
     return (
         <div>
+            <Image
+                priority
+                src="/images/profile.png"
+                className={`${utilStyles.borderCircle} ${utilStyles.block} ${utilStyles.marginAuto} ${utilStyles.profileImage} `}
+                height={144}
+                width={144}
+                alt=""
+            />
+            <h1 className={`${utilStyles.heading2Xl} ${utilStyles.textAlignCentre}`}>{name}</h1>
+        </div>
+    )
+}
 
-            {isHome ? (
-                <>
-                    <Image
-                        priority
-                        src="/images/profile.png"
-                        className={utilStyles.borderCircle}
-                        height={144}
-                        width={144}
-                        alt=""
-                    />
-                    <h1 className={utilStyles.heading2Xl}>{name}</h1>
-                </>
-            ) : (
-                <>
-                    <Link href="/">
-                        <Image
-                            priority
-                            src="/images/profile.png"
-                            className={utilStyles.borderCircle}
-                            height={108}
-                            width={108}
-                            alt=""
-                        />
-                    </Link>
-                    <h2 className={utilStyles.headingLg}>
-                        <Link href="/" className={utilStyles.colorInherit}>
-                            {name}
-                        </Link>
-                    </h2>
-                </>
-            )}
-
+function Socials() {
+    return (
+        <div id="social-test">
+            <ul class="social">
+                <li>
+                    <a href="https://www.instagram.com/erkfir"><i class="fa fa-instagram" aria-hidden="true" /></a>
+                </li>
+                <li>
+                    <a href="https://www.twitter.com/erkfir"><i class="fa fa-twitter" aria-hidden="true" /></a>
+                </li>
+            </ul>
         </div>
     )
 }
@@ -63,11 +54,14 @@ export default function Layout({ children, home }) {
                 <meta name="twitter:card" content="summary_large_image" />
 
                 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
+                <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossOrigin="anonymous" />
             </Head>
             <header className={styles.header}>
 
                 <TopProfile isHome='true'></TopProfile>
+
+                <Socials></Socials>
+
                 <NavBar />
             </header>
             <main>{children}</main>

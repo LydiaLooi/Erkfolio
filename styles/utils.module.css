@@ -2,8 +2,14 @@
     font-size: 2.5rem;
     line-height: 1.2;
     font-weight: 800;
-    letter-spacing: -0.05rem;
+    letter-spacing: 0.2rem;
     margin: 1rem 0;
+}
+
+@media only screen and (max-width: 700px) {
+    .heading2Xl {
+        font-size: 1.5rem;
+    }
 }
 
 .headingXl {
@@ -15,6 +21,13 @@
 }
 
 .headingLg {
+    font-size: 1.5rem;
+    line-height: 1.4;
+    margin: 1rem 0;
+}
+
+.headingLgCentred {
+    text-align: center;
     font-size: 1.5rem;
     line-height: 1.4;
     margin: 1rem 0;
@@ -62,4 +75,30 @@
     padding-right: 100px;
     padding-left: 100px;
     padding-top: 10px;
+}
+
+.textAlignCentre {
+    text-align: center;
+}
+
+
+.block {
+    display: block;
+}
+
+.marginAuto {
+    margin: auto;
+}
+
+
+.profileImage {
+    transition: ease 0.1s;
+}
+
+@media only screen and (max-width: 700px) {
+
+    .profileImage {
+        width: 100px;
+        height: 100px;
+    }
 }

@@ -30,7 +30,7 @@ export default function Home() {
                 </Head>
                 <section>
 
-                    <p>Welcome to my art portfolio! This site is mainly to easily organise and show the different types of artwork that I do (i.e., traditional vs. digital). Enjoy~!</p>
+                    <p>Welcome to my art portfolio! This site is mainly for me to easily organise and show the different types of artwork that I do (i.e., traditional vs. digital). Enjoy~!</p>
                 </section>
 
             </Layout>

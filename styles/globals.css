@@ -59,7 +59,6 @@ nav {
     max-width: 960px;
     mask-image: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, #362BCF 25%, #170F40 75%, rgba(255, 255, 255, 0) 100%);
     margin: 0 auto;
-    padding: 10px 0;
 }
 
 nav ul {
@@ -85,6 +84,14 @@ nav ul li a {
     font-size: 15px;
     text-decoration: none;
     display: block;
+    transition: ease 0.5s;
+}
+
+@media only screen and (max-width: 700px) {
+    nav ul li a {
+        padding-top: 5px;
+        padding-bottom: 5px;
+    }
 }
 
 nav ul li a:hover {
@@ -138,4 +145,74 @@ https://codepen.io/rrenula/pen/nJmQed
 .gallery img:hover {
     cursor: pointer;
     padding: 5px;
+}
+
+
+/* Social icons */
+
+
+#social-test {
+    text-align: center;
+    font-size: 30px;
+    height: 50px;
+
+}
+
+@media only screen and (max-width: 700px) {
+    #social-test {
+        height: 40px;
+    }
+}
+
+
+.social {
+    padding-left: 0px;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.social li a {
+    color: rgba(242, 138, 61, 0.6);
+}
+
+.social li {
+    color: rgba(242, 138, 61, 0.6);
+    list-style-type: none;
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    border: 1px solid rgba(242, 138, 61, 0.4);
+    cursor: pointer;
+    margin-left: 10px;
+    margin-right: 10px;
+    transition: ease .3s;
+    border-radius: 10px;
+
+}
+
+@media only screen and (max-width: 700px) {
+    .social li {
+        border: none;
+    }
+
+    .social li:hover {
+        color: rgba(242, 138, 61, 1);
+        border: none;
+    }
+}
+
+
+
+.social li:hover {
+    color: rgba(242, 138, 61, 1);
+}
+
+
+.social:hover>li {
+    opacity: 0.5;
+}
+
+.social:hover>li:hover {
+    opacity: 1;
 }
