@@ -216,3 +216,9 @@ https://codepen.io/rrenula/pen/nJmQed
 .social:hover>li:hover {
     opacity: 1;
 }
+
+.footer {
+    color: whitesmoke;
+    opacity: 0.1;
+    text-align: center;
+}
