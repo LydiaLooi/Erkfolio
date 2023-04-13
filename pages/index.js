@@ -41,18 +41,43 @@ function PostData({ allPostsData }) {
 function TestCollectionData({ testData }) {
     return (
         <section>
-            <p>Test Collection Data</p>
-            {testData.map(({ name, url }) => (
-                <Image
-                    key={url}
-                    priority
-                    src={url}
-                    className={utilStyles.borderCircle}
-                    height={144}
-                    width={144}
-                    alt=""
-                />
-            ))}
+            <div class="wrapper">
+                <div class="gallery">
+                    <ul>
+                        {testData.map(({ name, url }) => (
+                            <li key={url}><Image
+                                src={url}
+                                // className={utilStyles.borderCircle}
+                                height={200}
+                                width={200}
+                                alt=""
+                            /></li>
+                        ))}
+                    </ul>
+                </div>
+            </div>
+        </section >
+    )
+}
+
+function GalleryComponent() {
+    return (
+        <section>
+            <div class="wrapper">
+                <div class="gallery">
+                    <ul>
+                        <li><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/53819/9.png"></img></li>
+                        <li><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/53819/2.png"></img></li>
+                        <li><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/53819/3.png"></img></li>
+                        <li><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/53819/1.png"></img></li>
+                        <li><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/53819/4.png"></img></li>
+                        <li><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/53819/5.png"></img></li>
+                        <li><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/53819/7.png"></img></li>
+                        <li><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/53819/8.png"></img></li>
+                        <li><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/53819/6.png"></img></li>
+                    </ul>
+                </div>
+            </div>
         </section>
     )
 }
@@ -72,15 +97,20 @@ export default function Home({ allPostsData }) {
     console.log(testData);
 
     return (
-        <Layout home>
-            <Head>
-                <title>{siteTitle}</title>
-            </Head>
-            <section className={utilStyles.headingMd}>
-                <p>Wow!</p>
-            </section>
-            <PostData allPostsData={allPostsData} />
+        <div>
+            <Layout home>
+                <Head>
+                    <title>{siteTitle}</title>
+                </Head>
+                <section className={utilStyles.headingMd}>
+                    <p>Wow!</p>
+                </section>
+
+
+                <PostData allPostsData={allPostsData} />
+            </Layout>
             <TestCollectionData testData={testData} />
-        </Layout>
+
+        </div>
     );
 }
