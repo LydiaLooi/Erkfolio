@@ -9,17 +9,7 @@ export default function AboutPage() {
             <Head>
                 <title>About</title>
             </Head>
-            <Script
-                src="https://connect.facebook.net/en_US/sdk.js"
-                strategy="lazyOnload"
-                onLoad={() =>
-                    console.log(`script loaded correctly, window.FB has been populated`)
-                }
-            />
-            <h1>This is the about page</h1>
-            <h2>
-                <Link href="/">Back to home</Link>
-            </h2>
+            <p>This is the about page</p>
         </Layout>
     );
 }
