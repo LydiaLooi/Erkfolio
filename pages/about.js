@@ -9,7 +9,7 @@ export default function AboutPage() {
             <Head>
                 <title>About</title>
             </Head>
-            <p>This is the about page</p>
+            <p>This is a work in progress :)</p>
         </Layout>
     );
 }

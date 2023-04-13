@@ -8,5 +8,5 @@ module.exports = {
                 pathname: '/v0/b/erkfolio.appspot.com/**',
             },
         ],
-    },
+    }
 }

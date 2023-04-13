@@ -10,6 +10,80 @@ import { collection, addDoc } from 'firebase/firestore/lite'
 
 const artCollection = "art";
 
+const maxWidth = 800;
+
+/* Utility function to convert a canvas to a BLOB */
+let dataURLToBlob = function (dataURL) {
+    let BASE64_MARKER = ';base64,';
+    if (dataURL.indexOf(BASE64_MARKER) == -1) {
+        let parts = dataURL.split(',');
+        let contentType = parts[0].split(':')[1];
+        let raw = parts[1];
+
+        return new Blob([raw], { type: contentType });
+    }
+
+    let parts = dataURL.split(BASE64_MARKER);
+    let contentType = parts[0].split(':')[1];
+    let raw = window.atob(parts[1]);
+    let rawLength = raw.length;
+
+    let uInt8Array = new Uint8Array(rawLength);
+
+    for (let i = 0; i < rawLength; ++i) {
+        uInt8Array[i] = raw.charCodeAt(i);
+    }
+
+    return new Blob([uInt8Array], { type: contentType });
+}
+/* End Utility function to convert a canvas to a BLOB      */
+
+
+function resizeImage(imageFile) {
+    console.log("Resizing")
+    console.log(imageFile)
+
+    // Load the image
+    let reader = new FileReader();
+    reader.onload = function (readerEvent) {
+        console.log("loaded")
+        let image = new Image();
+        image.onload = function (imageEvent) {
+
+            // Resize the image
+            let canvas = document.createElement('canvas'),
+                max_size = maxWidth,// TODO : pull max size from a site config
+                width = image.width,
+                height = image.height;
+            if (width > height) {
+                if (width > max_size) {
+                    height *= max_size / width;
+                    width = max_size;
+                }
+            } else {
+                if (height > max_size) {
+                    width *= max_size / height;
+                    height = max_size;
+                }
+            }
+            canvas.width = width;
+            canvas.height = height;
+            canvas.getContext('2d').drawImage(image, 0, 0, width, height);
+            let dataUrl = canvas.toDataURL('image/jpeg');
+            let resizedImage = dataURLToBlob(dataUrl);
+
+            $.event.trigger({
+                type: "imageResized",
+                blob: resizedImage,
+                url: dataUrl
+            });
+        }
+        image.src = readerEvent.target.result;
+    }
+    reader.readAsDataURL(imageFile);
+
+}
+
 function DashboardHome() {
     const form = useRef();
 
@@ -22,27 +96,38 @@ function DashboardHome() {
         const pinned = form.current[4]?.checked;
         const image = form.current[5]?.files[0];
 
+        console.log(image)
+
         let tagsArray = [];
 
         tagsArray = tags.split(",").map(tag => tag.trim());
 
         const storageRef = ref(storage, `${artCollection}/${image.name}`)
 
-        uploadBytes(storageRef, image).then(
-            (snapshot) => {
-                getDownloadURL(snapshot.ref).then((downloadUrl) => {
-                    saveData({ name, description, tagsArray, date_created, pinned, url: downloadUrl })
-                }, (error) => {
-                    console.error(error)
-                    alert("Could not save...")
+        $(document).on("imageResized", function (event) {
+            var data = new FormData($("form[id*='uploadImageForm']")[0]);
+            if (event.blob && event.url) {
+                // console.log(event.blob)
+                uploadBytes(storageRef, event.blob).then(
+                    (snapshot) => {
+                        getDownloadURL(snapshot.ref).then((downloadUrl) => {
+                            saveData({ name, description, tagsArray, date_created, pinned, url: downloadUrl })
+                        }, (error) => {
+                            console.error(error)
+                            alert("Could not save...")
 
-                })
-            }, (error) => {
-                console.error(error)
-                alert("Could not save...")
+                        })
+                    }, (error) => {
+                        console.error(error)
+                        alert("Could not save...")
 
+                    }
+                )
             }
-        )
+        });
+
+        resizeImage(image)
+
     }
 
     const saveData = async (artData) => {
@@ -94,6 +179,7 @@ export default function Dashboard() {
         <Layout>
             <Head>
                 <title>Dasboard</title>
+                <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js" integrity="sha384-UG8ao2jwOWB7/oDdObZc6ItJmwUkR/PfMyt9Qs5AwX7PsnYn1CRKCTWyncPTWvaS" crossorigin="anonymous"></script>
             </Head>
             <h1>This is the dashboard page</h1>
 

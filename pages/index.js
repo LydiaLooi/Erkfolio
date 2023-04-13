@@ -8,7 +8,6 @@ import { collection, getDocs, query, where } from 'firebase/firestore/lite';
 import { db } from '../lib/firebase';
 import Link from 'next/link';
 
-
 export default function Home() {
 
     const [artData, setArtCollection] = useState([]);
@@ -30,7 +29,7 @@ export default function Home() {
                     <title>{siteTitle}</title>
                 </Head>
                 <section className={utilStyles.headingMd}>
-                    <p>Hello! At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.</p>
+                    <p>Welcome to my art collection! This site is mainly to organise my art and act as a portfolio of sorts. Enjoy~!</p>
                 </section>
 
             </Layout>
