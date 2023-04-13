@@ -42,6 +42,9 @@ nav ul {
     text-align: center;
     background: linear-gradient(90deg, #080410 0%, #080410 25%, #080410 75%, #080410 100%);
     box-shadow: 0 0 25px rgba(0, 0, 0, 0.1), inset 0 0 1px #E79F5E;
+    padding-right: 40px;
+
+
 }
 
 nav ul li {
@@ -72,16 +75,17 @@ https://codepen.io/rrenula/pen/nJmQed
 
 .wrapper {
     width: 90%;
-    margin: 40px auto;
+    margin: 0px auto;
 }
 
 div.gallery {
-    margin-top: 30px;
+    margin-top: 0px;
+
 }
 
 div.gallery ul {
     list-style-type: none;
-    margin-left: 35px;
+
 }
 
 /* animation */
@@ -96,11 +100,12 @@ div.gallery li img {
 div.gallery ul li {
     position: relative;
     float: left;
-    width: 400px;
-    height: 400px;
-    margin: 5px;
-    padding: 5px;
+    width: 380px;
+    height: 380px;
+    margin: 15px;
+    padding: 0px;
     z-index: 0;
+
 }
 
 /* Make sure z-index is higher on hover */
@@ -112,13 +117,20 @@ div.gallery ul li:hover {
 /* Image is position nicely under li */
 div.gallery ul li img {
     position: absolute;
-    left: 0;
+    /* Take your picture out of the flow */
     top: 0;
-    border: 1px solid #dddddd;
-    padding: 5px;
-    width: 400px;
-    height: 400px;
-    background: #f0f0f0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    /* Make the picture taking the size of it's parent */
+    width: 100%;
+    /* This if for the object-fit */
+    height: 100%;
+    /* This if for the object-fit */
+    object-fit: cover;
+    /* Equivalent of the background-size: cover; of a background-image */
+    object-position: center;
+
 }
 
 
@@ -132,19 +144,6 @@ div.gallery ul li img:hover {
     left: 67%; */
 }
 
-p.attribution {
-    font-family: 'Consolas';
-    color: #000;
-    clear: both;
-    text-align: center;
-    line-height: 25px;
-    padding-top: 30px;
-}
-
-p.attribution a {
-    color: #4c8d7c;
-}
-
 /* Responsive hack */
 @media only screen and (min-width: 499px) and (max-width: 1212px) {
     .wrapper {
@@ -155,10 +154,14 @@ p.attribution a {
 @media only screen and (max-width: 498px) {
     .wrapper {
         width: 300px;
+        margin: 0;
     }
 
     div.gallery ul {
         list-style-type: none;
         margin: 0;
+        padding: 0;
     }
+
+
 }

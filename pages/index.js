@@ -9,6 +9,7 @@ import { getSortedPostsData } from '../lib/posts';
 import { useEffect, useState } from 'react';
 import { collection, getDocs } from 'firebase/firestore/lite';
 import { db } from '../lib/firebase';
+import GalleryLayout from '../components/gallery_layout';
 
 export async function getStaticProps() {
     const allPostsData = getSortedPostsData();
@@ -41,17 +42,18 @@ function PostData({ allPostsData }) {
 function TestCollectionData({ testData }) {
     return (
         <section>
-            <div class="wrapper">
-                <div class="gallery">
+            <div className="wrapper">
+                <div className="gallery">
                     <ul>
                         {testData.map(({ name, url }) => (
-                            <li key={url}><Image
-                                src={url}
-                                // className={utilStyles.borderCircle}
-                                height={200}
-                                width={200}
-                                alt=""
-                            /></li>
+                            <li key={url}>
+                                <Image
+                                    src={url}
+                                    height={500}
+                                    width={500}
+                                    alt={name}
+                                />
+                            </li>
                         ))}
                     </ul>
                 </div>
@@ -109,7 +111,10 @@ export default function Home({ allPostsData }) {
 
                 <PostData allPostsData={allPostsData} />
             </Layout>
-            <TestCollectionData testData={testData} />
+            <GalleryLayout>
+                <TestCollectionData testData={testData} />
+            </GalleryLayout>
+
 
         </div>
     );
