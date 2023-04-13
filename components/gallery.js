@@ -67,9 +67,6 @@ export default function ArtGallery({ artData }) {
                         <div className="placeholder"></div>
                         <div className="placeholder"></div>
                         <div className="placeholder"></div>
-                        <div className="placeholder"></div>
-                        <div className="placeholder"></div>
-                        <div className="placeholder"></div>
                     </div>
                 </div>
             </section>

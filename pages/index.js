@@ -4,7 +4,7 @@ import utilStyles from '../styles/utils.module.css';
 import { useEffect, useState } from 'react';
 import GalleryLayout from '../components/gallery_layout';
 import ArtGallery from '../components/gallery';
-import { collection, getDocs, query, where } from 'firebase/firestore/lite';
+import { collection, getDocs, orderBy, query, where } from 'firebase/firestore/lite';
 import { db } from '../lib/firebase';
 import Link from 'next/link';
 
@@ -17,7 +17,7 @@ export default function Home() {
     }, []);
 
     async function getPinned() {
-        const querySnapshot = await getDocs(query(collection(db, 'art'), where('pinned', '==', true)));
+        const querySnapshot = await getDocs(query(collection(db, 'art'), where('pinned', '==', true), orderBy('date_created', 'desc')));
         setArtCollection(querySnapshot.docs.map((doc) => doc.data()));
     }
 
@@ -28,8 +28,9 @@ export default function Home() {
                 <Head>
                     <title>{siteTitle}</title>
                 </Head>
-                <section className={utilStyles.headingMd}>
-                    <p>Welcome to my art collection! This site is mainly to organise my art and act as a portfolio of sorts. Enjoy~!</p>
+                <section>
+
+                    <p>Welcome to my art portfolio! This site is mainly to easily organise and show the different types of artwork that I do (i.e., traditional vs. digital). Enjoy~!</p>
                 </section>
 
             </Layout>
