@@ -1,16 +1,13 @@
 import Head from 'next/head';
-import Image from 'next/image'
-import Layout from '../../components/layout';
-import GalleryLayout from '../../components/gallery_layout';
 import { useEffect, useState } from 'react';
-import { collection, getDocs, orderBy, query, where } from 'firebase/firestore/lite';
-import { db } from '../../lib/firebase';
-import { getLogger } from '../../logging/log-util';
+import GalleryLayout from '../../components/gallery_layout';
+import Layout from '../../components/layout';
 
-import useSWR from 'swr'
 import { fetchAllArtByRecent } from '../../fetches/all_art_by_recent';
 import { longDedupingInterval } from '../../fetches/swr_config';
 
+import useSWR from 'swr';
+import { getLogger } from '../../logging/log-util';
 const logger = getLogger("gallery-home")
 
 export default function GalleryHome() {

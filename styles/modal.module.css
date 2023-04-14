@@ -100,40 +100,33 @@
 
 
 .imageContainer {
-
     width: 50vw;
     max-width: 700px;
-    height: 90vh;
-    max-height: 700px;
-    position: relative;
-    overflow: hidden;
+    padding: 40px;
+    display: grid;
+    place-items: center;
     margin: auto;
+    position: relative;
+
 }
 
 /* 100% Image Width on Smaller Screens */
-@media only screen and (max-width: 700px) {
+@media only screen and (max-width: 900px) {
     .modalImage {
         width: 100%;
     }
 
-    .modalImage {
-        margin: auto;
-        display: block;
-        width: 80%;
-        max-width: 700px;
-        border-radius: 5px;
-    }
 
     .modalContainer {
-        width: 100%;
-        /* padding: 15px;
-        border-radius: 20px; */
-        margin: auto;
+        width: 100vw !important;
+        padding: 0 !important;
+        margin: 0 auto;
+
     }
 
     .imageContainer {
         width: 100vw;
-        height: 90vh;
+        /* height: 90vh; */
         position: relative;
         overflow: hidden;
     }
@@ -146,6 +139,7 @@
     border-radius: 20px;
     margin: auto;
     transition: ease 0.2s;
+    vertical-align: middle;
 }
 
 
@@ -155,5 +149,6 @@
     height: 100%;
     position: relative !important;
     object-fit: contain;
+    border-radius: 10px;
     transition: ease 0.2s;
 }

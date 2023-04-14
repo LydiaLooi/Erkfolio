@@ -1,4 +1,4 @@
-import ArtGallery from "./gallery";
+import ArtGallery from "./art_gallery";
 import GalleryNavigation from "./gallery_nav";
 import utilStyles from '../styles/utils.module.css'
 

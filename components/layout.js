@@ -2,7 +2,6 @@ import Head from 'next/head';
 import Image from 'next/image';
 import styles from './layout.module.css';
 import utilStyles from '../styles/utils.module.css';
-import Link from 'next/link';
 import NavBar from './navbar';
 
 const name = 'Erkfir';
@@ -14,7 +13,6 @@ function TopProfile(isHome) {
     return (
         <div>
             <Image
-                priority
                 src="/images/profile.png"
                 className={`${utilStyles.borderCircle} ${utilStyles.block} ${utilStyles.marginAuto} ${utilStyles.profileImage} `}
                 height={144}

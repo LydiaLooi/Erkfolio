@@ -3,44 +3,57 @@ import Image from 'next/image'
 import Layout from '../../components/layout';
 import GalleryLayout from '../../components/gallery_layout';
 import { useEffect, useState } from 'react';
-import { collection, getDocs, orderBy, query, where } from 'firebase/firestore/lite';
-import { db } from '../../lib/firebase';
-import ArtGallery from '../../components/gallery';
-import utilStyles from '../../styles/utils.module.css'
-import GalleryNavigation from '../../components/gallery_nav';
+import { fetchArtWithTagByRecent } from '../../fetches/all_art_with_tag_by_recent';
+
+import useSWR from 'swr'
+import { getLogger } from '../../logging/log-util';
+import { longDedupingInterval } from '../../fetches/swr_config';
+const logger = getLogger("gallery-digital")
+
 
 
 
 
 export default function TraditionalGallery() {
 
-    const [artData, setArtCollection] = useState([]);
+    const [displayData, setDisplayArt] = useState([]);
     const [originalData, setOGCollection] = useState([])
-    useEffect(() => {
-        filterResults();
-    }, []);
 
-    async function filterResults() {
-        const querySnapshot = await getDocs(query(collection(db, 'art'), where('tagsArray', 'array-contains', 'traditional art'), orderBy('date_created', 'desc')));
-        setArtCollection(querySnapshot.docs.map((doc) => doc.data()));
-        setOGCollection(querySnapshot.docs.map((doc) => doc.data()))
+    let tagName = "traditional art"
+
+    const { data, error } = useSWR(
+        ['all-traditional-art', tagName],
+        fetchArtWithTagByRecent,
+        {
+            dedupingInterval: longDedupingInterval,
+        }
+    );
+
+    if (error) {
+        logger.error("An error occured")
+        logger.error(error)
+    }
+    if (!data) {
+        logger.info("Loading data...")
     }
 
+    useEffect(() => {
+        if (data) {
+            setDisplayArt(data);
+            setOGCollection(data);
+        }
+    }, [data]);
+
+    const heading = "Traditional Art Gallery"
 
     return (
         <div>
             <Layout>
                 <Head>
-                    <title>Traditional Art Gallery</title>
+                    <title>{heading}</title>
                 </Head>
-
-
             </Layout>
-            <GalleryLayout>
-                <h2 className={utilStyles.underline}>Traditional Art Gallery</h2>
-                <GalleryNavigation></GalleryNavigation>
-                <ArtGallery artData={artData} galleryUpdateMethod={setArtCollection} originalData={originalData} />
-            </GalleryLayout>
+            <GalleryLayout heading={heading} displayUpdateMethod={setDisplayArt} displayData={displayData} originalData={originalData} hideFilter={false} />
         </div>
     );
 }

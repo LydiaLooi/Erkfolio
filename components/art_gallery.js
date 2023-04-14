@@ -3,8 +3,7 @@ import modalStyles from '../styles/modal.module.css';
 import searchStyles from '../styles/search.module.css'
 import { useEffect, useState } from "react";
 import { getLogger } from "../logging/log-util";
-import Date from "../components/date"
-import { P } from "pino";
+import Date from "./date"
 
 const logger = getLogger("gallery");
 
@@ -50,6 +49,14 @@ function Modal({ clickedImage, updateMethod }) {
         tags = clickedImage.tagsArray.sort().join(", ")
     }
 
+    let url = clickedImage.url
+    let alt = clickedImage.name
+
+    if (!url || url.length == 0) {
+        url = "/images/profile.png"
+        alt = "placeholder"
+    }
+
     return (
         <div>
 
@@ -70,12 +77,16 @@ function Modal({ clickedImage, updateMethod }) {
                 }}>
 
 
-                    <div class={modalStyles.imageContainer}>
+                    <div className={modalStyles.imageContainer}>
                         <Image
                             className={modalStyles.modalImage}
-                            src={clickedImage.url}
+                            src={url}
                             id="modal-image"
                             fill={true}
+                            alt={alt}
+                            sizes="(max-width: 768px) 100vw,
+                            (max-width: 1200px) 50vw,
+                            100vw"
                         />
                     </div>
                     <div className={modalStyles.modalCaption}>
