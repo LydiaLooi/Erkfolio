@@ -17,11 +17,12 @@ export default function ArtDump() {
     const [displayData, setDisplayArt] = useState([]);
     const [originalData, setOGCollection] = useState([])
     const [shouldFetch, setShouldFetch] = useState(true);
-    const lastRetrievedUrl = useRef("");
+    const lastRetrievedID = useRef("");
+    const lastRetrievedName = useRef("");
     const limitNum = useRef(6);
 
     const { data, error } = useSWR(
-        shouldFetch ? [lastRetrievedUrl.current, limitNum.current] : null,
+        shouldFetch ? [lastRetrievedID.current, lastRetrievedName.current, limitNum.current] : null,
         fetchTestCollection,
         {
             dedupingInterval: 10000,
@@ -59,9 +60,13 @@ export default function ArtDump() {
                     return prevOGData.concat(data);
                 }
             });
-            lastRetrievedUrl.current = data.slice(-1)[0].url
+            if (data.slice(-1)[0]) {
+                lastRetrievedID.current = data.slice(-1)[0].id
+                lastRetrievedName.current = data.slice(-1)[0].name
+            }
+
             limitNum.current = 7
-            console.log("THE LAST ONE WAS:", lastRetrievedUrl.current)
+            console.log("THE LAST ONE WAS:", lastRetrievedName.current, lastRetrievedID.current)
         }
     }, [data]);
 
