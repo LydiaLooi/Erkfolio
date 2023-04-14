@@ -87,7 +87,7 @@ function Modal({ clickedImage, updateMethod }) {
                         <Date dateString={clickedImage.date_created}></Date>
                         <p>{clickedImage.description}</p>
 
-                        <p><small>Tags: <i>{tags}</i></small></p>
+                        {tags.length > 0 ? <p><small>Tags: <i>{tags}</i></small></p> : null}
 
                     </div>
                 </div>

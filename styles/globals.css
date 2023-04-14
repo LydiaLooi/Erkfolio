@@ -47,6 +47,7 @@ a:hover {
 .cool-button:hover {
     background: rgba(242, 138, 61, 0.1);
     color: #F6B46F;
+    cursor: pointer;
 }
 
 

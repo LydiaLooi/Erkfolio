@@ -14,6 +14,9 @@ export default function GalleryNavigation() {
                     <li>
                         <Link href="/gallery/traditional">Traditional Art</Link>
                     </li>
+                    <li>
+                        <Link href="/dump">Misc.</Link>
+                    </li>
                 </ul>
             </nav>
         </div>
