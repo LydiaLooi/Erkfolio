@@ -6,7 +6,7 @@ import ArtGallery from '../components/gallery';
 import Link from 'next/link';
 import useSWR from 'swr'
 import { fetchPinnedArt } from '../fetches/pinned_art';
-
+import { longDedupingInterval } from '../fetches/swr_config';
 import { getLogger } from "../logging/log-util";
 
 const logger = getLogger("home");
@@ -19,7 +19,7 @@ export default function Home() {
     const [artData, setArtCollection] = useState([]);
 
     const { data, error } = useSWR('pinned-art', fetchPinnedArt, {
-        dedupingInterval: 30000, // 30 seconds
+        dedupingInterval: longDedupingInterval,
     })
     if (error) {
         logger.error("An error occured")
