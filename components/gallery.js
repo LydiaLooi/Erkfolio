@@ -43,6 +43,11 @@ function Modal({ clickedImage, updateMethod }) {
         }
     });
 
+    let tags = "";
+    if (clickedImage.tagsArray) {
+        tags = clickedImage.tagsArray.sort().join(", ")
+    }
+
     return (
         <div>
 
@@ -70,6 +75,8 @@ function Modal({ clickedImage, updateMethod }) {
                         <Date dateString={clickedImage.date_created}></Date>
                         <p>{clickedImage.description}</p>
 
+                        <p><small>Tags: <i>{tags}</i></small></p>
+
                     </div>
                 </div>
 
@@ -83,6 +90,7 @@ export default function ArtGallery({ artData }) {
     logger.debug(artData)
 
     let [clickedImage, setClickedImage] = useState({});
+
 
     if (artData.length != 0) {
         return (
