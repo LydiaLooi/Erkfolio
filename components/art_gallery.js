@@ -32,17 +32,10 @@ function hideModal() {
 function closeModal(updateMethod) {
     hideModal()
     enableBodyScroll()
-    updateMethod({})
+    updateMethod({ name: "placeholder" })
 }
 
 function Modal({ clickedImage, updateMethod }) {
-    logger.debug(clickedImage)
-
-    document.body.addEventListener('keyup', function (e) {
-        if (e.key == "Escape") {
-            closeModal(updateMethod)
-        }
-    });
 
     let tags = "";
     if (clickedImage.tagsArray) {
