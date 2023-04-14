@@ -3,9 +3,9 @@ import Layout, { siteTitle } from '../components/layout';
 import utilStyles from '../styles/utils.module.css';
 import { useEffect, useState } from 'react';
 import ArtGallery from '../components/gallery';
-import { collection, getDocs, orderBy, query, where } from 'firebase/firestore/lite';
-import { db } from '../lib/firebase';
 import Link from 'next/link';
+import useSWR from 'swr'
+import { fetchPinnedArt } from '../fetches/pinned_art';
 
 import { getLogger } from "../logging/log-util";
 
@@ -18,14 +18,22 @@ export default function Home() {
 
     const [artData, setArtCollection] = useState([]);
 
-    useEffect(() => {
-        getPinned();
-    }, []);
-
-    async function getPinned() {
-        const querySnapshot = await getDocs(query(collection(db, 'art'), where('pinned', '==', true), orderBy('date_created', 'desc')));
-        setArtCollection(querySnapshot.docs.map((doc) => doc.data()));
+    const { data, error } = useSWR('pinned-art', fetchPinnedArt, {
+        dedupingInterval: 30000, // 30 seconds
+    })
+    if (error) {
+        logger.error("An error occured")
+        logger.error(error)
     }
+    if (!data) {
+        logger.info("Loading data...")
+    }
+
+    useEffect(() => {
+        if (data) {
+            setArtCollection(data);
+        }
+    }, [data]);
 
 
     return (
@@ -41,7 +49,7 @@ export default function Home() {
 
             </Layout>
             <h3 className={utilStyles.underline}>Pinned Works</h3>
-            <ArtGallery artData={artData} />
+            <ArtGallery artData={artData} hideFilter={true} />
 
             <div className={utilStyles.marginBottom50px}>
                 <Link className="cool-button" href="/gallery">See More</Link>

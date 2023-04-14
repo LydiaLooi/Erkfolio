@@ -141,7 +141,7 @@ function FilterSearch({ artData, updateMethod, originalData }) {
     )
 }
 
-export default function ArtGallery({ artData, galleryUpdateMethod, originalData }) {
+export default function ArtGallery({ artData, galleryUpdateMethod, originalData, hideFilter = false }) {
     logger.debug(artData)
     logger.debug(galleryUpdateMethod)
     logger.debug(originalData)
@@ -157,7 +157,8 @@ export default function ArtGallery({ artData, galleryUpdateMethod, originalData 
             <section>
                 <Modal clickedImage={clickedImage} updateMethod={setClickedImage}></Modal>
                 <div className="wrapper">
-                    <FilterSearch artData={artData} updateMethod={galleryUpdateMethod} originalData={originalData}></FilterSearch>
+
+                    {!hideFilter ? <FilterSearch artData={artData} updateMethod={galleryUpdateMethod} originalData={originalData}></FilterSearch> : null}
 
                     <div className="gallery">
 
