@@ -43,8 +43,8 @@ export default function ArtDump() {
 
     useEffect(() => {
         if (data) {
-            console.warn("USE EFFECT")
-            console.log("UHHH")
+            logger.warn("USE EFFECT")
+            logger.log("UHHH")
             setDisplayArt((prevDisplayData) => {
                 if (prevDisplayData.length > 0) {
                     return prevDisplayData.concat(data.slice(1));
@@ -66,7 +66,7 @@ export default function ArtDump() {
             }
 
             limitNum.current = 7
-            console.log("THE LAST ONE WAS:", lastRetrievedName.current, lastRetrievedID.current)
+            logger.log("THE LAST ONE WAS:", lastRetrievedName.current, lastRetrievedID.current)
         }
     }, [data]);
 
