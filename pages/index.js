@@ -2,13 +2,19 @@ import Head from 'next/head';
 import Layout, { siteTitle } from '../components/layout';
 import utilStyles from '../styles/utils.module.css';
 import { useEffect, useState } from 'react';
-import GalleryLayout from '../components/gallery_layout';
 import ArtGallery from '../components/gallery';
 import { collection, getDocs, orderBy, query, where } from 'firebase/firestore/lite';
 import { db } from '../lib/firebase';
 import Link from 'next/link';
 
+import { getLogger } from "../logging/log-util";
+
+const logger = getLogger("home");
+
+
 export default function Home() {
+
+    logger.info("Home page loaded")
 
     const [artData, setArtCollection] = useState([]);
 
@@ -38,7 +44,7 @@ export default function Home() {
             <ArtGallery artData={artData} />
 
             <div className={utilStyles.marginBottom50px}>
-                <Link class="cool-button" href="/gallery">See More</Link>
+                <Link className="cool-button" href="/gallery">See More</Link>
             </div>
         </div>
     );

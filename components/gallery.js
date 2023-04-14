@@ -1,10 +1,12 @@
 import Image from "next/image";
 import modalStyles from '../styles/modal.module.css';
 import { useState } from "react";
+import { getLogger } from "../logging/log-util";
 
+const logger = getLogger("gallery");
 
 function Modal({ clickedImage, updateMethod }) {
-    console.log(clickedImage)
+    logger.debug(clickedImage)
     return (
         <div>
             <div id="image-modal" className={modalStyles.modal}>
@@ -20,14 +22,9 @@ function Modal({ clickedImage, updateMethod }) {
     )
 }
 
-function updateModal(description, url) {
-    console.log(description)
-    console.log(url)
-    return { description, url }
-}
 
 export default function ArtGallery({ artData }) {
-    console.log(artData)
+    logger.debug(artData)
 
     let [clickedImage, setClickedImage] = useState({});
 

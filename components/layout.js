@@ -29,12 +29,12 @@ function TopProfile(isHome) {
 function Socials() {
     return (
         <div id="social-test">
-            <ul class="social">
+            <ul className="social">
                 <li>
-                    <a href="https://www.instagram.com/erkfir"><i class="fa fa-instagram" aria-hidden="true" /></a>
+                    <a href="https://www.instagram.com/erkfir"><i className="fa fa-instagram" aria-hidden="true" /></a>
                 </li>
                 <li>
-                    <a href="https://www.twitter.com/erkfir"><i class="fa fa-twitter" aria-hidden="true" /></a>
+                    <a href="https://www.twitter.com/erkfir"><i className="fa fa-twitter" aria-hidden="true" /></a>
                 </li>
             </ul>
         </div>

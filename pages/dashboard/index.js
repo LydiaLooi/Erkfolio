@@ -8,6 +8,9 @@ import { auth, storage, db } from '../../lib/firebase';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { collection, addDoc } from 'firebase/firestore/lite'
 
+import { getLogger } from "../../logging/log-util";
+
+const logger = getLogger("dashboard");
 const artCollection = "art";
 
 const maxWidth = 800;
@@ -40,13 +43,13 @@ let dataURLToBlob = function (dataURL) {
 
 
 function resizeImage(imageFile) {
-    console.log("Resizing")
-    console.log(imageFile)
+    logger.debug("Resizing")
+    logger.debug(imageFile)
 
     // Load the image
     let reader = new FileReader();
     reader.onload = function (readerEvent) {
-        console.log("loaded")
+        logged.debug("loaded")
         let image = new Image();
         image.onload = function (imageEvent) {
 
@@ -96,7 +99,7 @@ function DashboardHome() {
         const pinned = form.current[4]?.checked;
         const image = form.current[5]?.files[0];
 
-        console.log(image)
+        logger.debug(image)
 
         let tagsArray = [];
 
@@ -105,20 +108,19 @@ function DashboardHome() {
         const storageRef = ref(storage, `${artCollection}/${image.name}`)
 
         $(document).on("imageResized", function (event) {
-            var data = new FormData($("form[id*='uploadImageForm']")[0]);
+            logger.info("Image successfully resized")
             if (event.blob && event.url) {
-                // console.log(event.blob)
                 uploadBytes(storageRef, event.blob).then(
                     (snapshot) => {
                         getDownloadURL(snapshot.ref).then((downloadUrl) => {
                             saveData({ name, description, tagsArray, date_created, pinned, url: downloadUrl })
                         }, (error) => {
-                            console.error(error)
+                            logger.error(error)
                             alert("Could not save...")
 
                         })
                     }, (error) => {
-                        console.error(error)
+                        logger.error(error)
                         alert("Could not save...")
 
                     }
@@ -131,11 +133,13 @@ function DashboardHome() {
     }
 
     const saveData = async (artData) => {
-        console.log(artData)
+        logger.debug(artData)
         try {
             await addDoc(collection(db, artCollection), artData)
+            logger.info("Successfully added to collection.")
             window.location.reload(false); // reload if successful
         } catch (error) {
+            logger.error(error)
             alert('Failed to add the data')
         }
     }
@@ -184,10 +188,6 @@ export default function Dashboard() {
             <h1>This is the dashboard page</h1>
 
             {user ? <DashboardHome /> : <Login />}
-
-            <h2>
-                <Link href="/">Back to home</Link>
-            </h2>
         </Layout>
     );
 }
