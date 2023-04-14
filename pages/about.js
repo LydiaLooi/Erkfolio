@@ -17,6 +17,10 @@ export default function AboutPage() {
             <p>As you can see from the gallery, a lot of what I draw is fan art of things that I like, often various games. There is also the occasional personal art piece featuring one of my own characters.</p>
             <p>I've been pretty inconsistent with drawing and painting, but I figured that creating a cool portfolio site might encourage me to create more art!</p>
 
+            <h3 className={utilStyles.underline}>Contact Me</h3>
+            Flick me a DM on <a href="https://instagram.com/erkfir">Instagram (@erkfir)</a> or Discord (Erkfir#9999)
+
+
             <h3 className={utilStyles.underline}>What I Use</h3>
             <h4>Software:</h4>
             <ul>

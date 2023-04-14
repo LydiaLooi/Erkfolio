@@ -49,7 +49,7 @@ function resizeImage(imageFile) {
     // Load the image
     let reader = new FileReader();
     reader.onload = function (readerEvent) {
-        logged.debug("loaded")
+        logger.debug("loaded")
         let image = new Image();
         image.onload = function (imageEvent) {
 
@@ -183,7 +183,6 @@ export default function Dashboard() {
         <Layout>
             <Head>
                 <title>Dasboard</title>
-                <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js" integrity="sha384-UG8ao2jwOWB7/oDdObZc6ItJmwUkR/PfMyt9Qs5AwX7PsnYn1CRKCTWyncPTWvaS" crossorigin="anonymous"></script>
             </Head>
             <h1>This is the dashboard page</h1>
 
