@@ -53,7 +53,7 @@ function Modal({ clickedImage, updateMethod }) {
     let alt = clickedImage.name
 
     if (!url || url.length == 0) {
-        url = "/images/profile.png"
+        url = "/images/placeholder.png"
         alt = "placeholder"
     }
 
