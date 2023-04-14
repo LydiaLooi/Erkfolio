@@ -5,40 +5,47 @@ import GalleryLayout from '../../components/gallery_layout';
 import { useEffect, useState } from 'react';
 import { collection, getDocs, orderBy, query, where } from 'firebase/firestore/lite';
 import { db } from '../../lib/firebase';
-import ArtGallery from '../../components/gallery';
-import utilStyles from '../../styles/utils.module.css'
-import GalleryNavigation from '../../components/gallery_nav';
+import { getLogger } from '../../logging/log-util';
 
+import useSWR from 'swr'
+import { fetchAllArtByRecent } from '../../fetches/all_art_by_recent';
+import { longDedupingInterval } from '../../fetches/swr_config';
 
+const logger = getLogger("gallery-home")
 
 export default function GalleryHome() {
 
-    const [artData, setArtCollection] = useState([]);
+    const [displayData, setDisplayArt] = useState([]);
     const [originalData, setOGCollection] = useState([])
 
-    useEffect(() => {
-        getAllArtOrderedByRecency();
-    }, []);
-
-    async function getAllArtOrderedByRecency() {
-        const querySnapshot = await getDocs(query(collection(db, 'art'), orderBy('date_created', 'desc')));
-        setArtCollection(querySnapshot.docs.map((doc) => doc.data()));
-        setOGCollection(querySnapshot.docs.map((doc) => doc.data()))
+    const { data, error } = useSWR('all-art', fetchAllArtByRecent, {
+        dedupingInterval: longDedupingInterval,
+    })
+    if (error) {
+        logger.error("An error occured")
+        logger.error(error)
+    }
+    if (!data) {
+        logger.info("Loading data...")
     }
 
+    useEffect(() => {
+        if (data) {
+            setDisplayArt(data);
+            setOGCollection(data);
+        }
+    }, [data]);
+
+    const heading = "Gallery"
 
     return (
         <div>
             <Layout>
                 <Head>
-                    <title>Gallery</title>
+                    <title>{heading}</title>
                 </Head>
             </Layout>
-            <GalleryLayout>
-                <h2 className={utilStyles.underline}>Gallery</h2>
-                <GalleryNavigation></GalleryNavigation>
-                <ArtGallery artData={artData} galleryUpdateMethod={setArtCollection} originalData={originalData} />
-            </GalleryLayout>
+            <GalleryLayout heading={heading} displayUpdateMethod={setDisplayArt} displayData={displayData} originalData={originalData} hideFilter={false} />
         </div>
     );
 }

@@ -70,8 +70,14 @@ function Modal({ clickedImage, updateMethod }) {
                 }}>
 
 
-
-                    <img className={modalStyles.modalImage} src={clickedImage.url} id="modal-image" />
+                    <div class={modalStyles.imageContainer}>
+                        <Image
+                            className={modalStyles.modalImage}
+                            src={clickedImage.url}
+                            id="modal-image"
+                            fill={true}
+                        />
+                    </div>
                     <div className={modalStyles.modalCaption}>
                         <h3>{clickedImage.name}</h3>
                         <Date dateString={clickedImage.date_created}></Date>
