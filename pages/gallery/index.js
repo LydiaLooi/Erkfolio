@@ -13,15 +13,16 @@ const logger = getLogger("gallery-home")
 
 export default function GalleryHome() {
 
+    logger.debug("GALLERY HOME")
+
     const [displayData, setDisplayArt] = useState([]);
     const [originalData, setOGCollection] = useState([])
     const [shouldFetch, setShouldFetch] = useState(true);
     const lastRetrievedID = useRef("");
     const lastRetrievedDate = useRef("");
     const limitNum = useRef(6);
-
     const { data, error } = useSWR(
-        shouldFetch ? [lastRetrievedID.current, lastRetrievedDate.current, limitNum.current] : null,
+        shouldFetch ? [`fetchPaginatedArtByRecent-${lastRetrievedID.current}`, lastRetrievedID.current, lastRetrievedDate.current, limitNum.current] : null,
         fetchPaginatedArtByRecent,
         {
             dedupingInterval: 10000,
@@ -42,8 +43,8 @@ export default function GalleryHome() {
 
     useEffect(() => {
         if (data) {
-            logger.warn("USE EFFECT")
-            logger.log("UHHH")
+            logger.debug("GALLERY USE EFFECT")
+            logger.debug("UHHH")
             setDisplayArt((prevDisplayData) => {
                 if (prevDisplayData.length > 0) {
                     return prevDisplayData.concat(data.slice(1));
@@ -64,8 +65,8 @@ export default function GalleryHome() {
                 lastRetrievedDate.current = data.slice(-1)[0].date_created
             }
 
-            limitNum.current = 7
-            logger.log("THE LAST ONE WAS:", lastRetrievedDate.current, lastRetrievedID.current)
+            limitNum.current += 1
+            logger.debug("THE LAST ONE WAS:", lastRetrievedDate.current, lastRetrievedID.current)
         }
     }, [data]);
 
@@ -88,38 +89,3 @@ export default function GalleryHome() {
         </div>
     );
 }
-
-//     const [displayData, setDisplayArt] = useState([]);
-//     const [originalData, setOGCollection] = useState([])
-
-//     const { data, error } = useSWR('all-art', fetchAllArtByRecent, {
-//         dedupingInterval: longDedupingInterval,
-//     })
-//     if (error) {
-//         logger.error("An error occured")
-//         logger.error(error)
-//     }
-//     if (!data) {
-//         logger.info("Loading data...")
-//     }
-
-//     useEffect(() => {
-//         if (data) {
-//             setDisplayArt(data);
-//             setOGCollection(data);
-//         }
-//     }, [data]);
-
-//     const heading = "Gallery"
-
-//     return (
-//         <div>
-//             <Layout>
-//                 <Head>
-//                     <title>{heading}</title>
-//                 </Head>
-//             </Layout>
-//             <GalleryLayout heading={heading} displayUpdateMethod={setDisplayArt} displayData={displayData} originalData={originalData} hideFilter={false} />
-//         </div>
-//     );
-// }

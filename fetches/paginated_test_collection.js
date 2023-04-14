@@ -2,7 +2,7 @@
 import { collection, getDocs, limit, orderBy, query, startAt, where, documentId } from 'firebase/firestore/lite';
 import { db } from '../lib/firebase';
 
-export const fetchTestCollection = async ([lastID, lastName, limitNum]) => {
+export const fetchTestCollection = async ([unique, lastID, lastName, limitNum]) => {
 
     let q;
     if (lastID.length > 0) {

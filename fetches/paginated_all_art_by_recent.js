@@ -3,7 +3,7 @@ import { collection, getDocs, limit, orderBy, query, startAt, where, documentId 
 import { db } from '../lib/firebase';
 
 
-export const fetchPaginatedArtByRecent = async ([lastID, lastDate, limitNum]) => {
+export const fetchPaginatedArtByRecent = async ([unique, lastID, lastDate, limitNum]) => {
     let q;
     if (lastID.length > 0) {
         q = query(

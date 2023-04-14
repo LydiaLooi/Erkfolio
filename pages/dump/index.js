@@ -14,6 +14,7 @@ const logger = getLogger("art-dump")
 
 
 export default function ArtDump() {
+    logger.debug("ART DUMP")
     const [displayData, setDisplayArt] = useState([]);
     const [originalData, setOGCollection] = useState([])
     const [shouldFetch, setShouldFetch] = useState(true);
@@ -22,7 +23,7 @@ export default function ArtDump() {
     const limitNum = useRef(6);
 
     const { data, error } = useSWR(
-        shouldFetch ? [lastRetrievedID.current, lastRetrievedName.current, limitNum.current] : null,
+        shouldFetch ? [`fetchTestCollection-${lastRetrievedID.current}`, lastRetrievedID.current, lastRetrievedName.current, limitNum.current] : null,
         fetchTestCollection,
         {
             dedupingInterval: 10000,
@@ -43,8 +44,8 @@ export default function ArtDump() {
 
     useEffect(() => {
         if (data) {
-            logger.warn("USE EFFECT")
-            logger.log("UHHH")
+            logger.debug("ART DUUMP USE EFFECT")
+            logger.debug("UHHH")
             setDisplayArt((prevDisplayData) => {
                 if (prevDisplayData.length > 0) {
                     return prevDisplayData.concat(data.slice(1));
@@ -65,7 +66,7 @@ export default function ArtDump() {
                 lastRetrievedName.current = data.slice(-1)[0].name
             }
 
-            limitNum.current = 7
+            limitNum.current += 1
             logger.log("THE LAST ONE WAS:", lastRetrievedName.current, lastRetrievedID.current)
         }
     }, [data]);
