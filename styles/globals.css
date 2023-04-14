@@ -222,3 +222,10 @@ https://codepen.io/rrenula/pen/nJmQed
     opacity: 0.2;
     text-align: center;
 }
+
+
+.errorMessage {
+    color: rgb(216, 60, 86);
+    opacity: 0;
+    transition: ease 0.1s;
+}

@@ -11,17 +11,18 @@ import GalleryNavigation from '../../components/gallery_nav';
 
 
 
-export default function GalleryHome() {
+
+export default function DigitalGallery() {
 
     const [artData, setArtCollection] = useState([]);
     const [originalData, setOGCollection] = useState([])
 
     useEffect(() => {
-        getAllArtOrderedByRecency();
+        filterResults();
     }, []);
 
-    async function getAllArtOrderedByRecency() {
-        const querySnapshot = await getDocs(query(collection(db, 'art'), orderBy('date_created', 'desc')));
+    async function filterResults() {
+        const querySnapshot = await getDocs(query(collection(db, 'art'), where('tagsArray', 'array-contains', 'digital art'), orderBy('date_created', 'desc')));
         setArtCollection(querySnapshot.docs.map((doc) => doc.data()));
         setOGCollection(querySnapshot.docs.map((doc) => doc.data()))
     }
@@ -31,11 +32,13 @@ export default function GalleryHome() {
         <div>
             <Layout>
                 <Head>
-                    <title>Gallery</title>
+                    <title>Digital Art Gallery</title>
                 </Head>
+
+
             </Layout>
             <GalleryLayout>
-                <h2 className={utilStyles.underline}>Gallery</h2>
+                <h2 className={utilStyles.underline}>Digital Art Gallery</h2>
                 <GalleryNavigation></GalleryNavigation>
                 <ArtGallery artData={artData} galleryUpdateMethod={setArtCollection} originalData={originalData} />
             </GalleryLayout>

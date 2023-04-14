@@ -1,8 +1,10 @@
 import Image from "next/image";
 import modalStyles from '../styles/modal.module.css';
-import { useState } from "react";
+import searchStyles from '../styles/search.module.css'
+import { useEffect, useState } from "react";
 import { getLogger } from "../logging/log-util";
 import Date from "../components/date"
+import { P } from "pino";
 
 const logger = getLogger("gallery");
 
@@ -86,17 +88,77 @@ function Modal({ clickedImage, updateMethod }) {
 }
 
 
-export default function ArtGallery({ artData }) {
+
+
+function FilterSearch({ artData, updateMethod, originalData }) {
+
+    function filterClient() {
+        let search = document.getElementById('filter-search');
+        let tag_word = search.value.trim().toLowerCase();
+        let results = originalData.filter(obj => obj.tagsArray.includes(tag_word))
+
+
+        if (results.length > 0) {
+            updateMethod(results)
+        } else {
+            let msg = document.getElementById('error-msg')
+            msg.style.opacity = 1;
+        }
+    }
+
+    function clearFilters() {
+        let search = document.getElementById('filter-search');
+        search.value = "";
+
+        let msg = document.getElementById('error-msg')
+        msg.style.opacity = 0;
+        updateMethod(originalData)
+    }
+
+
+    function handleInput() {
+        let msg = document.getElementById('error-msg')
+        msg.style.opacity = 0;
+    }
+
+    function handleKeyUp(e) {
+        if (e.key === 'Enter') {
+            filterClient()
+        }
+    }
+
+
+    return (
+        <div className={searchStyles.searchContainer}>
+
+            <input id="filter-search" type="text" placeholder="Filter results by tag" name="search" onInput={handleInput} onKeyUp={handleKeyUp} />
+            <button type="button" onClick={filterClient}><i className="fa fa-search"></i></button>
+            <button type="button" onClick={clearFilters}><i className="fa fa-times"></i></button>
+            <br />
+            <small id="error-msg" className="errorMessage"><i>None of the results have that tag</i></small>
+
+        </div>
+    )
+}
+
+export default function ArtGallery({ artData, galleryUpdateMethod, originalData }) {
     logger.debug(artData)
+    logger.debug(galleryUpdateMethod)
+    logger.debug(originalData)
 
     let [clickedImage, setClickedImage] = useState({});
 
 
-    if (artData.length != 0) {
+
+
+    if (artData && artData.length != 0) {
+        logger.debug(artData)
         return (
             <section>
                 <Modal clickedImage={clickedImage} updateMethod={setClickedImage}></Modal>
                 <div className="wrapper">
+                    <FilterSearch artData={artData} updateMethod={galleryUpdateMethod} originalData={originalData}></FilterSearch>
+
                     <div className="gallery">
 
                         {artData.map(({ name, description, date_created, pinned, tagsArray, url }) => (
