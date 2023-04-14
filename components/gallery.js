@@ -2,21 +2,77 @@ import Image from "next/image";
 import modalStyles from '../styles/modal.module.css';
 import { useState } from "react";
 import { getLogger } from "../logging/log-util";
+import Date from "../components/date"
 
 const logger = getLogger("gallery");
 
+function disableBodyScroll() {
+    let body = document.getElementsByTagName("body")[0];
+    body.style.height = "100vh";
+    body.style.overflowY = "hidden";
+}
+
+function enableBodyScroll() {
+    let body = document.getElementsByTagName("body")[0];
+    body.style.height = "100vh";
+    body.style.overflowY = "auto";
+}
+
+function showModal() {
+    let modal = document.getElementById("image-modal");
+    modal.style.display = "block";
+}
+
+function hideModal() {
+    let modal = document.getElementById("image-modal");
+    modal.style.display = "none"
+}
+
+function closeModal(updateMethod) {
+    hideModal()
+    enableBodyScroll()
+    updateMethod({})
+}
+
 function Modal({ clickedImage, updateMethod }) {
     logger.debug(clickedImage)
+
+    document.body.addEventListener('keyup', function (e) {
+        if (e.key == "Escape") {
+            closeModal(updateMethod)
+        }
+    });
+
     return (
         <div>
-            <div id="image-modal" className={modalStyles.modal}>
-                <span className={modalStyles.close} onClick={() => {
-                    let modal = document.getElementById("image-modal");
-                    modal.style.display = "none"
-                    updateMethod({})
-                }}>&times;</span>
-                <img className={modalStyles.modalContent} src={clickedImage.url} id="modal-image" />
-                <div id="caption">{clickedImage.caption}</div>
+
+            <div id="image-modal" className={modalStyles.modal} onClick={() => {
+                closeModal(updateMethod)
+            }}>
+                <div className={modalStyles.closeDiv} onClick={(e) => {
+                    closeModal(updateMethod)
+                }}>
+                    <span className={modalStyles.close} >
+                        &times;
+                    </span>
+                    <span className={modalStyles.closeText}>Close</span>
+                </div>
+
+                <div className={modalStyles.modalContainer} onClick={(e) => {
+                    e.stopPropagation();
+                }}>
+
+
+
+                    <img className={modalStyles.modalImage} src={clickedImage.url} id="modal-image" />
+                    <div className={modalStyles.modalCaption}>
+                        <h3>{clickedImage.name}</h3>
+                        <Date dateString={clickedImage.date_created}></Date>
+                        <p>{clickedImage.description}</p>
+
+                    </div>
+                </div>
+
             </div>
         </div>
     )
@@ -44,9 +100,10 @@ export default function ArtGallery({ artData }) {
                                     width={500}
                                     alt={name}
                                     onClick={() => {
-                                        setClickedImage({ description, url });
-                                        let modal = document.getElementById("image-modal");
-                                        modal.style.display = "block";
+                                        setClickedImage({ description, url, name, date_created, tagsArray });
+                                        showModal()
+                                        disableBodyScroll()
+
                                     }}
                                 />
                             </div>

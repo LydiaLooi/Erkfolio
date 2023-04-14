@@ -6,7 +6,8 @@
     /* Stay in place */
     z-index: 1;
     /* Sit on top */
-    padding-top: 100px;
+    padding-top: 12vh;
+    padding-bottom: 5vh;
     /* Location of the box */
     left: 0;
     top: 0;
@@ -23,28 +24,36 @@
 }
 
 /* Modal Content (image) */
-.modalContent {
+.modalImage {
     margin: auto;
     display: block;
     width: 80%;
     max-width: 700px;
+    border-radius: 5px;
+}
+
+.modalContainer {
+    width: 50%;
+    padding: 15px;
+    border-radius: 20px;
+    margin: auto;
 }
 
 /* Caption of Modal Image */
-#caption {
+.modalCaption {
     margin: auto;
     display: block;
     width: 80%;
     max-width: 700px;
     text-align: center;
     color: #ccc;
-    padding: 10px 0;
-    height: 150px;
+    /* padding: 10px 0; */
+    /* height: 150px; */
 }
 
 /* Add Animation */
-.modalContent,
-#caption {
+.modalImage,
+.modalCaption {
     -webkit-animation-name: zoom;
     -webkit-animation-duration: 0.3s;
     animation-name: zoom;
@@ -73,25 +82,38 @@
 
 /* The Close Button */
 .close {
+    top: 25px;
+    /* left: 50%; */
+    width: 100%;
     position: absolute;
-    top: 15px;
-    right: 35px;
     color: #f1f1f1;
-    font-size: 40px;
     font-weight: bold;
     transition: 0.3s;
+    font-size: 40px;
+    text-align: center;
 }
 
-.close:hover,
-.close:focus {
-    color: #bbb;
+.closeText {
+
+    position: absolute;
+    width: 100%;
+    margin: auto;
+    font-size: 12px;
+    top: 70px;
+    text-align: center;
+}
+
+
+.closeDiv:hover,
+.close:hover {
+    color: #bbb !important;
     text-decoration: none;
     cursor: pointer;
 }
 
 /* 100% Image Width on Smaller Screens */
 @media only screen and (max-width: 700px) {
-    .modalContent {
+    .modalImage {
         width: 100%;
     }
 }
