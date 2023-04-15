@@ -4,6 +4,9 @@ import searchStyles from '../styles/search.module.css'
 import { useEffect, useState } from "react";
 import { getLogger } from "../logging/log-util";
 import Date from "./date"
+import { onAuthStateChanged } from "@firebase/auth";
+import { isAdminUUID } from "../scripts/utils";
+import { auth } from "../scripts/firebase";
 
 const logger = getLogger("gallery");
 
@@ -37,6 +40,18 @@ function closeModal(updateMethod) {
 
 function Modal({ clickedImage, updateMethod }) {
 
+    const [user, setUser] = useState(null);
+
+    useEffect(() => {
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                setUser(user);
+            } else {
+                setUser(null);
+            }
+        });
+    }, []);
+
     let tags = "";
     if (clickedImage.tagsArray) {
         tags = clickedImage.tagsArray.sort().join(", ")
@@ -48,6 +63,10 @@ function Modal({ clickedImage, updateMethod }) {
     if (!url || url.length == 0) {
         url = "/images/placeholder.png"
         alt = "placeholder"
+    }
+
+    function handleEdit() {
+        logger.info("clicked id?", clickedImage.id)
     }
 
     return (
@@ -64,6 +83,7 @@ function Modal({ clickedImage, updateMethod }) {
                     </span>
                     <span className={modalStyles.closeText}>Close</span>
                 </div>
+
 
                 <div className={modalStyles.modalContainer} onClick={(e) => {
                     e.stopPropagation();
@@ -90,6 +110,15 @@ function Modal({ clickedImage, updateMethod }) {
                         {tags.length > 0 ? <p><small>Tags: <i>{tags}</i></small></p> : null}
 
                     </div>
+                    {
+                        user && isAdminUUID(user.uid) ?
+                            <div>
+                                <button className="cool-button centred" onClick={handleEdit}>Edit</button>
+
+                            </div>
+                            :
+                            null
+                    }
                 </div>
 
             </div>
@@ -190,18 +219,17 @@ export default function ArtGallery({ artData, galleryUpdateMethod, originalData,
 
                     <div className="gallery">
 
-                        {artData.map(({ name, description, date_created, pinned, tagsArray, url }) => (
-                            <div key={url}>
+                        {artData.map(({ id, name, description, date_created, pinned, tagsArray, url }) => (
+                            <div key={id}>
                                 <Image
                                     src={url}
                                     height={500}
                                     width={500}
                                     alt={name}
                                     onClick={() => {
-                                        setClickedImage({ description, url, name, date_created, tagsArray });
+                                        setClickedImage({ id, description, url, name, date_created, tagsArray });
                                         showModal()
                                         disableBodyScroll()
-
                                     }}
                                 />
                             </div>

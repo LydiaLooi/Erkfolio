@@ -1,4 +1,5 @@
-import { getAuth, onAuthStateChanged } from "@firebase/auth";
+import { onAuthStateChanged } from "@firebase/auth";
+import { auth } from "../scripts/firebase";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { isAdminUUID } from "../scripts/utils";
@@ -7,7 +8,6 @@ import { isAdminUUID } from "../scripts/utils";
 export default function NavBar() {
 
     const [user, setUser] = useState(null);
-    const auth = getAuth();
 
     useEffect(() => {
         onAuthStateChanged(auth, (user) => {

@@ -35,8 +35,8 @@ export default function TagsListCheckboxes({ handleCheckboxChangeMethod }) {
         <div className={styles.field}>
             <label>Tags:</label>
             <ul className={styles.checkboxes}>
-                {tagNames.map(({ name }) => (
-                    <li key={name} className={`${styles.checkbox}`}>
+                {tagNames.map(({ id, name }) => (
+                    <li key={id} className={`${styles.checkbox}`}>
                         <input
                             onChange={handleCheckboxChangeMethod}
                             className={`${styles.checkboxInput}`}

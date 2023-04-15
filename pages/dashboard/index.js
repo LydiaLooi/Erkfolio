@@ -1,4 +1,4 @@
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { onAuthStateChanged } from 'firebase/auth';
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
 import Layout from '../../components/layout';
@@ -35,7 +35,6 @@ function DashboardHome({ currentUser }) {
 export default function Dashboard() {
 
     const [user, setUser] = useState(null);
-    const auth = getAuth();
 
     useEffect(() => {
         onAuthStateChanged(auth, (user) => {

@@ -3,11 +3,11 @@ import Head from 'next/head';
 import Layout from '../../components/layout';
 import Login from '../../components/login';
 import { useState, useEffect, useRef } from 'react';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { onAuthStateChanged } from 'firebase/auth';
 import { auth, storage, db } from '../../scripts/firebase';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { collection, addDoc } from 'firebase/firestore/lite'
-
+import { auth } from '../../scripts/firebase';
 import { getLogger } from "../../logging/log-util";
 import resizeImage from '../../scripts/image_resizing';
 
