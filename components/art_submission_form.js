@@ -1,6 +1,6 @@
-import { addDoc, collection } from 'firebase/firestore/lite';
+import { addDoc, collection, setDoc, doc } from 'firebase/firestore/lite';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { db, storage } from '../scripts/firebase';
 
 import { getLogger } from "../logging/log-util";
@@ -11,6 +11,7 @@ const logger = getLogger("dashboard");
 const artCollection = "art";
 
 import styles from "./form.module.css"
+import Image from 'next/image';
 
 const saveNewTag = async (tagData) => {
     logger.debug("tagData", tagData)
@@ -40,20 +41,52 @@ function addTags(newTagsArray, tagsArray) {
 
 }
 
-export default function ArtSubmissionForm() {
+export default function ArtSubmissionForm({ editMode = false, existingData }) {
     const form = useRef();
+    const imageInput = useRef()
+    const nameInput = useRef()
+    const dateCreatedInput = useRef()
+    const descriptionInput = useRef()
     const newTagsInput = useRef();
     const pinnedInput = useRef();
     const dumpInput = useRef();
     const checkedTags = useRef([]);
 
+    function prefillTags() {
+        logger.debug("Prefilling...", checkedTags.current)
+        checkedTags.current.forEach(tag => {
+            const tagElement = document.getElementById(`tag-${tag}`);
+            if (tagElement) {
+                tagElement.checked = true;
+            }
+        });
+
+    }
+
+    useEffect(() => {
+        if (editMode && existingData) {
+            nameInput.current.value = existingData.name
+            dateCreatedInput.current.value = existingData.date_created
+            descriptionInput.current.value = existingData.description
+            pinnedInput.current.checked = existingData.pinned
+            dumpInput.current.checked = existingData.dump
+            checkedTags.current = existingData.tagsArray
+            prefillTags()
+        }
+    }, [existingData])
+
+
     const submitArt = (e) => {
         logger.debug("Checked tags:", checkedTags.current)
         e.preventDefault();
-        const image = form.current[0]?.files[0];
-        const name = form.current[1]?.value;
-        const date_created = form.current[2]?.value;
-        const description = form.current[3]?.value;
+
+        let image;
+        if (!editMode) {
+            image = imageInput.current?.files[0];
+        }
+        const name = nameInput.current?.value;
+        const date_created = dateCreatedInput.current?.value;
+        const description = descriptionInput.current?.value;
         const newTags = newTagsInput.current?.value;
         const pinned = pinnedInput.current?.checked;
         const dump = dumpInput.current?.checked;
@@ -64,35 +97,63 @@ export default function ArtSubmissionForm() {
 
         addTags(newTagsArray, checkedTags.current);
 
+        if (!editMode) {
+            const storageRef = ref(storage, `${artCollection}/${image.name}`)
 
-        const storageRef = ref(storage, `${artCollection}/${image.name}`)
+            $(document).on("imageResized", function (event) {
+                logger.info("Image successfully resized")
+                if (event.blob && event.url) {
+                    uploadBytes(storageRef, event.blob).then(
+                        (snapshot) => {
+                            getDownloadURL(snapshot.ref).then((downloadUrl) => {
+                                saveData({ name, description, tagsArray: checkedTags.current, date_created, pinned, dump, url: downloadUrl })
+                            }, (error) => {
+                                logger.error(error)
+                                alert("Could not save...")
 
-        $(document).on("imageResized", function (event) {
-            logger.info("Image successfully resized")
-            if (event.blob && event.url) {
-                uploadBytes(storageRef, event.blob).then(
-                    (snapshot) => {
-                        getDownloadURL(snapshot.ref).then((downloadUrl) => {
-                            saveData({ name, description, tagsArray: checkedTags.current, date_created, pinned, dump, url: downloadUrl })
+                            })
                         }, (error) => {
                             logger.error(error)
                             alert("Could not save...")
 
-                        })
-                    }, (error) => {
-                        logger.error(error)
-                        alert("Could not save...")
+                        }
+                    )
+                }
+            });
 
-                    }
-                )
-            }
-        });
+            resizeImage(image)
+        } else {
+            logger.info("Editing instead...")
+            editData({
+                id: existingData.id,
+                name,
+                description,
+                tagsArray: checkedTags.current,
+                date_created,
+                pinned,
+                dump,
+                url: existingData.url
+            })
+        }
 
-        resizeImage(image)
 
     }
 
+    const editData = async (artData) => {
+        logger.debug("Edit", artData)
+        try {
+            const docRef = doc(db, "art", artData.id);
+            delete artData.id
 
+            logger.debug("Final data..", artData)
+            await setDoc(docRef, artData)
+            window.location.reload(false); // reload if successful
+
+        } catch (error) {
+            logger.error(error)
+            alert('Failed to edit the data')
+        }
+    }
 
     const saveData = async (artData) => {
         logger.debug(artData)
@@ -124,18 +185,23 @@ export default function ArtSubmissionForm() {
     return (
         <div>
             <form className={styles.form} ref={form} onSubmit={submitArt}>
-                <p className={`${styles.required} ${styles.field}`}>
-                    <label>Image</label><input name='image' type="file" placeholder="Image" required />
-                </p>
+                {
+                    !editMode || !existingData ?
+                        <p className={`${styles.required} ${styles.field}`}>
+                            <label>Image</label><input name='image' ref={imageInput} type="file" placeholder="Image" required />
+                        </p>
+                        : <Image src={existingData.url} width={100} height={100} alt={existingData.name} />
+                }
+
 
                 <p className={`${styles.required} ${styles.field}`}>
-                    <label>Title</label><input name='name' type="text" placeholder="Name" required />
+                    <label>Title</label><input name='name' ref={nameInput} type="text" placeholder="Name" required />
                 </p>
                 <p className={`${styles.required} ${styles.field}`}>
-                    <label>Date created*</label><input name='date_created' type="date" required />
+                    <label>Date created*</label><input name='date_created' ref={dateCreatedInput} type="date" required />
                 </p>
                 <p className={`${styles.field}`}>
-                    <label>Description</label><textarea name='description' type="text" placeholder="Description" />
+                    <label>Description</label><textarea name='description' ref={descriptionInput} type="text" placeholder="Description" />
                 </p>
 
                 <TagsListCheckboxes handleCheckboxChangeMethod={checkboxHandler}></TagsListCheckboxes>

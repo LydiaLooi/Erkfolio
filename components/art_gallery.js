@@ -7,6 +7,7 @@ import Date from "./date"
 import { onAuthStateChanged } from "@firebase/auth";
 import { isAdminUUID } from "../scripts/utils";
 import { auth } from "../scripts/firebase";
+import Link from "next/link";
 
 const logger = getLogger("gallery");
 
@@ -65,10 +66,6 @@ function Modal({ clickedImage, updateMethod }) {
         alt = "placeholder"
     }
 
-    function handleEdit() {
-        logger.info("clicked id?", clickedImage.id)
-    }
-
     return (
         <div>
 
@@ -113,7 +110,7 @@ function Modal({ clickedImage, updateMethod }) {
                     {
                         user && isAdminUUID(user.uid) ?
                             <div>
-                                <button className="cool-button centred" onClick={handleEdit}>Edit</button>
+                                <Link className="cool-button centred" href={`/dashboard/edit/${clickedImage.id}`}>Edit</Link>
 
                             </div>
                             :

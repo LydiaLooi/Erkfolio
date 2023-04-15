@@ -1,3 +1,3 @@
 module.exports = {
-    longDedupingInterval: 60000 // 60 seconds
+    longDedupingInterval: 1200000 // 120 seconds
 }
