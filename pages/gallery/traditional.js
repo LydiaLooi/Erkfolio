@@ -1,51 +1,17 @@
 import Head from 'next/head';
-import Image from 'next/image'
 import Layout from '../../components/layout';
-import GalleryLayout from '../../components/gallery_layout';
-import { useEffect, useState } from 'react';
 import { fetchArtWithTagByRecent } from '../../fetches/all_art_with_tag_by_recent';
 
-import useSWR from 'swr'
+import PaginatedArtGallery from '../../components/paginated_art_gallery';
 import { getLogger } from '../../logging/log-util';
-import { longDedupingInterval } from '../../fetches/swr_config';
-const logger = getLogger("gallery-digital")
-
-
-
+const logger = getLogger("gallery-traditional")
 
 
 export default function TraditionalGallery() {
 
-    const [displayData, setDisplayArt] = useState([]);
-    const [originalData, setOGCollection] = useState([])
-
-    let tagName = "traditional art"
-
-    const { data, error } = useSWR(
-        ['all-traditional-art', tagName],
-        fetchArtWithTagByRecent,
-        {
-            dedupingInterval: longDedupingInterval,
-        }
-    );
-
-    if (error) {
-        logger.error("An error occured")
-        logger.error(error)
-    }
-    if (!data) {
-        logger.info("Loading data...")
-    }
-
-    useEffect(() => {
-        if (data) {
-            setDisplayArt(data);
-            setOGCollection(data);
-        }
-    }, [data]);
-
+    const limitNumber = 9
     const heading = "Traditional Art Gallery"
-
+    const tagName = "traditional art"
     return (
         <div>
             <Layout>
@@ -53,7 +19,12 @@ export default function TraditionalGallery() {
                     <title>{heading}</title>
                 </Head>
             </Layout>
-            <GalleryLayout heading={heading} displayUpdateMethod={setDisplayArt} displayData={displayData} originalData={originalData} hideFilter={false} />
+            <PaginatedArtGallery
+                title={heading}
+                limitAmount={limitNumber}
+                fetchArtMethod={fetchArtWithTagByRecent}
+                fetchArtMethodName={`fetchArtWithTagByRecent-${tagName}`}
+            />
         </div>
     );
 }

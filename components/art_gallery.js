@@ -152,17 +152,14 @@ function FilterSearch({ artData, updateMethod, originalData }) {
 }
 
 export default function ArtGallery({ artData, galleryUpdateMethod, originalData, hideFilter = false }) {
-    logger.debug(artData)
-    logger.debug(galleryUpdateMethod)
-    logger.debug(originalData)
+    logger.debug("ArtGallery artData", artData)
+    logger.debug("ArtGallery galleryUpdateMethod", galleryUpdateMethod)
+    logger.debug("ArtGallery originalData", originalData)
 
     let [clickedImage, setClickedImage] = useState({});
 
 
-
-
     if (artData && artData.length != 0) {
-        logger.debug(artData)
         return (
             <section>
                 <Modal clickedImage={clickedImage} updateMethod={setClickedImage}></Modal>
@@ -175,7 +172,6 @@ export default function ArtGallery({ artData, galleryUpdateMethod, originalData,
                         {artData.map(({ name, description, date_created, pinned, tagsArray, url }) => (
                             <div key={url}>
                                 <Image
-
                                     src={url}
                                     height={500}
                                     width={500}
@@ -207,7 +203,4 @@ export default function ArtGallery({ artData, galleryUpdateMethod, originalData,
             </section>
         )
     }
-
-
-
 }

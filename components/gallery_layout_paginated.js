@@ -2,7 +2,17 @@ import ArtGallery from "./art_gallery";
 import GalleryNavigation from "./gallery_nav";
 import utilStyles from '../styles/utils.module.css'
 
-export default function PaginatedGalleryLayout({ children, home, heading, displayData, originalData, hideFilter, displayUpdateMethod, getMore }) {
+export default function PaginatedGalleryLayout(
+    {
+        children,
+        home,
+        heading,
+        displayData,
+        originalData,
+        hideFilter,
+        displayUpdateMethod,
+        getMore
+    }) {
 
     return (
         <div>
