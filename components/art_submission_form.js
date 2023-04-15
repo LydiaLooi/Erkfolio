@@ -1,4 +1,4 @@
-import { addDoc, collection, setDoc, doc } from 'firebase/firestore/lite';
+import { addDoc, collection, setDoc, doc, deleteDoc } from 'firebase/firestore/lite';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { useEffect, useRef } from 'react';
 import { db, storage } from '../scripts/firebase';
@@ -139,6 +139,10 @@ export default function ArtSubmissionForm({ editMode = false, existingData }) {
 
     }
 
+    function handleDelete() {
+        deleteData(existingData.id)
+    }
+
     const editData = async (artData) => {
         logger.debug("Edit", artData)
         try {
@@ -164,6 +168,19 @@ export default function ArtSubmissionForm({ editMode = false, existingData }) {
         } catch (error) {
             logger.error(error)
             alert('Failed to add the data')
+        }
+    }
+
+    const deleteData = async (id) => {
+        logger.debug("DELETE", id)
+        try {
+            const docRef = doc(db, "art", id);
+            await deleteDoc(docRef)
+            window.location.reload(false); // reload if successful
+
+        } catch (error) {
+            logger.error(error)
+            alert('Failed to delete the data')
         }
     }
 
@@ -215,7 +232,12 @@ export default function ArtSubmissionForm({ editMode = false, existingData }) {
                 <p className={`${styles.field}`}>
                     <label>Dump: </label><input id='dump' ref={dumpInput} name='dump' type="checkbox" placeholder="false" />
                 </p>
-                <button className='cool-button centred' type="submit">Submit</button><br />
+
+                {editMode ? <button className='cool-button-red margin-t-20px' onClick={handleDelete} type="button">Delete</button> : null}
+
+                <button className='cool-button centred' type="submit">Submit</button>
+
+
             </form>
         </div>
     )

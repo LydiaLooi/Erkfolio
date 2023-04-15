@@ -6,6 +6,7 @@ import { fetchTestCollection } from '../../fetches/paginated_test_collection';
 import useSWR from 'swr';
 import PaginatedGalleryLayout from '../../components/gallery_layout_paginated';
 import { getLogger } from '../../logging/log-util';
+import { longDedupingInterval } from '../../fetches/swr_config';
 const logger = getLogger("art-dump")
 
 
@@ -28,7 +29,7 @@ export default function ArtDump() {
         shouldFetch ? [`fetchTestCollection-${lastRetrievedID.current}`, lastRetrievedID.current, lastRetrievedName.current, limitNum.current] : null,
         fetchTestCollection,
         {
-            dedupingInterval: 10000,
+            dedupingInterval: longDedupingInterval,
             onSuccess: () => {
                 setShouldFetch(false)
             },

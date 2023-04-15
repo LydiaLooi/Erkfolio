@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import useSWR from 'swr';
 import PaginatedGalleryLayout from '../components/gallery_layout_paginated'
 import { getLogger } from '../logging/log-util';
+import { longDedupingInterval } from '../fetches/swr_config';
 const logger = getLogger("paginated-art-gallery")
 
 export default function PaginatedArtGallery({ title, limitAmount, fetchArtMethod, fetchArtMethodName }) {
@@ -29,7 +30,7 @@ export default function PaginatedArtGallery({ title, limitAmount, fetchArtMethod
         ] : null,
         fetchArtMethod,
         {
-            dedupingInterval: 10000,
+            dedupingInterval: longDedupingInterval,
             onSuccess: () => {
                 setShouldFetch(false)
             },
