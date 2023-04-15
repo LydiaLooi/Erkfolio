@@ -6,9 +6,10 @@ export default function App({ Component, pageProps }) {
         <>
             <Head>
                 <meta property="og:title" content="Erkfolio" />
-                <meta property="og:description" content="Take a peek at my art and stuff!" />
+                <meta property="og:description" content="Erkfir's Art Portfolio and stuff" />
                 <meta property="og:image" content="/images/profile.png" />
-                <meta property="og:url" content="https://example.com/" />
+                <meta property="og:image:alt" content="Erkfir's drawing of a witch version of herself" />
+                <meta property="og:type" content="website" />
                 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossOrigin="anonymous" />
             </Head>
             <Component {...pageProps} />
