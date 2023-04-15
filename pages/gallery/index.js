@@ -13,14 +13,19 @@ const logger = getLogger("gallery-home")
 
 export default function GalleryHome() {
 
+    const _limitNum = 9
+
     logger.debug("GALLERY HOME")
 
     const [displayData, setDisplayArt] = useState([]);
     const [originalData, setOGCollection] = useState([])
     const [shouldFetch, setShouldFetch] = useState(true);
+
+    const showButton = useRef(true);
     const lastRetrievedID = useRef("");
     const lastRetrievedDate = useRef("");
-    const limitNum = useRef(6);
+    const limitNum = useRef(_limitNum);
+
     const { data, error } = useSWR(
         shouldFetch ? [`fetchPaginatedArtByRecent-${lastRetrievedID.current}`, lastRetrievedID.current, lastRetrievedDate.current, limitNum.current] : null,
         fetchPaginatedArtByRecent,
@@ -44,7 +49,13 @@ export default function GalleryHome() {
     useEffect(() => {
         if (data) {
             logger.debug("GALLERY USE EFFECT")
-            logger.debug("UHHH")
+
+            // Check for button
+            if (data.length < limitNum.current) {
+                showButton.current = false
+            }
+
+
             setDisplayArt((prevDisplayData) => {
                 if (prevDisplayData.length > 0) {
                     return prevDisplayData.concat(data.slice(1));
@@ -65,7 +76,13 @@ export default function GalleryHome() {
                 lastRetrievedDate.current = data.slice(-1)[0].date_created
             }
 
-            limitNum.current += 1
+            limitNum.current = _limitNum + 1
+
+            let btn = document.getElementById("load-more-button");
+            if (!showButton.current) {
+                btn.style.display = "none";
+            }
+
             logger.debug("THE LAST ONE WAS:", lastRetrievedDate.current, lastRetrievedID.current)
         }
     }, [data]);
@@ -84,7 +101,14 @@ export default function GalleryHome() {
                     <title>{heading}</title>
                 </Head>
             </Layout>
-            <PaginatedGalleryLayout heading={heading} displayUpdateMethod={setDisplayArt} displayData={displayData} originalData={originalData} hideFilter={false} getMore={getMore} />
+            <PaginatedGalleryLayout
+                heading={heading}
+                displayUpdateMethod={setDisplayArt}
+                displayData={displayData}
+                originalData={originalData}
+                hideFilter={false}
+                getMore={getMore}
+            />
 
         </div>
     );

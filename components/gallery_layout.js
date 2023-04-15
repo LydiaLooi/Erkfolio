@@ -8,7 +8,12 @@ export default function GalleryLayout({ children, home, heading, displayData, or
         <div>
             <h2 className={utilStyles.underline}>{heading}</h2>
             <GalleryNavigation></GalleryNavigation>
-            <ArtGallery artData={displayData} galleryUpdateMethod={displayUpdateMethod} originalData={originalData} hideFilter={hideFilter} />
+            <ArtGallery
+                artData={displayData}
+                galleryUpdateMethod={displayUpdateMethod}
+                originalData={originalData}
+                hideFilter={hideFilter}
+            />
         </div>
     );
 }
