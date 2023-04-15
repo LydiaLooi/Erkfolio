@@ -12,26 +12,58 @@ const artCollection = "art";
 
 import styles from "./form.module.css"
 
+const saveNewTag = async (tagData) => {
+    logger.debug("tagData", tagData)
+    try {
+        await addDoc(collection(db, 'filters'), tagData)
+        logger.info("Successfully added ", tagData.name)
+    } catch (error) {
+        logger.error(error)
+        alert('failed to add new tag')
+    }
+}
+
+/**
+ * Processes the new tags and adds it to the existing array if it isn't already there.
+ * @param {*} newTagsArray 
+ * @param {*} tagsArray 
+ */
+function addTags(newTagsArray, tagsArray) {
+    for (const tag of newTagsArray) {
+        if (!tagsArray.includes(tag) && tag.length > 0) {
+            tagsArray.push(tag);
+            saveNewTag({ name: tag })
+            logger.debug("Adding tag:", tag)
+        }
+    }
+
+
+}
 
 export default function ArtSubmissionForm() {
     const form = useRef();
-
+    const newTagsInput = useRef();
+    const pinnedInput = useRef();
+    const dumpInput = useRef();
     const checkedTags = useRef([]);
 
     const submitArt = (e) => {
+        logger.debug("Checked tags:", checkedTags.current)
         e.preventDefault();
-        const name = form.current[0]?.value;
-        const description = form.current[1]?.value;
-        const tags = form.current[2]?.value;
-        const date_created = form.current[3]?.value;
-        const pinned = form.current[4]?.checked;
-        const image = form.current[5]?.files[0];
+        const image = form.current[0]?.files[0];
+        const name = form.current[1]?.value;
+        const date_created = form.current[2]?.value;
+        const description = form.current[3]?.value;
+        const newTags = newTagsInput.current?.value;
+        const pinned = pinnedInput.current?.checked;
+        const dump = dumpInput.current?.checked;
 
-        logger.debug(image)
+        logger.debug("Image", image)
 
-        let tagsArray = [];
+        let newTagsArray = newTags.split(",").map(tag => tag.trim());
 
-        tagsArray = tags.split(",").map(tag => tag.trim());
+        addTags(newTagsArray, checkedTags.current);
+
 
         const storageRef = ref(storage, `${artCollection}/${image.name}`)
 
@@ -41,7 +73,7 @@ export default function ArtSubmissionForm() {
                 uploadBytes(storageRef, event.blob).then(
                     (snapshot) => {
                         getDownloadURL(snapshot.ref).then((downloadUrl) => {
-                            saveData({ name, description, tagsArray, date_created, pinned, url: downloadUrl })
+                            saveData({ name, description, tagsArray: checkedTags.current, date_created, pinned, dump, url: downloadUrl })
                         }, (error) => {
                             logger.error(error)
                             alert("Could not save...")
@@ -60,11 +92,13 @@ export default function ArtSubmissionForm() {
 
     }
 
+
+
     const saveData = async (artData) => {
         logger.debug(artData)
         try {
             await addDoc(collection(db, artCollection), artData)
-            logger.info("Successfully added to collection.")
+            logger.info("Successfully added to art collection.")
             window.location.reload(false); // reload if successful
         } catch (error) {
             logger.error(error)
@@ -98,20 +132,22 @@ export default function ArtSubmissionForm() {
                     <label>Title</label><input name='name' type="text" placeholder="Name" required />
                 </p>
                 <p className={`${styles.required} ${styles.field}`}>
-                    <label>Date created*: </label><input name='date_created' type="date" required />
+                    <label>Date created*</label><input name='date_created' type="date" required />
                 </p>
                 <p className={`${styles.field}`}>
-                    <label>Description: </label><textarea name='description' type="text" placeholder="Description" />
+                    <label>Description</label><textarea name='description' type="text" placeholder="Description" />
                 </p>
-                {/* <label>Tags: </label><input name='tags' type="text" placeholder="Tags" /> */}
 
                 <TagsListCheckboxes handleCheckboxChangeMethod={checkboxHandler}></TagsListCheckboxes>
 
                 <p className={`${styles.field}`}>
-                    <label>New Tags </label><input name='new_tags' type="text" placeholder="New Tags" />
+                    <label>New Tags</label><input id='new_tags' ref={newTagsInput} name='new_tags' type="text" placeholder="New Tags" />
                 </p>
                 <p className={`${styles.field}`}>
-                    <label>Pinned: </label><input name='pinned' type="checkbox" placeholder="false" />
+                    <label>Pinned: </label><input id='pinned' ref={pinnedInput} name='pinned' type="checkbox" placeholder="false" />
+                </p>
+                <p className={`${styles.field}`}>
+                    <label>Dump: </label><input id='dump' ref={dumpInput} name='dump' type="checkbox" placeholder="false" />
                 </p>
                 <button className='cool-button centred' type="submit">Submit</button><br />
             </form>
