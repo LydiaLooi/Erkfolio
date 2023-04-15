@@ -1,6 +1,6 @@
 
 import { collection, getDocs, orderBy, query, where, documentId, limit, startAt } from 'firebase/firestore/lite';
-import { db } from '../lib/firebase';
+import { db } from '../scripts/firebase';
 
 
 export const fetchArtWithTagByRecent = async ([unique, lastID, lastDate, limitNum]) => {

@@ -1,6 +1,6 @@
 
 import { collection, getDocs, limit, orderBy, query, startAt, where, documentId } from 'firebase/firestore/lite';
-import { db } from '../lib/firebase';
+import { db } from '../scripts/firebase';
 
 
 export const fetchPaginatedArtByRecent = async ([unique, lastID, lastDate, limitNum]) => {

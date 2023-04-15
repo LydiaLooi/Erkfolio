@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import styles from './layout.module.css';
 import { collection, getDocs } from 'firebase/firestore/lite';
-import { db } from '../lib/firebase';
+import { db } from '../scripts/firebase';
 import { getLogger } from '../logging/log-util';
 
 const logger = getLogger('filters')

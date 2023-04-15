@@ -1,6 +1,6 @@
 
 import { collection, getDocs, orderBy, query, where } from 'firebase/firestore/lite';
-import { db } from '../lib/firebase';
+import { db } from '../scripts/firebase';
 
 export const fetchPinnedArt = async () => {
     const q = query(
