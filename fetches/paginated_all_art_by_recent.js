@@ -8,16 +8,18 @@ export const fetchPaginatedArtByRecent = async ([unique, lastID, lastDate, limit
     if (lastID.length > 0) {
         q = query(
             collection(db, 'art'),
+            where('dump', '==', false),
             orderBy('date_created', 'desc'),
-            orderBy(documentId(), 'desc'),
+            orderBy(documentId(), 'asc'),
             limit(limitNum),
             startAt(lastDate, lastID),
         );
     } else {
         q = query(
             collection(db, 'art'),
+            where('dump', '==', false),
             orderBy('date_created', 'desc'),
-            orderBy(documentId(), 'desc'),
+            orderBy(documentId(), 'asc'),
             limit(limitNum)
         )
     }
