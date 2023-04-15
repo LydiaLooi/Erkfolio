@@ -10,6 +10,7 @@ module.exports = {
         ],
     },
     env: {
-        LOG_LEVEL: process.env.LOG_LEVEL
+        LOG_LEVEL: process.env.LOG_LEVEL,
+        ADMIN_UID: process.env.ADMIN_UID
     }
 }

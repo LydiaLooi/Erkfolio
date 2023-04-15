@@ -1,0 +1,145 @@
+.form {
+    max-width: 40em;
+    margin: 0 auto;
+    position: relative;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.field {
+    width: 100%;
+    margin: 0 0 1.5em 0;
+}
+
+.label {
+    font-weight: bold;
+    color: white;
+    padding-top: 0;
+    padding-left: 0;
+    letter-spacing: .025em;
+    font-size: 1.125em;
+    line-height: 1.25;
+    position: relative;
+    z-index: 100;
+}
+
+.required label:after {
+    content: '* ';
+    color: red !important;
+    font-weight: normal;
+    font-size: .75em;
+    vertical-align: top;
+}
+
+.form label {
+    font-weight: bold;
+    color: white;
+    padding-top: 0;
+    padding-left: 0;
+    letter-spacing: .025em;
+    font-size: 1.125em;
+    line-height: 1.25;
+    position: relative;
+    z-index: 100;
+}
+
+
+.form input[type="text"],
+.form textarea {
+    padding: .75em 1em;
+    appearance: none;
+    outline: none;
+    line-height: normal;
+    border-radius: 0;
+    border: none;
+    display: block;
+
+    width: 100%;
+    box-sizing: border-box;
+    background: #222222;
+    color: white;
+    position: relative;
+}
+
+.form input::placeholder,
+.form textarea::placeholder {
+    color: white;
+}
+
+.form input:active,
+.form textarea:active,
+.form input:focus,
+.form textarea:focus {
+    background: #333333;
+}
+
+
+
+/* Styles for hiding the checkbox */
+.checkboxInput[type="checkbox"] {
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+}
+
+
+.checkboxes {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+    overflow: hidden;
+}
+
+.checkbox {
+    float: left;
+    margin: 1px;
+}
+
+
+
+/* Styles for checkbox input */
+.checkboxInput {
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+}
+
+/** ------------------------ **/
+
+.checkboxInput+label {
+    padding: 0.75em 1em;
+    border-radius: 0;
+    border: none;
+    cursor: pointer;
+    box-sizing: border-box;
+    background: #222222;
+    line-height: normal;
+    display: inline-block;
+    width: auto;
+    color: #4E4E4E;
+    position: relative;
+    user-select: none;
+}
+
+.checkboxInput+label:hover {
+    background: #3d3d3d;
+}
+
+.checkboxInput:checked+label {
+    color: #F6B46F !important;
+    background-color: #3d3b3a;
+}
+
+/* ------------------------ */

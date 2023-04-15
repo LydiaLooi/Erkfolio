@@ -25,7 +25,7 @@ export default function PaginatedGalleryLayout(
                 hideFilter={hideFilter}
             />
             <div className={utilStyles.marginBottom50px}>
-                <a id="load-more-button" className="cool-button" onClick={getMore}>Load More</a>
+                <buttpm id="load-more-button" className="cool-button centred" onClick={getMore}>Load More</buttpm>
             </div>
         </div>
     );

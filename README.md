@@ -10,6 +10,7 @@ Minimum required `.env`
 
 ```
 LOG_LEVEL="debug"
+ADMIN_UUID="Insert Firebase UUID of admin user"
 ```
 
 ### Technologies Used
