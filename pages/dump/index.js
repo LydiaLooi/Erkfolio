@@ -2,7 +2,7 @@ import Head from 'next/head';
 import { useEffect, useRef, useState } from 'react';
 import Layout from '../../components/layout';
 import { fetchTestCollection } from '../../fetches/paginated_test_collection';
-
+import utilStyles from '../../styles/utils.module.css'
 import useSWR from 'swr';
 import PaginatedGalleryLayout from '../../components/gallery_layout_paginated';
 import { getLogger } from '../../logging/log-util';
@@ -100,7 +100,14 @@ export default function ArtDump() {
                     <title>{heading}</title>
                 </Head>
             </Layout>
-            <PaginatedGalleryLayout heading={heading} displayUpdateMethod={setDisplayArt} displayData={displayData} originalData={originalData} hideFilter={false} getMore={getMore} />
+            <h2 className={utilStyles.underline}>{heading}</h2>
+
+            <PaginatedGalleryLayout
+                displayUpdateMethod={setDisplayArt}
+                displayData={displayData}
+                originalData={originalData}
+                hideFilter={false}
+                getMore={getMore} />
 
         </div>
     );

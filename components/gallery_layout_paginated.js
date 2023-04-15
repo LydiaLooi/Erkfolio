@@ -6,7 +6,7 @@ export default function PaginatedGalleryLayout(
     {
         children,
         home,
-        heading,
+        description,
         displayData,
         originalData,
         hideFilter,
@@ -16,8 +16,8 @@ export default function PaginatedGalleryLayout(
 
     return (
         <div>
-            <h2 className={utilStyles.underline}>{heading}</h2>
             <GalleryNavigation></GalleryNavigation>
+            {description ? <div className={utilStyles.containerWidth}><p>{description}</p></div> : null}
             <ArtGallery
                 artData={displayData}
                 galleryUpdateMethod={displayUpdateMethod}

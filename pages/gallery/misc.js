@@ -9,7 +9,8 @@ const logger = getLogger("gallery-home")
 
 export default function MiscGallery() {
     const limitNumber = 9
-    const heading = "Misc Gallery"
+    const heading = "Miscellaneous"
+    const description = "This gallery is for images that I want to exclude from the main galleries... but still have them here because why not :)"
     return (
         <div>
             <Layout>
@@ -19,6 +20,7 @@ export default function MiscGallery() {
             </Layout>
             <PaginatedArtGallery
                 title={heading}
+                description={description}
                 limitAmount={limitNumber}
                 fetchArtMethod={fetchPaginatedDumpArt}
                 fetchArtMethodName={"fetchPaginatedDumpArt"}
