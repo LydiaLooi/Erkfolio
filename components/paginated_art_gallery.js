@@ -20,8 +20,13 @@ export default function PaginatedArtGallery({ title, limitAmount, fetchArtMethod
     const limitNum = useRef(_limitNum);
 
     logger.debug("SWR Unique:", `${fetchArtMethodName}-${lastRetrievedID.current}`)
+
     const { data, error } = useSWR(
-        shouldFetch ? [`${fetchArtMethodName}-${lastRetrievedID.current}`, lastRetrievedID.current, lastRetrievedDate.current, limitNum.current] : null,
+        shouldFetch ? [
+            `${fetchArtMethodName}-${lastRetrievedID.current}`,
+            lastRetrievedID.current,
+            lastRetrievedDate.current, limitNum.current
+        ] : null,
         fetchArtMethod,
         {
             dedupingInterval: 10000,
