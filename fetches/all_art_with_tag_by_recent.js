@@ -1,7 +1,7 @@
 
 import { collection, getDocs, orderBy, query, where, documentId, limit, startAt } from 'firebase/firestore/lite';
 import { db } from '../scripts/firebase';
-
+import { artCollection } from '../collection_names';
 
 export const fetchArtWithTagByRecent = async ([unique, lastID, lastDate, limitNum]) => {
     // unique = fetchArtWithTagByRecent-tagName-lastID
@@ -12,7 +12,7 @@ export const fetchArtWithTagByRecent = async ([unique, lastID, lastDate, limitNu
     let q;
     if (lastID.length > 0) {
         q = query(
-            collection(db, 'art'),
+            collection(db, artCollection),
             where('tagsArray', 'array-contains', tagName),
             where('dump', '==', false),
             orderBy('date_created', 'desc'),
@@ -22,7 +22,7 @@ export const fetchArtWithTagByRecent = async ([unique, lastID, lastDate, limitNu
         );
     } else {
         q = query(
-            collection(db, 'art'),
+            collection(db, artCollection),
             where('tagsArray', 'array-contains', tagName),
             where('dump', '==', false),
             orderBy('date_created', 'desc'),

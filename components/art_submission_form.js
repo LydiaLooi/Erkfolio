@@ -8,15 +8,16 @@ import resizeImage from '../scripts/image_resizing';
 import TagsListCheckboxes from './tags_list_checkboxes';
 
 const logger = getLogger("dashboard");
-const artCollection = "art";
 
 import styles from "./form.module.css"
 import Image from 'next/image';
 
+import { tagsCollection, artCollection } from '../collection_names';
+
 const saveNewTag = async (tagData) => {
     logger.debug("tagData", tagData)
     try {
-        await addDoc(collection(db, 'filters'), tagData)
+        await addDoc(collection(db, tagsCollection), tagData)
         logger.info("Successfully added ", tagData.name)
     } catch (error) {
         logger.error(error)
@@ -140,7 +141,10 @@ export default function ArtSubmissionForm({ editMode = false, existingData }) {
     }
 
     function handleDelete() {
-        deleteData(existingData.id)
+        let result = confirm("Are you sure you want to delete this?");
+        if (result) {
+            deleteData(existingData.id)
+        }
     }
 
     const editData = async (artData) => {

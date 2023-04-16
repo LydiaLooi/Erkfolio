@@ -1,10 +1,11 @@
 
 import { collection, getDocs, orderBy, query, where } from 'firebase/firestore/lite';
 import { db } from '../scripts/firebase';
+import { artCollection } from '../collection_names';
 
 export const fetchAllArtByRecent = async () => {
     const q = query(
-        collection(db, 'art'),
+        collection(db, artCollection),
         orderBy('date_created', 'desc')
     );
     const querySnapshot = await getDocs(q);
