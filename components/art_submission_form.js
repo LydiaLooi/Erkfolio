@@ -43,6 +43,7 @@ function addTags(newTagsArray, tagsArray) {
 }
 
 export default function ArtSubmissionForm({ editMode = false, existingData }) {
+
     const form = useRef();
     const imageInput = useRef()
     const nameInput = useRef()
@@ -81,6 +82,10 @@ export default function ArtSubmissionForm({ editMode = false, existingData }) {
         logger.debug("Checked tags:", checkedTags.current)
         e.preventDefault();
 
+        let btn = document.getElementById("submit-button");
+        btn.disabled = true;
+
+
         let image;
         if (!editMode) {
             image = imageInput.current?.files[0];
@@ -111,11 +116,15 @@ export default function ArtSubmissionForm({ editMode = false, existingData }) {
                             }, (error) => {
                                 logger.error(error)
                                 alert("Could not save...")
+                                btn.disabled = false;
+
 
                             })
                         }, (error) => {
                             logger.error(error)
                             alert("Could not save...")
+                            btn.disabled = false;
+
 
                         }
                     )
@@ -136,18 +145,23 @@ export default function ArtSubmissionForm({ editMode = false, existingData }) {
                 url: existingData.url
             })
         }
-
-
     }
 
-    function handleDelete() {
+
+    function handleDelete(e) {
+        e.target.disabled = true;
+
         let result = confirm("Are you sure you want to delete this?");
         if (result) {
             deleteData(existingData.id)
+        } else {
+            e.target.disabled = false;
         }
     }
 
     const editData = async (artData) => {
+        let btn = document.getElementById("submit-button");
+
         logger.debug("Edit", artData)
         try {
             const docRef = doc(db, "art", artData.id);
@@ -155,11 +169,13 @@ export default function ArtSubmissionForm({ editMode = false, existingData }) {
 
             logger.debug("Final data..", artData)
             await setDoc(docRef, artData)
-            window.location.reload(false); // reload if successful
+            logger.info("Successfully edited... Reloading...")
+            window.location.reload();
 
         } catch (error) {
             logger.error(error)
             alert('Failed to edit the data')
+            btn.disabled = false;
         }
     }
 
@@ -167,8 +183,9 @@ export default function ArtSubmissionForm({ editMode = false, existingData }) {
         logger.debug(artData)
         try {
             await addDoc(collection(db, artCollection), artData)
-            logger.info("Successfully added to art collection.")
-            window.location.reload(false); // reload if successful
+            logger.info("Successfully added to art collection... Either need to refresh or wait for update.")
+            window.location.reload();
+
         } catch (error) {
             logger.error(error)
             alert('Failed to add the data')
@@ -180,7 +197,8 @@ export default function ArtSubmissionForm({ editMode = false, existingData }) {
         try {
             const docRef = doc(db, "art", id);
             await deleteDoc(docRef)
-            window.location.reload(false); // reload if successful
+            logger.info("Successfully deleted... Going back to dashboard...")
+            window.location.reload();
 
         } catch (error) {
             logger.error(error)
@@ -239,7 +257,7 @@ export default function ArtSubmissionForm({ editMode = false, existingData }) {
 
                 {editMode ? <button className='cool-button-red margin-t-20px' onClick={handleDelete} type="button">Delete</button> : null}
 
-                <button className='cool-button centred' type="submit">Submit</button>
+                <button id="submit-button" className='cool-button centred' type="submit">Submit</button>
 
 
             </form>

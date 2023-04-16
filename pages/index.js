@@ -36,6 +36,10 @@ export default function Home() {
     }, [data]);
 
 
+    function handleClick(e) {
+        e.target.disabled = true
+    }
+
     return (
         <div>
             <Layout home>

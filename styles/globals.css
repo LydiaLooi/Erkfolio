@@ -76,10 +76,24 @@ a:hover {
     cursor: pointer;
 }
 
+.cool-button:disabled {
+    background: rgba(230, 193, 165, 0.1);
+    color: #f1cda6;
+    border: rgb(134, 134, 134);
+    cursor: not-allowed;
+}
+
 .cool-button-red:hover {
     background: rgba(242, 61, 61, 0.1);
     color: #f66f6f;
     cursor: pointer;
+}
+
+.cool-button-red:disabled {
+    background: rgba(236, 155, 155, 0.1);
+    color: #eb9d9d;
+    border: rgb(134, 134, 134);
+    cursor: not-allowed;
 }
 
 /**
