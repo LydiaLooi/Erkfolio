@@ -29,7 +29,7 @@ let dataURLToBlob = function (dataURL) {
 /* End Utility function to convert a canvas to a BLOB      */
 
 
-export default function resizeImage(imageFile, maxWidth = 800) {
+export default function resizeImage(imageFile, maxWidth = 850) {
     logger.debug("Resizing")
     logger.debug(imageFile)
 
