@@ -17,7 +17,7 @@ export default function PaginatedGalleryLayout(
     return (
         <div>
             <GalleryNavigation></GalleryNavigation>
-            {description ? <div className={utilStyles.containerWidth}><p>{description}</p></div> : null}
+            {description ? <div className={`${utilStyles.containerWidth} ${utilStyles.paddingX15px}`}><p>{description}</p></div> : null}
             <ArtGallery
                 artData={displayData}
                 galleryUpdateMethod={displayUpdateMethod}
