@@ -68,7 +68,7 @@ export default function ArtSubmissionForm({ editMode = false, existingData }) {
     }
 
     useEffect(() => {
-        if (editMode && existingData) {
+        if (editMode && existingData) { // Prefill fields with existing data
             nameInput.current.value = existingData.name
             dateCreatedInput.current.value = existingData.date_created
             descriptionInput.current.value = existingData.description
@@ -80,6 +80,35 @@ export default function ArtSubmissionForm({ editMode = false, existingData }) {
     }, [existingData])
 
 
+    function uploadImageAndSave({ id, name, date_created, description, pinned, dump, image }) {
+        const storageRef = ref(storage, `${artCollection}/${image.name}`)
+
+        $(document).on(resizeEvent, function (event) {
+            logger.info("Image successfully resized")
+            if (event.blob && event.url) {
+                uploadBytes(storageRef, event.blob).then(
+                    (snapshot) => {
+                        getDownloadURL(snapshot.ref).then((downloadUrl) => {
+                            saveOrEditData({ id, name, description, tagsArray: checkedTags.current, date_created, pinned, dump, url: downloadUrl })
+                        }, (error) => {
+                            logger.error(error)
+                            alert("Could not save...")
+                            btn.disabled = false;
+
+
+                        })
+                    }, (error) => {
+                        logger.error(error)
+                        alert("Could not save...")
+                        btn.disabled = false;
+                    }
+                )
+            }
+        });
+
+        resizeImage({ imageFile: image, eventName: resizeEvent })
+    }
+
     const submitArt = (e) => {
         logger.debug("Checked tags:", checkedTags.current)
         e.preventDefault();
@@ -87,11 +116,6 @@ export default function ArtSubmissionForm({ editMode = false, existingData }) {
         let btn = document.getElementById("submit-button");
         btn.disabled = true;
 
-
-        let image;
-        if (!editMode) {
-            image = imageInput.current?.files[0];
-        }
         const name = nameInput.current?.value;
         const date_created = dateCreatedInput.current?.value;
         const description = descriptionInput.current?.value;
@@ -99,59 +123,47 @@ export default function ArtSubmissionForm({ editMode = false, existingData }) {
         const pinned = pinnedInput.current?.checked;
         const dump = dumpInput.current?.checked;
 
-        logger.debug("Image", image)
 
         let newTagsArray = newTags.split(",").map(tag => tag.trim());
 
         addTags(newTagsArray, checkedTags.current);
 
-        if (!editMode) {
-            const storageRef = ref(storage, `${artCollection}/${image.name}`)
-
-            $(document).on(resizeEvent, function (event) {
-                logger.info("Image successfully resized")
-                if (event.blob && event.url) {
-                    uploadBytes(storageRef, event.blob).then(
-                        (snapshot) => {
-                            getDownloadURL(snapshot.ref).then((downloadUrl) => {
-                                saveData({ name, description, tagsArray: checkedTags.current, date_created, pinned, dump, url: downloadUrl })
-                            }, (error) => {
-                                logger.error(error)
-                                alert("Could not save...")
-                                btn.disabled = false;
-
-
-                            })
-                        }, (error) => {
-                            logger.error(error)
-                            alert("Could not save...")
-                            btn.disabled = false;
-                        }
-                    )
-                }
-            });
-
-            resizeImage({ imageFile: image, eventName: resizeEvent })
-        } else {
-            logger.info("Editing instead...")
-            editData({
-                id: existingData.id,
-                name,
-                description,
-                tagsArray: checkedTags.current,
-                date_created,
-                pinned,
-                dump,
-                url: existingData.url
-            })
+        let data = { name, date_created, description, tagsArray: checkedTags.current, pinned, dump }
+        if (editMode && existingData) {
+            data.id = existingData.id
+            data.url = existingData.url
         }
+
+
+        let image;
+        image = imageInput.current?.files[0];
+        if (image) {
+            data.image = image
+        }
+
+        if (editMode) {
+
+            if (!image) {
+                logger.warn("No image found ... so we're not editing the image")
+                saveOrEditData(data) // Go straight into editing the data...
+            } else {
+                // Do the thing
+                uploadImageAndSave(data)
+            }
+        } else {
+            uploadImageAndSave(data)
+        }
+
+    }
+
+    function removeUploadedImage() {
+        imageInput.current.value = "";
     }
 
     function testResize() {
         let image;
-        if (!editMode) {
-            image = imageInput.current?.files[0];
-        }
+        image = imageInput.current?.files[0];
+
 
         if (!image) {
             logger.warn("No image has been selected yet")
@@ -196,31 +208,31 @@ export default function ArtSubmissionForm({ editMode = false, existingData }) {
         }
     }
 
-    const editData = async (artData) => {
-        let btn = document.getElementById("submit-button");
 
-        logger.debug("Edit", artData)
-        try {
-            const docRef = doc(db, artCollection, artData.id);
-            delete artData.id
-
-            logger.debug("Final data..", artData)
-            await setDoc(docRef, artData)
-            logger.info("Successfully edited... Reloading...")
-            window.location.reload();
-
-        } catch (error) {
-            logger.error(error)
-            alert('Failed to edit the data')
-            btn.disabled = false;
-        }
-    }
-
-    const saveData = async (artData) => {
+    /**
+     * Will either save or edit the data. Will edit the data if artData has an id
+     * @param {*} artData 
+     */
+    const saveOrEditData = async (artData) => {
         logger.debug(artData)
+        delete artData.image
+
         try {
-            await addDoc(collection(db, artCollection), artData)
-            logger.info("Successfully added to art collection... Either need to refresh or wait for update.")
+            if (artData.id) {
+                logger.info("We're gonna set a doc instead of add one since we have...", artData.id)
+                const docRef = doc(db, artCollection, artData.id);
+                delete artData.id
+
+                logger.debug("Final data..", artData)
+                await setDoc(docRef, artData)
+                logger.info("Successfully edited... Reloading...")
+
+            } else {
+                delete artData.id
+
+                await addDoc(collection(db, artCollection), artData)
+                logger.info("Successfully added to art collection... Either need to refresh or wait for update.")
+            }
             window.location.reload();
 
         } catch (error) {
@@ -261,13 +273,26 @@ export default function ArtSubmissionForm({ editMode = false, existingData }) {
     return (
         <div>
             <form className={styles.form} ref={form} onSubmit={submitArt}>
+
                 {
-                    !editMode || !existingData ?
+                    editMode && existingData ? <Image src={existingData.url} width={100} height={100} alt={existingData.name} /> : null
+                }
+
+                {
+                    !editMode ?
                         <p className={`${styles.required} ${styles.field}`}>
                             <label>Image</label><input name='image' ref={imageInput} type="file" placeholder="Image" required />
                         </p>
-                        : <Image src={existingData.url} width={100} height={100} alt={existingData.name} />
+                        :
+                        <p className={`${styles} ${styles.field}`}>
+                            <label>Image </label><small><i>Note: This will overwrite the current image above.</i></small><br /><input name='image' ref={imageInput} type="file" placeholder="Image" />
+                        </p>
                 }
+
+                {
+                    editMode ? <button className='cool-button-red centred' type="button" onClick={removeUploadedImage}>Remove image</button> : null
+                }
+
 
                 <div id="resized-image"></div>
                 <button className='cool-button centred' type="button" onClick={testResize}>Test Resize</button>
