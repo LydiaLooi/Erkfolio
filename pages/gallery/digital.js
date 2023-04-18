@@ -11,7 +11,7 @@ export default function DigitalGallery() {
 
     const limitNumber = 9
     const heading = "Digital Art Gallery"
-    const tagName = "digital art"
+    const tagName = process.env.DIGITAL_GALLERY_TAG
     return (
         <div>
             <Layout>

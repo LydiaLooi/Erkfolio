@@ -1,4 +1,4 @@
 module.exports = {
-    artCollection: 'art',
-    tagsCollection: 'filters'
+    artCollection: process.env.ART_COLLECTION,
+    tagsCollection: process.env.TAG_COLLECTION
 }

@@ -25,6 +25,12 @@ Minimum required `.env`
 ```
 LOG_LEVEL="debug"
 ADMIN_UUID="Insert Firebase UUID of admin user"
+MAX_HEIGHT=800
+MAX_WIDTH=1000
+ART_COLLECTION="art"
+TAG_COLLECTION="filters"
+DIGITAL_GALLERY_TAG="digital art"
+TRADITIONAL_GALLERY_TAG="traditional art"
 ```
 
 ### Technologies Used

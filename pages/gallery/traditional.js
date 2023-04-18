@@ -11,7 +11,7 @@ export default function TraditionalGallery() {
 
     const limitNumber = 9
     const heading = "Traditional Art Gallery"
-    const tagName = "traditional art"
+    const tagName = process.env.TRADITIONAL_GALLERY_TAG
     return (
         <div>
             <Layout>
