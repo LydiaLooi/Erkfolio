@@ -164,7 +164,7 @@ export default function ArtSubmissionForm({ editMode = false, existingData }) {
 
         logger.debug("Edit", artData)
         try {
-            const docRef = doc(db, "art", artData.id);
+            const docRef = doc(db, artCollection, artData.id);
             delete artData.id
 
             logger.debug("Final data..", artData)
@@ -195,7 +195,7 @@ export default function ArtSubmissionForm({ editMode = false, existingData }) {
     const deleteData = async (id) => {
         logger.debug("DELETE", id)
         try {
-            const docRef = doc(db, "art", id);
+            const docRef = doc(db, artCollection, id);
             await deleteDoc(docRef)
             logger.info("Successfully deleted... Going back to dashboard...")
             window.location.reload();
