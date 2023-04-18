@@ -218,7 +218,7 @@ export default function ArtGallery({ artData, galleryUpdateMethod, originalData,
                     <div className="gallery">
 
                         {artData.map(({ id, name, description, date_created, pinned, tagsArray, url }) => (
-                            <div key={id} className={artStyles.imageContainer}>
+                            <div key={id} className={artStyles.artImageContainer}>
                                 <Image
                                     src={url}
                                     height={500}

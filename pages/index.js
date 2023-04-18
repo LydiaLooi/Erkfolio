@@ -47,8 +47,7 @@ export default function Home() {
                     <title>{siteTitle}</title>
                 </Head>
                 <section>
-
-                    <p>Welcome to my art portfolio! This site is mainly for me to easily organise and show the different types of artwork that I do (i.e., traditional vs. digital). Enjoy~!</p>
+                    <p className={utilStyles.paddingX15px}>Welcome to my art portfolio! This site is mainly for me to easily organise and show the different types of artwork that I do (i.e., traditional vs. digital). Enjoy~!</p>
                 </section>
 
             </Layout>

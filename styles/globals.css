@@ -204,12 +204,6 @@ https://codepen.io/rrenula/pen/nJmQed
 
 }
 
-@media only screen and (max-width: 700px) {
-    #social-test {
-        height: 40px;
-    }
-}
-
 
 .social {
     padding-left: 0px;
@@ -238,6 +232,10 @@ https://codepen.io/rrenula/pen/nJmQed
 }
 
 @media only screen and (max-width: 700px) {
+    #social-test {
+        height: 40px;
+    }
+
     .social li {
         border: none;
     }
@@ -245,6 +243,11 @@ https://codepen.io/rrenula/pen/nJmQed
     .social li:hover {
         color: rgba(242, 138, 61, 1);
         border: none;
+    }
+
+    .gallery img {
+        width: 100vw;
+        height: 100vw;
     }
 }
 

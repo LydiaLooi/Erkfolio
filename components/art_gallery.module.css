@@ -20,12 +20,12 @@
     animation-duration: 0.3s;
 }
 
-.imageContainer {
+.artImageContainer {
     position: relative;
     display: inline-block;
 }
 
-.imageContainer:hover .imageOverlay {
+.artImageContainer:hover .imageOverlay {
     visibility: visible;
     opacity: 1;
 }
