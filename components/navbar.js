@@ -32,6 +32,12 @@ export default function NavBar() {
                 <li>
                     <Link href="/gallery">Gallery</Link>
                 </li>
+                {/* <li>
+                    <Link href="/other">Other</Link>
+                </li>
+                <li>
+                    <Link href="/commissions">Commissions</Link>
+                </li> */}
 
                 {user && isAdminUUID(user.uid) ? <li><Link href="/dashboard">Dashboard</Link></li> : null}
             </ul>

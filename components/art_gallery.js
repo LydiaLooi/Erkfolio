@@ -1,4 +1,5 @@
 import Image from "next/image";
+import artStyles from './art_gallery.module.css';
 import modalStyles from '../styles/modal.module.css';
 import searchStyles from '../styles/search.module.css'
 import { useEffect, useState } from "react";
@@ -217,7 +218,7 @@ export default function ArtGallery({ artData, galleryUpdateMethod, originalData,
                     <div className="gallery">
 
                         {artData.map(({ id, name, description, date_created, pinned, tagsArray, url }) => (
-                            <div key={id}>
+                            <div key={id} className={artStyles.imageContainer}>
                                 <Image
                                     src={url}
                                     height={500}
@@ -229,6 +230,11 @@ export default function ArtGallery({ artData, galleryUpdateMethod, originalData,
                                         disableBodyScroll()
                                     }}
                                 />
+                                <div className={artStyles.imageOverlay}>
+                                    <span>{name}</span><br />
+                                    <small><Date dateString={date_created} /></small>
+                                </div>
+
                             </div>
                         ))}
 
