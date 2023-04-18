@@ -15,18 +15,6 @@
     margin: 0 0 1.5em 0;
 }
 
-.label {
-    font-weight: bold;
-    color: white;
-    padding-top: 0;
-    padding-left: 0;
-    letter-spacing: .025em;
-    font-size: 1.125em;
-    line-height: 1.25;
-    position: relative;
-    z-index: 100;
-}
-
 .required label:after {
     content: '* ';
     color: red !important;
@@ -41,7 +29,7 @@
     padding-top: 0;
     padding-left: 0;
     letter-spacing: .025em;
-    font-size: 1.125em;
+    font-size: 1em;
     line-height: 1.25;
     position: relative;
     z-index: 100;

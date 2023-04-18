@@ -29,7 +29,7 @@ let dataURLToBlob = function (dataURL) {
 /* End Utility function to convert a canvas to a BLOB      */
 
 
-export default function resizeImage(imageFile, maxWidth = 800) {
+export default function resizeImage({ imageFile, eventName = "imageResized", maxWidth = process.env.MAX_WIDTH, maxHeight = process.env.MAX_HEIGHT }) {
     logger.debug("Resizing")
     logger.debug(imageFile)
 
@@ -42,28 +42,31 @@ export default function resizeImage(imageFile, maxWidth = 800) {
 
             // Resize the image
             let canvas = document.createElement('canvas'),
-                max_size = maxWidth,// TODO : pull max size from a site config
+                // max_size = Math.max(maxWidth, maxHeight),
                 width = image.width,
                 height = image.height;
             if (width > height) {
-                if (width > max_size) {
-                    height *= max_size / width;
-                    width = max_size;
+                if (width > maxWidth) {
+                    height *= maxWidth / width;
+                    width = maxWidth;
                 }
             } else {
-                if (height > max_size) {
-                    width *= max_size / height;
-                    height = max_size;
+                if (height > maxHeight) {
+                    width *= maxHeight / height;
+                    height = maxHeight;
                 }
             }
             canvas.width = width;
             canvas.height = height;
+
+            logger.debug(`Resized image dimensions: ${width} x ${height} pixels`);
+
             canvas.getContext('2d').drawImage(image, 0, 0, width, height);
-            let dataUrl = canvas.toDataURL('image/jpeg');
+            let dataUrl = canvas.toDataURL('image/png');
             let resizedImage = dataURLToBlob(dataUrl);
 
             $.event.trigger({
-                type: "imageResized",
+                type: eventName,
                 blob: resizedImage,
                 url: dataUrl
             });

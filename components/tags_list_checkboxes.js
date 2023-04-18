@@ -22,10 +22,10 @@ export default function TagsListCheckboxes({ handleCheckboxChangeMethod }) {
         logger.info("Loading data...")
     }
 
-
     useEffect(() => {
         if (data) {
             logger.info("Data:", data)
+            data.sort((a, b) => { return a.name > b.name }) // Sort alphabetically by name
             setTagNames(data)
         }
     }, [data]);

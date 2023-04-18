@@ -1,6 +1,6 @@
 import { addDoc, collection, setDoc, doc, deleteDoc } from 'firebase/firestore/lite';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { db, storage } from '../scripts/firebase';
 
 import { getLogger } from "../logging/log-util";
@@ -54,6 +54,8 @@ export default function ArtSubmissionForm({ editMode = false, existingData }) {
     const dumpInput = useRef();
     const checkedTags = useRef([]);
 
+    const resizeEvent = "imageResized"
+
     function prefillTags() {
         logger.debug("Prefilling...", checkedTags.current)
         checkedTags.current.forEach(tag => {
@@ -106,7 +108,7 @@ export default function ArtSubmissionForm({ editMode = false, existingData }) {
         if (!editMode) {
             const storageRef = ref(storage, `${artCollection}/${image.name}`)
 
-            $(document).on("imageResized", function (event) {
+            $(document).on(resizeEvent, function (event) {
                 logger.info("Image successfully resized")
                 if (event.blob && event.url) {
                     uploadBytes(storageRef, event.blob).then(
@@ -124,14 +126,12 @@ export default function ArtSubmissionForm({ editMode = false, existingData }) {
                             logger.error(error)
                             alert("Could not save...")
                             btn.disabled = false;
-
-
                         }
                     )
                 }
             });
 
-            resizeImage(image)
+            resizeImage({ imageFile: image, eventName: resizeEvent })
         } else {
             logger.info("Editing instead...")
             editData({
@@ -145,6 +145,43 @@ export default function ArtSubmissionForm({ editMode = false, existingData }) {
                 url: existingData.url
             })
         }
+    }
+
+    function testResize() {
+        let image;
+        if (!editMode) {
+            image = imageInput.current?.files[0];
+        }
+
+        if (!image) {
+            logger.warn("No image has been selected yet")
+            return
+        }
+
+        $(document).on("testResize", function (event) {
+            // Check if the <div> element already contains an <img> element
+            let resizedImageDiv = document.getElementById('resized-image');
+            if (resizedImageDiv.getElementsByTagName('img').length === 0) {
+                // Create a new <img> element and set its src attribute to the data URL of the resized image
+                let img = document.createElement('img');
+                img.src = event.url;
+
+                // Append the <img> element to the <div> element with the id "resized-image"
+                resizedImageDiv.appendChild(img);
+            }
+        });
+
+        let div = document.getElementById("resized-image");
+
+        // Select all <img> elements within the <div>
+        let images = div.querySelectorAll('img');
+
+        // Loop through each <img> element and remove it from the <div>
+        images.forEach(function (image) {
+            image.remove();
+        });
+
+        resizeImage({ imageFile: image, eventName: "testResize" })
     }
 
 
@@ -231,6 +268,9 @@ export default function ArtSubmissionForm({ editMode = false, existingData }) {
                         </p>
                         : <Image src={existingData.url} width={100} height={100} alt={existingData.name} />
                 }
+
+                <div id="resized-image"></div>
+                <button className='cool-button centred' type="button" onClick={testResize}>Test Resize</button>
 
 
                 <p className={`${styles.required} ${styles.field}`}>
