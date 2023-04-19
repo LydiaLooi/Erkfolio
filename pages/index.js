@@ -47,9 +47,9 @@ export default function Home() {
                 </section>
 
             </Layout>
-            <h3 className={utilStyles.underline}>
+            <h2 className={utilStyles.underline}>
                 Pinned Works
-            </h3>
+            </h2>
             <ArtGallery artData={artData} hideFilter={true} />
 
             <div className={utilStyles.marginBottom50px}>

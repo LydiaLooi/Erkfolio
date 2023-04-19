@@ -156,62 +156,78 @@ export default function ViewProject() {
             <Modal clickedImage={clickedImage} updateMethod={setClickedImage}></Modal>
 
             <Layout>
-                {projectData ?
-                    <div>
+                <div>
+                    {projectData ?
                         <h2 className={utilStyles.underline}>{projectData.name}</h2>
-                    </div>
-                    : <p>Loading...</p>
-                }
+                        :
+                        <h2 className={utilStyles.underline}>Loading...</h2>
+                    }
+                </div>
             </Layout>
-            {projectData ?
-                <div className="wrapper">
-                    <div className={utilStyles.mainImageContainer}>
+            <div className="wrapper">
+                <div className={utilStyles.mainImageContainer}>
+                    {projectData ?
                         <Image
                             className={utilStyles.mainImage}
                             src={projectData.main_image_url}
                             alt={projectData.name}
                             fill={true}
+                            placeholder="empty"
+                        /> :
+                        <Image
+                            className={utilStyles.mainImage}
+                            src="/images/placeholder.png"
+                            alt="Placeholder"
+                            fill={true}
+                            placeholder="empty"
                         />
+                    }
+                </div>
+                <div className={utilStyles.containerWidth}>
+                    <div className={utilStyles.paddingX15px}>
+                        {projectData ?
+                            <>
+                                <p>{projectData.description}</p>
+                                {projectData.link ? <i> <a href={projectData.link}>{projectData.link}</a></i> : null}
+                            </>
+                            : <p>Loading...</p>}
                     </div>
-                    <div className={utilStyles.containerWidth}>
-                        <div className={utilStyles.paddingX15px}>
-                            <p>{projectData.description}</p>
-                            {projectData.link ? <p>Link: <a href={projectData.link}>{projectData.link}</a></p> : null}
+                </div>
+            </div>
+
+
+
+            {
+                projectData && projectData.project_images ?
+                    <div className="wrapper">
+                        <h3 className={utilStyles.underline}>Project Images</h3>
+                        <div className="gallery">
+                            {projectData.project_images ? projectData.project_images.map(({ title, description, url }) => (
+                                <div key={url} className={artStyles.artImageContainer}>
+                                    <Image
+                                        src={url}
+                                        height={500}
+                                        width={500}
+                                        alt={title}
+                                        onClick={() => {
+                                            setClickedImage({ title, description, url });
+                                            showModal()
+                                            disableBodyScroll()
+                                        }}
+                                    />
+                                    <div className={artStyles.imageOverlay}>
+                                        <span>{title}</span><br />
+                                        <small>{description}</small>
+                                    </div>
+
+                                </div>
+                            )) : <p>None :(</p>}
                         </div>
                     </div>
-                </div>
-                : null}
 
 
-            {projectData && projectData.project_images ?
-                <div className="wrapper">
-                    <h3 className={utilStyles.underline}>Project Images</h3>
-                    <div className="gallery">
-                        {projectData.project_images ? projectData.project_images.map(({ title, description, url }) => (
-                            <div key={url} className={artStyles.artImageContainer}>
-                                <Image
-                                    src={url}
-                                    height={500}
-                                    width={500}
-                                    alt={title}
-                                    onClick={() => {
-                                        setClickedImage({ title, description, url });
-                                        showModal()
-                                        disableBodyScroll()
-                                    }}
-                                />
-                                <div className={artStyles.imageOverlay}>
-                                    <span>{title}</span><br />
-                                    <small>{description}</small>
-                                </div>
-
-                            </div>
-                        )) : <p>None :(</p>}
-                    </div>
-                </div>
-
-
-                : null}
-        </div>
+                    : null
+            }
+        </div >
     );
 }
