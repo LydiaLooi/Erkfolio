@@ -10,7 +10,7 @@ export default function OtherHome() {
             <Head>
                 <title>Other</title>
             </Head>
-            <h1>This section is a work in progress :)</h1>
+            <h1>Other Projects</h1>
         </Layout>
     );
 }

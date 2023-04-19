@@ -6,19 +6,19 @@ import { getLogger } from "../../../logging/log-util";
 const logger = getLogger("edit-art")
 
 import { useRouter } from 'next/router'
-import { fetchArtByUid } from "../../../fetches/fetch_art_by_id";
+import { fetchProjectById } from "../../../fetches/fetch_project_by_id";
 import { longDedupingInterval } from "../../../fetches/swr_config";
-import ArtSubmissionForm from "../../../components/art_submission_form";
 import utilStyles from "../../../styles/utils.module.css"
 
 import { auth } from "../../../scripts/firebase";
 import { isAdminUUID } from "../../../scripts/utils";
 import { onAuthStateChanged } from "@firebase/auth";
+import ProjectSubmissionForm from "../../../components/project_submission_form";
 
-export default function EditArt() {
+export default function EditProject() {
     const router = useRouter()
 
-    const [artData, setArt] = useState()
+    const [projectData, setProject] = useState()
     const [user, setUser] = useState(null);
     const [shouldFetch, setShouldFetch] = useState(false)
 
@@ -38,11 +38,11 @@ export default function EditArt() {
         });
     }, []);
 
-    const { uid } = router.query
+    const { proj_uid } = router.query
 
     const { data, error } = useSWR(
-        shouldFetch ? uid : null,
-        fetchArtByUid,
+        shouldFetch ? proj_uid : null,
+        fetchProjectById,
         {
             dedupingInterval: longDedupingInterval,
             onSuccess: () => {
@@ -69,7 +69,7 @@ export default function EditArt() {
 
         if (data) {
             logger.info("SUCCESS", data)
-            setArt(data);
+            setProject(data);
         }
     }, [data]);
 
@@ -78,8 +78,8 @@ export default function EditArt() {
         <Layout>
             {user && isAdminUUID(user.uid) ?
                 <div>
-                    <h2 className={utilStyles.underline}>Editing Artwork...</h2>
-                    <ArtSubmissionForm editMode={true} existingData={artData}></ArtSubmissionForm>
+                    <h2 className={utilStyles.underline}>Editing Project...</h2>
+                    <ProjectSubmissionForm editMode={true} existingData={projectData} />
                 </div>
                 : <p>Loading...</p>
             }
