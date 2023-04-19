@@ -12,6 +12,7 @@ const logger = getLogger("dashboard");
 
 import ArtSubmissionForm from '../../components/art_submission_form';
 import utilStyles from '../../styles/utils.module.css';
+import Link from 'next/link';
 
 
 function UnauthorisedUser() {
@@ -25,6 +26,7 @@ function UnauthorisedUser() {
 function DashboardHome({ currentUser }) {
     return (
         <div>
+            <Link href="/dashboard/project">Add a new project instead</Link>
             <p>You're logged in as: {currentUser.displayName}</p>
             {isAdminUID(currentUser.uid) ? <ArtSubmissionForm /> : <UnauthorisedUser />}
             <button className='cool-button-red centred margin-t-20px' onClick={() => auth.signOut()}>Sign out</button>
