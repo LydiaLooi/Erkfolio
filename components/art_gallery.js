@@ -9,6 +9,8 @@ import { onAuthStateChanged } from "@firebase/auth";
 import { isAdminUUID } from "../scripts/utils";
 import { auth } from "../scripts/firebase";
 import Link from "next/link";
+import { faSearch, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const logger = getLogger("gallery");
 
@@ -192,8 +194,16 @@ function FilterSearch({ artData, updateMethod, originalData }) {
         <div className={searchStyles.searchContainer}>
 
             <input id="filter-search" type="text" placeholder="Filter results by tag" name="search" onInput={handleInput} onKeyUp={handleKeyUp} />
-            <button type="button" onClick={filterIfAvailable}><i className="fa fa-search"></i></button>
-            <button type="button" onClick={clearFilters}><i className="fa fa-times"></i></button>
+            <button type="button" onClick={filterIfAvailable}>
+                <FontAwesomeIcon
+                    icon={faSearch}
+                />
+            </button>
+            <button type="button" onClick={clearFilters}>
+                <FontAwesomeIcon
+                    icon={faTimes}
+                />
+            </button>
             <br />
             <small id="error-msg" className="errorMessage"><i>None of the results have that tag</i></small>
         </div>

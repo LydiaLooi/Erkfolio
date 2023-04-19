@@ -1,6 +1,14 @@
 import Script from 'next/script';
 import '../styles/globals.css';
 import Head from 'next/head';
+import "@fortawesome/fontawesome-svg-core/styles.css";
+
+// https://www.slingacademy.com/article/how-to-use-font-awesome-with-next-js/
+import { config } from "@fortawesome/fontawesome-svg-core";
+// Tell Font Awesome to skip adding the CSS automatically 
+// since it's already imported above
+config.autoAddCss = false;
+
 export default function App({ Component, pageProps }) {
     return (
         <>
@@ -16,8 +24,6 @@ export default function App({ Component, pageProps }) {
                 <meta property="og:type" content="website" />
 
                 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-                <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossOrigin="anonymous" />
             </Head>
             <Component {...pageProps} />
             <Script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js" integrity="sha384-UG8ao2jwOWB7/oDdObZc6ItJmwUkR/PfMyt9Qs5AwX7PsnYn1CRKCTWyncPTWvaS" crossOrigin="anonymous"></Script>

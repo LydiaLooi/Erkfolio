@@ -3,6 +3,12 @@ import Image from 'next/image';
 import styles from './layout.module.css';
 import utilStyles from '../styles/utils.module.css';
 import NavBar from './navbar';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+import {
+    faInstagram,
+    faTwitter
+} from "@fortawesome/free-brands-svg-icons";
 
 const name = 'Erkfir';
 export const siteTitle = "Erkfir";
@@ -29,10 +35,19 @@ function Socials() {
         <div id="social-test">
             <ul className="social">
                 <li>
-                    <a href="https://www.instagram.com/erkfir"><i className="fa fa-instagram" aria-hidden="true" /></a>
+                    <a href="https://www.instagram.com/erkfir">
+                        <FontAwesomeIcon
+                            icon={faInstagram}
+                        />
+
+                    </a>
                 </li>
                 <li>
-                    <a href="https://www.twitter.com/erkfir"><i className="fa fa-twitter" aria-hidden="true" /></a>
+                    <a href="https://www.twitter.com/erkfir">
+                        <FontAwesomeIcon
+                            icon={faTwitter}
+                        />
+                    </a>
                 </li>
             </ul>
         </div>
