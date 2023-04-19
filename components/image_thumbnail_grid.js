@@ -6,17 +6,17 @@ import Image from "next/image"
 const logger = getLogger("image-thumbnail-grid")
 
 export default function ImageThumbnailGrid({ images }) {
-    // images minimum expected: [{title, description, file}]
+    // images minimum expected: [{title, description, resized}]
 
     logger.debug("IMAGES", images)
 
     return (
         <div>
             <div className={`${styles.thumbnailGallery}`}>
-                {images ? images.map(({ title, description, file }) => (
+                {images ? images.map(({ title, description, resized }) => (
                     <div key={title} className={styles.thumbnailImageContainer}>
                         <Image
-                            src={URL.createObjectURL(file)}
+                            src={resized.url}
                             alt={title}
                             fill={true}
 

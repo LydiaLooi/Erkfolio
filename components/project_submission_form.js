@@ -29,6 +29,8 @@ export default function ProjectSubmissionForm({ editMode = false, existingData }
 
     const [projectImages, setProjectImages] = useState([])
 
+    const finalProjectImagesData = useRef([]);
+
     const resizeEvent = "imageResized"
 
 
@@ -43,8 +45,8 @@ export default function ProjectSubmissionForm({ editMode = false, existingData }
     }, [existingData])
 
 
-    function uploadImageAndSave({ id, name, date_created, description, pinned, link, mainImage }) {
-        const storageRef = ref(storage, `${projectCollection}/${mainImage.name}`)
+    async function uploadImageAndSave({ id, name, date_created, description, pinned, link, mainImage, project_images }) {
+        const storageRef = ref(storage, `${projectCollection}/${mainImage.name}`) // Resize and save the mainImage... which hasn't been done yet.
 
         $(document).on(resizeEvent, function (event) {
             logger.info("Image successfully resized")
@@ -59,7 +61,8 @@ export default function ProjectSubmissionForm({ editMode = false, existingData }
                                 date_created,
                                 pinned,
                                 link,
-                                main_image_url: downloadUrl
+                                main_image_url: downloadUrl,
+                                project_images
                             }, projectCollection)
                         }, (error) => {
                             logger.error(error)
@@ -80,8 +83,29 @@ export default function ProjectSubmissionForm({ editMode = false, existingData }
         resizeImage({ imageFile: mainImage, eventName: resizeEvent })
     }
 
-    const submitArt = (e) => {
+    async function uploadImages() {
+
+        for (let image of projectImages) {
+            let storageRef = ref(storage, `${projectCollection}/${image.title}`)
+
+            let snapshot = await uploadBytes(storageRef, image.resized.blob)
+
+            let downloadUrl = await getDownloadURL(snapshot.ref)
+
+            image.url = downloadUrl
+            delete image.resized
+            delete image.file
+            finalProjectImagesData.current.push(image)
+
+        }
+    }
+
+    async function submitData(e) {
         e.preventDefault();
+
+        await uploadImages()
+
+        logger.info(finalProjectImagesData.current)
 
         let btn = document.getElementById("submit-button");
         btn.disabled = true;
@@ -97,7 +121,8 @@ export default function ProjectSubmissionForm({ editMode = false, existingData }
             date_created,
             description,
             link,
-            pinned
+            pinned,
+            project_images: finalProjectImagesData.current
         }
 
         if (editMode && existingData) {
@@ -113,16 +138,16 @@ export default function ProjectSubmissionForm({ editMode = false, existingData }
         }
 
         if (editMode) {
-
-            if (!mainImage) {
-                logger.warn("No image found ... so we're not editing the image")
-                saveOrEditData(data, projectCollection) // Go straight into editing the data...
-            } else {
-                // Do the thing
-                uploadImageAndSave(data)
-            }
+            logger.warn("Yeah uh, editing isn't a thing quite yet...")
+            // if (!mainImage) {
+            //     logger.warn("No image found ... so we're not editing the image")
+            //     saveOrEditData(data, projectCollection) // Go straight into editing the data...
+            // } else {
+            //     // Do the thing
+            //     uploadImageAndSave(data)
+            // }
         } else {
-            uploadImageAndSave(data)
+            await uploadImageAndSave(data)
         }
 
     }
@@ -229,14 +254,30 @@ export default function ProjectSubmissionForm({ editMode = false, existingData }
     function handleImagePicked(imageData) {
         logger.debug("AN IMAGE HAS BEEN PICKED??? current", projectImages)
 
-        setProjectImages(projectImages.concat([imageData]))
+        // Do some resizing, on resizedone, set project images..
+
+        let eventName = imageData.title.trim().replace(/\s/g, "");
+
+        logger.debug("RESIZing", `resizing-${eventName}`)
+
+
+        $(document).on(`resizing-${eventName}`, function (event) {
+            logger.debug("RESIZED", `resizing-${eventName}`)
+            imageData.resized = event
+            setProjectImages(projectImages.concat([imageData]))
+        })
+
+        resizeImage({
+            imageFile: imageData.file,
+            eventName: `resizing-${eventName}`
+        })
 
     }
 
 
     return (
         <div>
-            <form className={styles.form} ref={form} onSubmit={submitArt}>
+            <form className={styles.form} ref={form} onSubmit={submitData}>
 
                 {
                     editMode && existingData ? <Image src={existingData.main_image_url} width={100} height={100} alt={existingData.name} /> : null
