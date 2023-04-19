@@ -275,7 +275,7 @@ export default function ProjectSubmissionForm({ editMode = false, existingData }
                 </p>
 
 
-                <h4>Project Images</h4>
+                <h3 className={`${styles.field}`}>Project Images</h3>
                 <ImagePicker handleData={handleImagePicked}></ImagePicker>
 
 

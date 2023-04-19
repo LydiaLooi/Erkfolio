@@ -268,8 +268,10 @@ https://codepen.io/rrenula/pen/nJmQed
 
 .footer {
     color: whitesmoke;
-    opacity: 0.2;
-    text-align: center;
+    opacity: 0.8;
+    text-align: right;
+    margin-top: 15px;
+    margin-right: 15px;
 }
 
 
