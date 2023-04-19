@@ -32,10 +32,10 @@ export default function NavBar() {
                 <li>
                     <Link href="/gallery">Gallery</Link>
                 </li>
-                {/* <li>
+                <li>
                     <Link href="/other">Other</Link>
                 </li>
-                <li>
+                {/*<li>
                     <Link href="/commissions">Commissions</Link>
                 </li> */}
 

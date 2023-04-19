@@ -112,3 +112,38 @@
         height: 100px;
     }
 }
+
+
+.mainImageContainer {
+    width: 40vw;
+    max-width: 1000px;
+    display: grid;
+    place-items: center;
+    margin: auto;
+    position: relative;
+    transition: ease 0.2s;
+
+}
+
+@media only screen and (max-width: 1000px) {
+    .mainImageContainer {
+        width: 80vw;
+    }
+}
+
+@media only screen and (max-width: 800px) {
+
+    .mainImageContainer {
+        width: 100vw;
+    }
+}
+
+
+.mainImage {
+    width: 100%;
+    height: 100%;
+    position: relative !important;
+    object-fit: contain;
+    border-radius: 10px;
+    transition: ease 0.2s;
+}

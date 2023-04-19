@@ -175,6 +175,12 @@ https://codepen.io/rrenula/pen/nJmQed
     margin: 0px auto;
 }
 
+@media only screen and (max-width: 800px) {
+    .wrapper {
+        width: 100%;
+    }
+}
+
 .gallery {
     display: flex;
     flex-wrap: wrap;
