@@ -36,10 +36,6 @@ export default function Home() {
     }, [data]);
 
 
-    function handleClick(e) {
-        e.target.disabled = true
-    }
-
     return (
         <div>
             <Layout home>
@@ -55,7 +51,7 @@ export default function Home() {
             <ArtGallery artData={artData} hideFilter={true} />
 
             <div className={utilStyles.marginBottom50px}>
-                <Link className='cool-button centred' href="/gallery">See More</Link>
+                <Link className='cool-button centred' href="/gallery">See Full Gallery</Link>
             </div>
         </div>
     );

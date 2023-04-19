@@ -5,11 +5,18 @@ export default function App({ Component, pageProps }) {
     return (
         <>
             <Head>
-                <meta property="og:title" content="Erkfolio" />
-                <meta property="og:description" content="Erkfir's Art Portfolio and stuff" />
+                <link rel="icon" href="/favicon.ico" />
+
+                <meta name="title" property="og:title" content="Erkfolio" />
+
+                <meta name="description" property="og:description" content="A website to showcase Erkfir's art portfolio and projects" />
+
                 <meta property="og:image" content="/images/profile.png" />
                 <meta property="og:image:alt" content="Erkfir's drawing of a witch version of herself" />
                 <meta property="og:type" content="website" />
+
+                <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
                 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossOrigin="anonymous" />
             </Head>
             <Component {...pageProps} />
