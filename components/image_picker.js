@@ -45,7 +45,7 @@ export default function ImagePicker({ handleData }) {
                 <label>Image Description</label><textarea name='imageDescription' ref={imageDescriptionInput} type="text" placeholder="Description" />
             </p>
             {message ? <p><small>{message}</small></p> : null}
-            <button type="button" onClick={imagePicked}>Add new image</button>
+            <button type="button" className="cool-button-mini" onClick={imagePicked}>Add new image</button>
         </div>
     )
 }

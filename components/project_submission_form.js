@@ -13,6 +13,7 @@ import Image from 'next/image';
 
 import { projectCollection } from '../collection_names';
 import ImagePicker from './image_picker';
+import ImageThumbnailGrid from './image_thumbnail_grid';
 
 
 
@@ -26,7 +27,7 @@ export default function ProjectSubmissionForm({ editMode = false, existingData }
     const linkInput = useRef()
     const pinnedInput = useRef();
 
-    const [projectImages, setProjectImages] = useState()
+    const [projectImages, setProjectImages] = useState([])
 
     const resizeEvent = "imageResized"
 
@@ -225,8 +226,11 @@ export default function ProjectSubmissionForm({ editMode = false, existingData }
         }
     }
 
-    function handleImagePicked(image) {
-        logger.debug("AN IMAGE HAS BEEN PICKED???", image)
+    function handleImagePicked(imageData) {
+        logger.debug("AN IMAGE HAS BEEN PICKED??? current", projectImages)
+
+        setProjectImages(projectImages.concat([imageData]))
+
     }
 
 
@@ -274,14 +278,22 @@ export default function ProjectSubmissionForm({ editMode = false, existingData }
                     <label>Project Link</label><input name='link' ref={linkInput} type="text" placeholder="URL" />
                 </p>
 
-
-                <h3 className={`${styles.field}`}>Project Images</h3>
-                <ImagePicker handleData={handleImagePicked}></ImagePicker>
-
-
                 <p className={`${styles.field}`}>
                     <label>Pinned: </label><input id='pinned' ref={pinnedInput} name='pinned' type="checkbox" placeholder="false" />
                 </p>
+
+
+                <h3 className={`${styles.field}`}>Project Images</h3>
+
+
+                <div className={styles.field}>
+                    <ImageThumbnailGrid images={projectImages} />
+                </div>
+
+                <div className={`${styles.field}`}>
+                    <ImagePicker handleData={handleImagePicked}></ImagePicker>
+                </div>
+
 
                 {editMode ? <button className='cool-button-red margin-t-20px' onClick={handleDelete} type="button">Delete</button> : null}
 

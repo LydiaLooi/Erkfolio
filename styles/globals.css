@@ -24,6 +24,24 @@ a:hover {
 }
 
 
+.cool-button-mini {
+    width: 150px;
+    mask-image: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, #362BCF 25%, #170F40 75%, rgba(255, 255, 255, 0) 100%);
+    text-align: center;
+    background: linear-gradient(90deg, #080410 0%, #080410 25%, #080410 75%, #080410 100%);
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.1), inset 0 0 1px #E79F5E;
+    padding: 5px;
+    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu,
+        Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+    text-transform: uppercase;
+    color: #F6B46F;
+    font-size: 13px;
+    text-decoration: none;
+    display: block;
+    border: 1px solid rgba(242, 138, 61, 0.4);
+}
+
+
 .cool-button {
     width: 200px;
     mask-image: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, #362BCF 25%, #170F40 75%, rgba(255, 255, 255, 0) 100%);
@@ -70,7 +88,8 @@ a:hover {
     margin-top: 20px;
 }
 
-.cool-button:hover {
+.cool-button:hover,
+.cool-button-mini:hover {
     background: rgba(242, 138, 61, 0.1);
     color: #F6B46F;
     cursor: pointer;
