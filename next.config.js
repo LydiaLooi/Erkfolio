@@ -8,6 +8,7 @@ module.exports = {
                 pathname: '/v0/b/erkfolio.appspot.com/**',
             },
         ],
+        minimumCacheTTL: 31536000,
     },
     env: {
         LOG_LEVEL: process.env.LOG_LEVEL,
