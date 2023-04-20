@@ -8,7 +8,7 @@ const logger = getLogger("edit-art")
 import { useRouter } from 'next/router'
 import { fetchArtByUid } from "../../../fetches/fetch_art_by_id";
 import { longDedupingInterval } from "../../../fetches/swr_config";
-import ArtSubmissionForm from "../../../components/art_submission_form";
+import ArtSubmissionForm from "../../../components/forms/art_submission_form";
 import utilStyles from "../../../styles/utils.module.css"
 
 import { auth } from "../../../scripts/firebase";

@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import useSWR from 'swr';
-import { fetchTags } from '../fetches/tags_list';
-import { getLogger } from '../logging/log-util';
+import { fetchTags } from '../../fetches/tags_list';
+import { getLogger } from '../../logging/log-util';
 import styles from './form.module.css';
-import { longDedupingInterval } from '../fetches/swr_config';
+import { longDedupingInterval } from '../../fetches/swr_config';
 const logger = getLogger('tags-checkboxes')
 
 export default function TagsListCheckboxes({ handleCheckboxChangeMethod }) {

@@ -1,6 +1,6 @@
 import { useRef, useState } from "react"
 import styles from "./form.module.css"
-import { getLogger } from "../logging/log-util"
+import { getLogger } from "../../logging/log-util"
 import Image from "next/image"
 
 const logger = getLogger("image-thumbnail-grid")

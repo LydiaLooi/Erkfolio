@@ -13,7 +13,7 @@ import utilStyles from "../../../styles/utils.module.css"
 import { auth } from "../../../scripts/firebase";
 import { isAdminUUID } from "../../../scripts/utils";
 import { onAuthStateChanged } from "@firebase/auth";
-import ProjectSubmissionForm from "../../../components/project_submission_form";
+import ProjectSubmissionForm from "../../../components/forms/project_submission_form";
 
 export default function EditProject() {
     const router = useRouter()

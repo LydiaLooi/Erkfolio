@@ -10,7 +10,7 @@ import { isAdminUUID as isAdminUID } from '../../scripts/utils';
 
 const logger = getLogger("dashboard");
 
-import ArtSubmissionForm from '../../components/art_submission_form';
+import ArtSubmissionForm from '../../components/forms/art_submission_form';
 import utilStyles from '../../styles/utils.module.css';
 import Link from 'next/link';
 

@@ -1,21 +1,21 @@
 import { addDoc, collection, setDoc, doc, deleteDoc } from 'firebase/firestore/lite';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { useEffect, useRef, useState } from 'react';
-import { db, storage } from '../scripts/firebase';
+import { db, storage } from '../../scripts/firebase';
 
-import { getLogger } from "../logging/log-util";
-import resizeImage from '../scripts/image_resizing';
+import { getLogger } from "../../logging/log-util";
+import resizeImage from '../../scripts/image_resizing';
 
 const logger = getLogger("dashboard");
 
 import styles from "./form.module.css"
 import Image from 'next/image';
 
-import { projectCollection } from '../collection_names';
+import { projectCollection } from '../../collection_names';
 import ImagePicker from './image_picker';
 import ImageThumbnailGrid from './image_thumbnail_grid';
 
-import { getCurrentUnixTimestamp } from '../scripts/utils'
+import { getCurrentUnixTimestamp } from '../../scripts/utils'
 
 
 export default function ProjectSubmissionForm({ editMode = false, existingData }) {

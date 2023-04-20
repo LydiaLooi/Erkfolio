@@ -1,10 +1,10 @@
 import { addDoc, collection, setDoc, doc, deleteDoc } from 'firebase/firestore/lite';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { useEffect, useRef, useState } from 'react';
-import { db, storage } from '../scripts/firebase';
+import { db, storage } from '../../scripts/firebase';
 
-import { getLogger } from "../logging/log-util";
-import resizeImage from '../scripts/image_resizing';
+import { getLogger } from "../../logging/log-util";
+import resizeImage from '../../scripts/image_resizing';
 import TagsListCheckboxes from './tags_list_checkboxes';
 
 const logger = getLogger("dashboard");
@@ -12,7 +12,7 @@ const logger = getLogger("dashboard");
 import styles from "./form.module.css"
 import Image from 'next/image';
 
-import { tagsCollection, artCollection } from '../collection_names';
+import { tagsCollection, artCollection } from '../../collection_names';
 
 const saveNewTag = async (tagData) => {
     logger.debug("tagData", tagData)
