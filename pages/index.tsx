@@ -12,7 +12,7 @@ import { ArtInterface } from '../interfaces/firebase_interfaces';
 
 const logger = getLogger("home");
 
-const Home = () => {
+export default function Home() {
 
     logger.info("Home page loaded")
 
@@ -52,8 +52,8 @@ const Home = () => {
             <ArtGallery
                 artData={artData}
                 hideFilter={true}
-                galleryUpdateMethod={null}
-                originalData={null}
+                galleryUpdateMethod={undefined}
+                originalData={artData}
             />
 
             <div className={utilStyles.marginBottom50px}>
@@ -63,4 +63,3 @@ const Home = () => {
     );
 }
 
-export default Home;

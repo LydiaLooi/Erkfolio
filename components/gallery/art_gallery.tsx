@@ -5,16 +5,25 @@ import Date from "../date";
 import artStyles from './art_gallery.module.css';
 import { ImageModal, showModal, disableBodyScroll } from "../image_modal"
 import FilterSearch from "./art_filter_search";
+import { ArtInterface } from "../../interfaces/firebase_interfaces";
+import { ModalDisplayImage } from "../../interfaces/modals";
 
 
 const logger = getLogger("gallery");
 
-export default function ArtGallery({ artData, galleryUpdateMethod, originalData, hideFilter = false }) {
+interface ArtGalleryProps {
+    artData: Array<ArtInterface>,
+    galleryUpdateMethod?: (arg: Array<ArtInterface>) => void,
+    originalData: Array<ArtInterface>,
+    hideFilter: boolean
+}
+
+export default function ArtGallery({ artData, galleryUpdateMethod, originalData, hideFilter = false }: ArtGalleryProps) {
     logger.debug("ArtGallery artData", artData)
     logger.debug("ArtGallery galleryUpdateMethod", galleryUpdateMethod)
     logger.debug("ArtGallery originalData", originalData)
 
-    let [clickedImage, setClickedImage] = useState({});
+    let [clickedImage, setClickedImage] = useState<ModalDisplayImage>();
 
     if (artData && artData.length != 0) {
         return (
@@ -22,7 +31,7 @@ export default function ArtGallery({ artData, galleryUpdateMethod, originalData,
                 <ImageModal clickedImage={clickedImage} updateMethod={setClickedImage}></ImageModal>
                 <div className="wrapper">
 
-                    {!hideFilter ? <FilterSearch artData={artData} updateMethod={galleryUpdateMethod} originalData={originalData}></FilterSearch> : null}
+                    {!hideFilter && galleryUpdateMethod ? <FilterSearch artResultsData={originalData} updateMethod={galleryUpdateMethod}></FilterSearch> : null}
 
                     <div className="gallery">
 
