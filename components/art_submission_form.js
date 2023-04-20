@@ -80,33 +80,26 @@ export default function ArtSubmissionForm({ editMode = false, existingData }) {
     }, [existingData])
 
 
-    function uploadImageAndSave({ id, name, date_created, description, pinned, dump, image }) {
+    async function uploadImageAndSave({ id, name, date_created, description, pinned, dump, image }) {
         const storageRef = ref(storage, `${artCollection}/${image.name}`)
 
-        $(document).on(resizeEvent, function (event) {
-            logger.info("Image successfully resized")
-            if (event.blob && event.url) {
-                uploadBytes(storageRef, event.blob).then(
-                    (snapshot) => {
-                        getDownloadURL(snapshot.ref).then((downloadUrl) => {
-                            saveOrEditData({ id, name, description, tagsArray: checkedTags.current, date_created, pinned, dump, url: downloadUrl })
-                        }, (error) => {
-                            logger.error(error)
-                            alert("Could not save...")
-                            btn.disabled = false;
+        try {
+            const data = await resizeImage({ imageFile: image })
+            logger.info("uploadImageAndSave Done!", data);
 
-
-                        })
-                    }, (error) => {
-                        logger.error(error)
-                        alert("Could not save...")
-                        btn.disabled = false;
-                    }
-                )
+            if (data.blob && data.dataUrl) {
+                const snapshot = await uploadBytes(storageRef, data.blob);
+                logger.info("Obtained snapshot")
+                const downloadUrl = await getDownloadURL(snapshot.ref);
+                logger.info("Obtained downloadUrl")
+                saveOrEditData({ id, name, description, tagsArray: checkedTags.current, date_created, pinned, dump, url: downloadUrl });
             }
-        });
 
-        resizeImage({ imageFile: image, eventName: resizeEvent })
+        } catch (error) {
+            logger.error(error);
+            alert("Could not save...");
+            btn.disabled = false;
+        }
     }
 
     const submitArt = (e) => {
@@ -160,7 +153,7 @@ export default function ArtSubmissionForm({ editMode = false, existingData }) {
         imageInput.current.value = "";
     }
 
-    function testResize() {
+    async function testResize() {
         let image;
         image = imageInput.current?.files[0];
 
@@ -169,19 +162,6 @@ export default function ArtSubmissionForm({ editMode = false, existingData }) {
             logger.warn("No image has been selected yet")
             return
         }
-
-        $(document).on("testResize", function (event) {
-            // Check if the <div> element already contains an <img> element
-            let resizedImageDiv = document.getElementById('resized-image');
-            if (resizedImageDiv.getElementsByTagName('img').length === 0) {
-                // Create a new <img> element and set its src attribute to the data URL of the resized image
-                let img = document.createElement('img');
-                img.src = event.url;
-
-                // Append the <img> element to the <div> element with the id "resized-image"
-                resizedImageDiv.appendChild(img);
-            }
-        });
 
         let div = document.getElementById("resized-image");
 
@@ -193,7 +173,17 @@ export default function ArtSubmissionForm({ editMode = false, existingData }) {
             image.remove();
         });
 
-        resizeImage({ imageFile: image, eventName: "testResize" })
+        let data = await resizeImage({ imageFile: image })
+        logger.info("Done!", data)
+
+        // Check if the <div> element already contains an <img> element
+        let resizedImageDiv = document.getElementById('resized-image');
+        // Create a new <img> element and set its src attribute to the data URL of the resized image
+        let img = document.createElement('img');
+        img.src = data.dataUrl;
+
+        // Append the <img> element to the <div> element with the id "resized-image"
+        resizedImageDiv.appendChild(img);
     }
 
 
@@ -213,8 +203,8 @@ export default function ArtSubmissionForm({ editMode = false, existingData }) {
      * Will either save or edit the data. Will edit the data if artData has an id
      * @param {*} artData 
      */
-    const saveOrEditData = async (artData) => {
-        logger.debug(artData)
+    async function saveOrEditData(artData) {
+        logger.debug("artData", artData)
         delete artData.image
 
         try {

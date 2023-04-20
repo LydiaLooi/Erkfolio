@@ -4,7 +4,7 @@ import { getStorage } from "firebase/storage";
 import { getFirestore } from 'firebase/firestore/lite';
 
 const firebaseConfig = {
-    apiKey: "AIzaSyBHImoa2lgKC290vPJahVqEsnf7BwdVSfk",
+    apiKey: process.env.FIREBASE_API_KEY,
     authDomain: "erkfolio.firebaseapp.com",
     projectId: "erkfolio",
     storageBucket: "erkfolio.appspot.com",
@@ -22,4 +22,6 @@ const provider = new GoogleAuthProvider();
 export const db = getFirestore(app);
 export const storage = getStorage(app);
 
-export const signInWithGoogle = () => signInWithPopup(auth, provider)
+export function signInWithGoogle() {
+    signInWithPopup(auth, provider)
+}

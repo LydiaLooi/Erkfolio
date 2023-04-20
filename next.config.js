@@ -11,6 +11,7 @@ module.exports = {
         minimumCacheTTL: 31536000,
     },
     env: {
+        FIREBASE_API_KEY: process.env.FIREBASE_API_KEY,
         LOG_LEVEL: process.env.LOG_LEVEL,
         ADMIN_UID: process.env.ADMIN_UID,
         MAX_HEIGHT: process.env.MAX_HEIGHT,
