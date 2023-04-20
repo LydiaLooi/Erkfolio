@@ -8,3 +8,7 @@ export interface ArtInterface {
     tagsArray: Array<string>,
     url: string
 }
+
+export interface FirebaseUser {
+    uid: string
+}

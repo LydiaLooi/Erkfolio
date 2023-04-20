@@ -6,7 +6,12 @@ import { auth } from "../scripts/firebase";
 import { isAdminUUID } from "../scripts/utils";
 import modalStyles from '../styles/modal.module.css';
 import Date from "./date";
+import { FirebaseUser } from "../interfaces/firebase_interfaces";
 
+import { getLogger } from "../logging/log-util";
+import { ModalDisplayImage } from "../interfaces/modals";
+
+const logger = getLogger("image-modal")
 
 export function disableBodyScroll() {
     let body = document.getElementsByTagName("body")[0];
@@ -22,23 +27,37 @@ export function enableBodyScroll() {
 
 export function showModal() {
     let modal = document.getElementById("image-modal");
+    if (!modal) {
+        logger.error("image-modal element could not be found")
+        return
+    }
     modal.style.display = "block";
 }
 
 export function hideModal() {
     let modal = document.getElementById("image-modal");
+    if (!modal) {
+        logger.error("image-modal element could not be found")
+        return
+    }
     modal.style.display = "none"
 }
 
-export function closeModal(updateMethod) {
+export function closeModal(updateMethod: (arg: ModalDisplayImage) => void) {
     hideModal()
     enableBodyScroll()
     updateMethod({ name: "placeholder" })
 }
 
-export function ImageModal({ clickedImage, updateMethod }) {
 
-    const [user, setUser] = useState(null);
+interface ImageModalProps {
+    clickedImage: any,
+    updateMethod: () => void
+}
+
+export function ImageModal({ clickedImage, updateMethod }: ImageModalProps) {
+
+    const [user, setUser] = useState<FirebaseUser | null>(null);
 
     useEffect(() => {
         onAuthStateChanged(auth, (user) => {
@@ -65,7 +84,6 @@ export function ImageModal({ clickedImage, updateMethod }) {
 
     return (
         <div>
-
             <div id="image-modal" className={modalStyles.modal} onClick={() => {
                 closeModal(updateMethod)
             }}>
