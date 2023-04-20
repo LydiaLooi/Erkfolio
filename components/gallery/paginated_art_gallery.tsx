@@ -5,14 +5,23 @@ import useSWR from 'swr';
 import PaginatedGalleryLayout from './gallery_layout_paginated'
 import { getLogger } from '../../logging/log-util';
 import { longDedupingInterval } from '../../fetches/swr_config';
+import { ArtInterface } from '../../interfaces/firebase_interfaces';
 const logger = getLogger("paginated-art-gallery")
 
-export default function PaginatedArtGallery({ title, description, limitAmount, fetchArtMethod, fetchArtMethodName }) {
+interface PaginatedArtGalleryProps {
+    title: string,
+    description: string,
+    limitAmount: number,
+    fetchArtMethod: () => Array<ArtInterface>,
+    fetchArtMethodName: string,
+}
+
+export default function PaginatedArtGallery({ title, description, limitAmount, fetchArtMethod, fetchArtMethodName }: PaginatedArtGalleryProps) {
 
     const _limitNum = limitAmount
 
-    const [displayData, setDisplayArt] = useState([]);
-    const [originalData, setOGCollection] = useState([])
+    const [displayData, setDisplayArt] = useState<Array<ArtInterface>>([]);
+    const [originalData, setOGCollection] = useState<Array<ArtInterface>>([])
     const [shouldFetch, setShouldFetch] = useState(true);
 
     const showButton = useRef(true);
@@ -57,17 +66,19 @@ export default function PaginatedArtGallery({ title, description, limitAmount, f
 
             setDisplayArt((prevDisplayData) => {
                 if (prevDisplayData.length > 0) {
-                    return prevDisplayData.concat(data.slice(1));
+                    let sliced = data.slice(1) as never
+                    return prevDisplayData.concat(sliced);
                 } else {
-                    return prevDisplayData.concat(data);
+                    return prevDisplayData.concat(data as never);
                 }
             });
 
             setOGCollection((prevOGData) => {
                 if (prevOGData.length > 0) {
-                    return prevOGData.concat(data.slice(1));
+                    let sliced = data.slice(1) as never
+                    return prevOGData.concat(sliced);
                 } else {
-                    return prevOGData.concat(data);
+                    return prevOGData.concat(data as never);
                 }
             });
             if (data.slice(-1)[0]) {
@@ -77,7 +88,7 @@ export default function PaginatedArtGallery({ title, description, limitAmount, f
 
             limitNum.current = _limitNum + 1
 
-            let btn = document.getElementById("load-more-button");
+            let btn = getLoadMoreButtonElement();
             if (!showButton.current) {
                 btn.style.display = "none";
             }
@@ -87,7 +98,15 @@ export default function PaginatedArtGallery({ title, description, limitAmount, f
     }, [data]);
 
 
-    async function getMore() {
+    function getLoadMoreButtonElement() {
+        let btn = document.getElementById("load-more-button");
+        if (!btn) {
+            throw new Error("Element load-more-button not found")
+        }
+        return btn
+    }
+
+    async function callToGetMore() {
         logger.debug("Get more!", shouldFetch)
         setShouldFetch(true)
     }
@@ -101,7 +120,7 @@ export default function PaginatedArtGallery({ title, description, limitAmount, f
                 displayData={displayData}
                 originalData={originalData}
                 hideFilter={false}
-                getMore={getMore}
+                methodToFetchMoreData={callToGetMore}
             />
         </div>
     );

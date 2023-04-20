@@ -9,13 +9,12 @@ import {
     faInstagram,
     faTwitter
 } from "@fortawesome/free-brands-svg-icons";
+import { ReactNode } from 'react';
 
 const name = 'Erkfir';
 export const siteTitle = "Erkfir";
 
-function TopProfile(isHome) {
-
-
+function TopProfile() {
     return (
         <div>
             <Image
@@ -54,15 +53,14 @@ function Socials() {
     )
 }
 
-export default function Layout({ children }) {
+export default function Layout({ children }: { children: ReactNode }) {
     return (
         <div className={styles.container}>
 
             <header className={styles.header}>
 
-                <TopProfile isHome='true'></TopProfile>
-
-                <Socials></Socials>
+                <TopProfile />
+                <Socials />
 
                 <NavBar />
             </header>

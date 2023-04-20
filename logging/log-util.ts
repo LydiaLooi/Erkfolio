@@ -1,13 +1,13 @@
 
 import logLevelData from "../log-level";
-import pino, { Logger } from "pino";
+import pino from "pino";
 
 const logLevels = new Map(Object.entries(logLevelData));
 
-export function getLogLevel(logger) {
+export function getLogLevel(logger: string) {
     return logLevels.get(logger) || logLevels.get("*") || "info";
 }
 
-export function getLogger(name) {
+export function getLogger(name: string) {
     return pino({ name, level: getLogLevel(name) });
 }

@@ -1,18 +1,27 @@
 import ArtGallery from "./art_gallery";
 import GalleryNavigation from "./gallery_nav";
 import utilStyles from '../../styles/utils.module.css'
+import { ArtInterface } from "../../interfaces/firebase_interfaces";
+
+
+interface PaginatedArtGalleryProps {
+    description: string,
+    displayData: Array<ArtInterface>,
+    originalData: Array<ArtInterface>,
+    hideFilter: boolean,
+    displayUpdateMethod: (arg: Array<ArtInterface>) => void,
+    methodToFetchMoreData: () => void
+}
 
 export default function PaginatedGalleryLayout(
     {
-        children,
-        home,
         description,
         displayData,
         originalData,
         hideFilter,
         displayUpdateMethod,
-        getMore
-    }) {
+        methodToFetchMoreData
+    }: PaginatedArtGalleryProps) {
 
     return (
         <div>
@@ -25,7 +34,7 @@ export default function PaginatedGalleryLayout(
                 hideFilter={hideFilter}
             />
             <div className={utilStyles.marginBottom50px}>
-                <button id="load-more-button" className="cool-button centred" onClick={getMore}>Load More</button>
+                <button id="load-more-button" className="cool-button centred" onClick={methodToFetchMoreData}>Load More</button>
             </div>
         </div>
     );

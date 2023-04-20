@@ -1,6 +1,6 @@
 import { signInWithGoogle } from "../scripts/firebase";
 
-const Login = () => {
+export default function Login() {
     return (
         <div>
             <button className='cool-button centred' onClick={signInWithGoogle}>
@@ -9,5 +9,3 @@ const Login = () => {
         </div>
     )
 }
-
-export default Login;

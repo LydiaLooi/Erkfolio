@@ -28,10 +28,10 @@ export default function ArtGallery({ artData, galleryUpdateMethod, originalData,
     if (artData && artData.length != 0) {
         return (
             <section>
-                <ImageModal clickedImage={clickedImage} updateMethod={setClickedImage}></ImageModal>
+                <ImageModal clickedImage={clickedImage} updateMethod={setClickedImage} />
                 <div className="wrapper">
 
-                    {!hideFilter && galleryUpdateMethod ? <FilterSearch artResultsData={originalData} updateMethod={galleryUpdateMethod}></FilterSearch> : null}
+                    {!hideFilter && galleryUpdateMethod ? <FilterSearch artResultsData={originalData} updateMethod={galleryUpdateMethod} /> : null}
 
                     <div className="gallery">
 

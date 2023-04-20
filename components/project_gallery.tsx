@@ -7,11 +7,16 @@ import { longDedupingInterval } from "../fetches/swr_config";
 import { getLogger } from "../logging/log-util";
 import artStyles from './gallery/art_gallery.module.css';
 import Date from "./date";
+import { ProjectDataInterface } from "../interfaces/firebase_interfaces";
 
 const logger = getLogger("project-gallery");
 
+interface ProjectGalleryInterface {
+    projectData: Array<ProjectDataInterface>,
+    projectDataUpdateMethod: (arg: Array<ProjectDataInterface>) => void
+}
 
-export default function ProjectGallery({ projectData, projectDataUpdateMethod }) {
+export default function ProjectGallery({ projectData, projectDataUpdateMethod }: ProjectGalleryInterface) {
     const router = useRouter()
 
     logger.debug("ProjectGallery artData", projectData)

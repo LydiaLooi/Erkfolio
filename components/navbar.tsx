@@ -3,18 +3,19 @@ import { auth } from "../scripts/firebase";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { isAdminUUID } from "../scripts/utils";
+import { FirebaseUser } from "../interfaces/firebase_interfaces";
 
 
 export default function NavBar() {
 
-    const [user, setUser] = useState(null);
+    const [user, setUser] = useState<FirebaseUser>();
 
     useEffect(() => {
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 setUser(user);
             } else {
-                setUser(null);
+                setUser(undefined);
             }
         });
     }, []);

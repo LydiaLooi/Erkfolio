@@ -17,6 +17,7 @@ export interface ProjectImageInterface {
 
 
 export interface ProjectDataInterface {
+    id: string,
     name: string,
     description: string,
     link: string,
