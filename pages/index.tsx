@@ -37,7 +37,7 @@ const Home = () => {
 
     return (
         <div>
-            <Layout home >
+            <Layout>
                 <Head>
                     <title>{siteTitle} </title>
                 </Head>

@@ -1,115 +1,23 @@
 import { useEffect, useState } from "react";
-import useSWR from 'swr'
+import useSWR from 'swr';
 
 import { getLogger } from "../../logging/log-util";
 const logger = getLogger("edit-art")
 
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/router';
 import { fetchProjectById } from "../../fetches/fetch_project_by_id";
 
-import utilStyles from "../../styles/utils.module.css"
 import artStyles from '../../components/gallery/art_gallery.module.css';
-import modalStyles from "../../styles/modal.module.css"
+import utilStyles from "../../styles/utils.module.css";
 
+import Image from "next/image";
 import Layout from "../../components/layout";
 import { longDedupingInterval } from "../../fetches/swr_config";
-import Image from "next/image";
 
-
-function disableBodyScroll() {
-    let body = document.getElementsByTagName("body")[0];
-    body.style.height = "100vh";
-    body.style.overflowY = "hidden";
-}
-
-function enableBodyScroll() {
-    let body = document.getElementsByTagName("body")[0];
-    body.style.height = "100vh";
-    body.style.overflowY = "auto";
-}
-
-function showModal() {
-    let modal = document.getElementById("image-modal");
-    modal.style.display = "block";
-}
-
-function hideModal() {
-    let modal = document.getElementById("image-modal");
-    modal.style.display = "none"
-}
-
-function closeModal(updateMethod) {
-    hideModal()
-    enableBodyScroll()
-    updateMethod({ name: "placeholder" })
-}
-
-function Modal({ clickedImage, updateMethod }) {
-
-
-
-    let tags = "";
-    if (clickedImage.tagsArray) {
-        tags = clickedImage.tagsArray.sort().join(", ")
-    }
-
-    let url = clickedImage.url
-    let alt = clickedImage.name
-
-    if (!url || url.length == 0) {
-        url = "/images/placeholder.png"
-        alt = "placeholder"
-    }
-
-    return (
-        <div>
-
-            <div id="image-modal" className={modalStyles.modal} onClick={() => {
-                closeModal(updateMethod)
-            }}>
-                <div className={modalStyles.closeDiv} onClick={(e) => {
-                    closeModal(updateMethod)
-                }}>
-                    <span className={modalStyles.close} >
-                        &times;
-                    </span>
-                    <span className={modalStyles.closeText}>Close</span>
-                </div>
-
-
-                <div className={modalStyles.modalContainer} onClick={(e) => {
-                    e.stopPropagation();
-                }}>
-
-
-                    <div className={modalStyles.imageContainer}>
-                        <Image
-                            className={modalStyles.modalImage}
-                            src={url}
-                            id="modal-image"
-                            fill={true}
-                            alt={alt}
-                            sizes="(max-width: 768px) 100vw,
-                            (max-width: 1200px) 50vw,
-                            100vw"
-
-                        />
-                    </div>
-                    <div className={modalStyles.modalCaption}>
-                        <h3>{clickedImage.title}</h3>
-                        <p>{clickedImage.description}</p>
-
-                        {tags.length > 0 ? <p><small>Tags: <i>{tags}</i></small></p> : null}
-
-                    </div>
-
-                </div>
-
-            </div>
-        </div>
-    )
-}
-
+import { ImageModal, disableBodyScroll, showModal } from "../../components/image_modal";
+import { ProjectDataInterface, ProjectImageInterface } from "../../interfaces/firebase_interfaces";
+import { ModalDisplayImage } from "../../interfaces/modals";
+import Date from "../../components/date";
 
 
 
@@ -117,8 +25,8 @@ function Modal({ clickedImage, updateMethod }) {
 export default function ViewProject() {
     const router = useRouter()
 
-    const [projectData, setProject] = useState()
-    let [clickedImage, setClickedImage] = useState({});
+    const [projectData, setProject] = useState<ProjectDataInterface | null>()
+    let [clickedImage, setClickedImage] = useState<ModalDisplayImage>();
 
     const { uid } = router.query
 
@@ -135,6 +43,7 @@ export default function ViewProject() {
         }
     );
 
+
     if (error) {
         logger.error("An error occured while fetching data... redirecting to the dashboard")
         router.push('/dashboard', undefined, { shallow: true })
@@ -145,15 +54,27 @@ export default function ViewProject() {
 
     useEffect(() => {
         if (data) {
-            logger.info("SUCCESS", data)
-            setProject(data);
+            let projectData = data as ProjectDataInterface
+            logger.info("SUCCESS", projectData)
+            setProject(projectData);
         }
     }, [data]);
 
 
+    function handleClick({ title, description, url }: ProjectImageInterface) {
+        let modalImage: ModalDisplayImage = {
+            name: title,
+            description: description,
+            url: url
+        }
+        setClickedImage(modalImage);
+        showModal()
+        disableBodyScroll()
+    }
+
     return (
         <div>
-            <Modal clickedImage={clickedImage} updateMethod={setClickedImage}></Modal>
+            <ImageModal clickedImage={clickedImage} updateMethod={setClickedImage} editAvailable={false}></ImageModal>
 
             <Layout>
                 <div>
@@ -172,6 +93,7 @@ export default function ViewProject() {
                             src={projectData.main_image_url}
                             alt={projectData.name}
                             fill={true}
+                            sizes="(max-width: 1200px) 50vw, 100vw"
                             placeholder="empty"
                         /> :
                         <Image
@@ -179,6 +101,7 @@ export default function ViewProject() {
                             src="/images/placeholder.png"
                             alt="Placeholder"
                             fill={true}
+                            sizes="(max-width: 1200px) 50vw, 100vw"
                             placeholder="empty"
                         />
                     }
@@ -187,6 +110,7 @@ export default function ViewProject() {
                     <div className={utilStyles.paddingX15px}>
                         {projectData ?
                             <>
+                                <p><b><Date dateString={projectData.date_created} /></b></p>
                                 <p>{projectData.description}</p>
                                 {projectData.link ? <i> <a href={projectData.link}>{projectData.link}</a></i> : null}
                             </>
@@ -202,7 +126,6 @@ export default function ViewProject() {
                     <div className="wrapper">
                         <h3 className={utilStyles.underline}>Project Images</h3>
                         <div className="gallery">
-                            {logger.debug("Project images??", projectData.project_images)}
                             {projectData.project_images ? projectData.project_images.map(({ title, description, url }) => (
                                 <div key={url} className={artStyles.artImageContainer}>
                                     <Image
@@ -211,9 +134,8 @@ export default function ViewProject() {
                                         width={500}
                                         alt={title}
                                         onClick={() => {
-                                            setClickedImage({ title, description, url });
-                                            showModal()
-                                            disableBodyScroll()
+                                            handleClick({ title, description, url })
+
                                         }}
                                     />
                                     <div className={artStyles.imageOverlay}>

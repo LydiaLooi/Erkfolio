@@ -27,20 +27,20 @@ export function enableBodyScroll() {
 
 export function showModal() {
     let modal = document.getElementById("image-modal");
-    if (!modal) {
-        logger.error("image-modal element could not be found")
-        return
+    if (modal) {
+        modal.style.display = "block";
+    } else {
+        logger.warn("image-modal element couldn't be found")
     }
-    modal.style.display = "block";
 }
 
 export function hideModal() {
     let modal = document.getElementById("image-modal");
-    if (!modal) {
-        logger.error("image-modal element could not be found")
-        return
+    if (modal) {
+        modal.style.display = "none"
+    } else {
+        logger.warn("image-modal element couldn't be found")
     }
-    modal.style.display = "none"
 }
 
 export function closeModal(updateMethod: (arg: ModalDisplayImage) => void) {
@@ -51,11 +51,12 @@ export function closeModal(updateMethod: (arg: ModalDisplayImage) => void) {
 
 
 interface ImageModalProps {
-    clickedImage: any,
-    updateMethod: () => void
+    clickedImage?: ModalDisplayImage,
+    updateMethod: (arg: ModalDisplayImage) => void
+    editAvailable?: boolean
 }
 
-export function ImageModal({ clickedImage, updateMethod }: ImageModalProps) {
+export function ImageModal({ clickedImage, updateMethod, editAvailable = true }: ImageModalProps) {
 
     const [user, setUser] = useState<FirebaseUser | null>(null);
 
@@ -70,8 +71,20 @@ export function ImageModal({ clickedImage, updateMethod }: ImageModalProps) {
     }, []);
 
     let tags = "";
+    if (!clickedImage) {
+        return (
+            <>
+                <div>
+                    <div id="image-modal" className={modalStyles.modal} onClick={() => {
+                        closeModal(updateMethod)
+                    }}></div>
+                </div>
+            </>
+        )
+    }
     if (clickedImage.tagsArray) {
-        tags = clickedImage.tagsArray.sort().join(", ")
+        const sortedTags = clickedImage.tagsArray.sort()
+        tags = sortedTags.join(", ")
     }
 
     let url = clickedImage.url
@@ -109,9 +122,7 @@ export function ImageModal({ clickedImage, updateMethod }: ImageModalProps) {
                             id="modal-image"
                             fill={true}
                             alt={alt}
-                            sizes="(max-width: 768px) 100vw,
-                            (max-width: 1200px) 50vw,
-                            100vw"
+                            sizes="(max-width: 1200px) 50vw, 100vw"
                         />
                     </div>
                     <div className={modalStyles.modalCaption}>
@@ -123,7 +134,7 @@ export function ImageModal({ clickedImage, updateMethod }: ImageModalProps) {
 
                     </div>
                     {
-                        user && isAdminUUID(user.uid) ?
+                        user && isAdminUUID(user.uid) && editAvailable ?
                             <div>
                                 <Link className="cool-button centred" href={`/dashboard/edit/${clickedImage.id}`}>Edit</Link>
 
