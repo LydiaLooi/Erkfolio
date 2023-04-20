@@ -19,6 +19,11 @@
         "react-dom": "18.2.0",
         "remark": "^14.0.2",
         "remark-html": "^15.0.2",
-        "swr": "^2.1.3"
+        "swr": "^2.1.3",
+        "touch-cli": "^0.0.1"
+    },
+    "devDependencies": {
+        "@types/react": "^18.0.37",
+        "typescript": "^5.0.4"
     }
 }
