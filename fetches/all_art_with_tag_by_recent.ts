@@ -2,8 +2,12 @@
 import { collection, getDocs, orderBy, query, where, documentId, limit, startAt } from 'firebase/firestore/lite';
 import { db } from '../scripts/firebase';
 import { artCollection } from '../collection_names';
+import { ArtInterface } from '../interfaces/firebase_interfaces';
+import { getArtInterfaceFromDocumentData } from '../components/gallery/utils';
 
-export const fetchArtWithTagByRecent = async ([unique, lastID, lastDate, limitNum]) => {
+
+
+export const fetchArtWithTagByRecent = async ([unique, lastID, lastDate, limitNum]: [unqiue: string, lastID: string, lastDate: string, limitNum: number]) => {
     // unique = fetchArtWithTagByRecent-tagName-lastID
 
     const arr = unique.split('-'); // split the string by '-'
@@ -32,12 +36,9 @@ export const fetchArtWithTagByRecent = async ([unique, lastID, lastDate, limitNu
     }
 
     const querySnapshot = await getDocs(q);
-    const data = [];
+    const data: Array<ArtInterface> = [];
     querySnapshot.forEach((doc) => {
-        data.push({
-            id: doc.id,
-            ...doc.data(),
-        });
+        data.push(getArtInterfaceFromDocumentData(doc));
     });
     return data;
 };

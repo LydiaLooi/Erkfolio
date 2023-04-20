@@ -2,8 +2,10 @@
 import { collection, getDocs, limit, orderBy, query, startAt, where, documentId } from 'firebase/firestore/lite';
 import { db } from '../scripts/firebase';
 import { artCollection } from '../collection_names';
+import { ArtInterface } from '../interfaces/firebase_interfaces';
+import { getArtInterfaceFromDocumentData } from '../components/gallery/utils';
 
-export const fetchPaginatedArtByRecent = async ([unique, lastID, lastDate, limitNum]) => {
+export const fetchPaginatedArtByRecent = async ([unique, lastID, lastDate, limitNum]: [unqiue: string, lastID: string, lastDate: string, limitNum: number]) => {
     let q;
     if (lastID.length > 0) {
         q = query(
@@ -24,12 +26,9 @@ export const fetchPaginatedArtByRecent = async ([unique, lastID, lastDate, limit
         )
     }
     const querySnapshot = await getDocs(q);
-    const data = [];
+    const data: Array<ArtInterface> = [];
     querySnapshot.forEach((doc) => {
-        data.push({
-            id: doc.id,
-            ...doc.data(),
-        });
+        data.push(getArtInterfaceFromDocumentData(doc));
     });
     return data;
 };

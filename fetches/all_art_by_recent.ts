@@ -2,20 +2,19 @@
 import { collection, getDocs, orderBy, query, where } from 'firebase/firestore/lite';
 import { db } from '../scripts/firebase';
 import { artCollection } from '../collection_names';
+import { ArtInterface } from '../interfaces/firebase_interfaces';
+import { getArtInterfaceFromDocumentData } from '../components/gallery/utils';
 
-export async function fetchPinnedArt() {
+export const fetchAllArtByRecent = async () => {
     const q = query(
         collection(db, artCollection),
-        where('pinned', '==', true),
         orderBy('date_created', 'desc')
     );
     const querySnapshot = await getDocs(q);
-    const data = [];
+    const data: Array<ArtInterface> = [];
     querySnapshot.forEach((doc) => {
-        data.push({
-            id: doc.id,
-            ...doc.data(),
-        });
+
+        data.push(getArtInterfaceFromDocumentData(doc));
     });
     return data;
 };
