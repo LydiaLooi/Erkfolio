@@ -202,6 +202,7 @@ export default function ViewProject() {
                     <div className="wrapper">
                         <h3 className={utilStyles.underline}>Project Images</h3>
                         <div className="gallery">
+                            {logger.debug("Project images??", projectData.project_images)}
                             {projectData.project_images ? projectData.project_images.map(({ title, description, url }) => (
                                 <div key={url} className={artStyles.artImageContainer}>
                                     <Image

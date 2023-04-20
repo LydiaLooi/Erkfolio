@@ -15,6 +15,7 @@ import { projectCollection } from '../collection_names';
 import ImagePicker from './image_picker';
 import ImageThumbnailGrid from './image_thumbnail_grid';
 
+import { getCurrentUnixTimestamp } from '../scripts/utils'
 
 
 export default function ProjectSubmissionForm({ editMode = false, existingData }) {
@@ -31,8 +32,6 @@ export default function ProjectSubmissionForm({ editMode = false, existingData }
 
     const finalProjectImagesData = useRef([]);
 
-    const resizeEvent = "imageResized"
-
 
     useEffect(() => {
         if (editMode && existingData) { // Prefill fields with existing data
@@ -46,47 +45,41 @@ export default function ProjectSubmissionForm({ editMode = false, existingData }
 
 
     async function uploadImageAndSave({ id, name, date_created, description, pinned, link, mainImage, project_images }) {
+
+
         const storageRef = ref(storage, `${projectCollection}/${mainImage.name}`) // Resize and save the mainImage... which hasn't been done yet.
 
-        $(document).on(resizeEvent, function (event) {
-            logger.info("Image successfully resized")
-            if (event.blob && event.url) {
-                uploadBytes(storageRef, event.blob).then(
-                    (snapshot) => {
-                        getDownloadURL(snapshot.ref).then((downloadUrl) => {
-                            saveOrEditData({
-                                id,
-                                name,
-                                description,
-                                date_created,
-                                pinned,
-                                link,
-                                main_image_url: downloadUrl,
-                                project_images
-                            }, projectCollection)
-                        }, (error) => {
-                            logger.error(error)
-                            alert("Could not save...")
-                            btn.disabled = false;
-
-
-                        })
-                    }, (error) => {
-                        logger.error(error)
-                        alert("Could not save...")
-                        btn.disabled = false;
-                    }
-                )
+        try {
+            const data = await resizeImage({ imageFile: mainImage })
+            logger.info("uploadImageAndSave Done!", data);
+            if (data.blob && data.dataUrl) {
+                const snapshot = await uploadBytes(storageRef, data.blob);
+                logger.info("Obtained snapshot")
+                const downloadUrl = await getDownloadURL(snapshot.ref);
+                logger.info("Obtained downloadUrl")
+                saveOrEditData({
+                    id,
+                    name,
+                    description,
+                    date_created,
+                    pinned,
+                    link,
+                    main_image_url: downloadUrl,
+                    project_images
+                }, projectCollection)
             }
-        });
-
-        resizeImage({ imageFile: mainImage, eventName: resizeEvent })
+        } catch (error) {
+            logger.error(error);
+            alert("Could not save...");
+            btn.disabled = false;
+        }
     }
 
     async function uploadImages() {
+        logger.info("Uploading project images...")
 
         for (let image of projectImages) {
-            let storageRef = ref(storage, `${projectCollection}/${image.title}`)
+            let storageRef = ref(storage, `${projectCollection}/${image.title}-${getCurrentUnixTimestamp()}`)
 
             let snapshot = await uploadBytes(storageRef, image.resized.blob)
 
@@ -96,7 +89,7 @@ export default function ProjectSubmissionForm({ editMode = false, existingData }
             delete image.resized
             delete image.file
             finalProjectImagesData.current.push(image)
-
+            logger.debug("Uploaded... ", downloadUrl)
         }
     }
 
@@ -139,13 +132,7 @@ export default function ProjectSubmissionForm({ editMode = false, existingData }
 
         if (editMode) {
             logger.warn("Yeah uh, editing isn't a thing quite yet...")
-            // if (!mainImage) {
-            //     logger.warn("No image found ... so we're not editing the image")
-            //     saveOrEditData(data, projectCollection) // Go straight into editing the data...
-            // } else {
-            //     // Do the thing
-            //     uploadImageAndSave(data)
-            // }
+
         } else {
             await uploadImageAndSave(data)
         }
@@ -156,7 +143,7 @@ export default function ProjectSubmissionForm({ editMode = false, existingData }
         mainImageInput.current.value = "";
     }
 
-    function testResize() {
+    async function testResize() {
         let mainImage;
         mainImage = mainImageInput.current?.files[0];
 
@@ -165,19 +152,6 @@ export default function ProjectSubmissionForm({ editMode = false, existingData }
             logger.warn("No image has been selected yet")
             return
         }
-
-        $(document).on("testResize", function (event) {
-            // Check if the <div> element already contains an <img> element
-            let resizedImageDiv = document.getElementById('resized-image');
-            if (resizedImageDiv.getElementsByTagName('img').length === 0) {
-                // Create a new <img> element and set its src attribute to the data URL of the resized image
-                let img = document.createElement('img');
-                img.src = event.url;
-
-                // Append the <img> element to the <div> element with the id "resized-image"
-                resizedImageDiv.appendChild(img);
-            }
-        });
 
         let div = document.getElementById("resized-image");
 
@@ -189,7 +163,17 @@ export default function ProjectSubmissionForm({ editMode = false, existingData }
             image.remove();
         });
 
-        resizeImage({ imageFile: mainImage, eventName: "testResize" })
+        let data = await resizeImage({ imageFile: mainImage })
+        logger.info("Done!", data)
+
+        // Check if the <div> element already contains an <img> element
+        let resizedImageDiv = document.getElementById('resized-image');
+        // Create a new <img> element and set its src attribute to the data URL of the resized image
+        let img = document.createElement('img');
+        img.src = data.dataUrl;
+
+        // Append the <img> element to the <div> element with the id "resized-image"
+        resizedImageDiv.appendChild(img);
     }
 
 
@@ -251,27 +235,16 @@ export default function ProjectSubmissionForm({ editMode = false, existingData }
         }
     }
 
-    function handleImagePicked(imageData) {
+    async function handleImagePicked(imageData) {
         logger.debug("AN IMAGE HAS BEEN PICKED??? current", projectImages)
 
         // Do some resizing, on resizedone, set project images..
-
-        let eventName = imageData.title.trim().replace(/\s/g, "");
-
-        logger.debug("RESIZing", `resizing-${eventName}`)
-
-
-        $(document).on(`resizing-${eventName}`, function (event) {
-            logger.debug("RESIZED", `resizing-${eventName}`)
-            imageData.resized = event
-            setProjectImages(projectImages.concat([imageData]))
-        })
-
-        resizeImage({
+        let data = await resizeImage({
             imageFile: imageData.file,
-            eventName: `resizing-${eventName}`
         })
 
+        imageData.resized = data
+        setProjectImages(projectImages.concat([imageData]))
     }
 
 

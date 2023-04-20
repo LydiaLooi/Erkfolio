@@ -54,8 +54,6 @@ export default function ArtSubmissionForm({ editMode = false, existingData }) {
     const dumpInput = useRef();
     const checkedTags = useRef([]);
 
-    const resizeEvent = "imageResized"
-
     function prefillTags() {
         logger.debug("Prefilling...", checkedTags.current)
         checkedTags.current.forEach(tag => {

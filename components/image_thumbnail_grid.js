@@ -14,9 +14,9 @@ export default function ImageThumbnailGrid({ images }) {
         <div>
             <div className={`${styles.thumbnailGallery}`}>
                 {images ? images.map(({ title, description, resized }) => (
-                    <div key={title} className={styles.thumbnailImageContainer}>
+                    <div key={resized.dataUrl} className={styles.thumbnailImageContainer}>
                         <Image
-                            src={resized.url}
+                            src={resized.dataUrl}
                             alt={title}
                             fill={true}
 
