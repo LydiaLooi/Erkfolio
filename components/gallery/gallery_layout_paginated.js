@@ -1,6 +1,6 @@
 import ArtGallery from "./art_gallery";
 import GalleryNavigation from "./gallery_nav";
-import utilStyles from '../styles/utils.module.css'
+import utilStyles from '../../styles/utils.module.css'
 
 export default function PaginatedGalleryLayout(
     {

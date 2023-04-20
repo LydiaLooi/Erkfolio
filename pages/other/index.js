@@ -1,12 +1,10 @@
 import Head from 'next/head';
 import Layout from '../../components/layout';
-import { fetchPaginatedArtByRecent } from '../../fetches/paginated_all_art_by_recent'
 
-import PaginatedArtGallery from '../../components/paginated_art_gallery';
-import utilStyles from '../../styles/utils.module.css'
-import { getLogger } from '../../logging/log-util';
+import { useState } from 'react';
 import ProjectGallery from '../../components/project_gallery';
-import { useEffect, useState } from 'react';
+import { getLogger } from '../../logging/log-util';
+import utilStyles from '../../styles/utils.module.css';
 const logger = getLogger("gallery-home")
 
 

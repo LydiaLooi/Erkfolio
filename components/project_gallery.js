@@ -1,20 +1,12 @@
 import Image from "next/image";
-import artStyles from './art_gallery.module.css';
-import modalStyles from '../styles/modal.module.css';
-import searchStyles from '../styles/search.module.css'
-import { useEffect, useState } from "react";
-import { getLogger } from "../logging/log-util";
-import Date from "./date"
-import { onAuthStateChanged } from "@firebase/auth";
-import { isAdminUUID } from "../scripts/utils";
-import { auth } from "../scripts/firebase";
-import Link from "next/link";
-import { faSearch, faTimes } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import useSWR from 'swr'
+import { useRouter } from "next/router";
+import { useEffect } from "react";
+import useSWR from 'swr';
 import { fetchAllProjectsByRecent } from "../fetches/fetch_all_projects";
 import { longDedupingInterval } from "../fetches/swr_config";
-import { useRouter } from "next/router";
+import { getLogger } from "../logging/log-util";
+import artStyles from './gallery/art_gallery.module.css';
+import Date from "./date";
 
 const logger = getLogger("project-gallery");
 

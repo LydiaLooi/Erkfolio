@@ -8,7 +8,7 @@ import { useRouter } from 'next/router'
 import { fetchProjectById } from "../../fetches/fetch_project_by_id";
 
 import utilStyles from "../../styles/utils.module.css"
-import artStyles from '../../components/art_gallery.module.css';
+import artStyles from '../../components/gallery/art_gallery.module.css';
 import modalStyles from "../../styles/modal.module.css"
 
 import Layout from "../../components/layout";

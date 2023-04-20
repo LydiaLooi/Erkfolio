@@ -1,13 +1,13 @@
 import Image from "next/image";
 import artStyles from './art_gallery.module.css';
-import modalStyles from '../styles/modal.module.css';
-import searchStyles from '../styles/search.module.css'
+import modalStyles from '../../styles/modal.module.css';
+import searchStyles from '../../styles/search.module.css'
 import { useEffect, useState } from "react";
-import { getLogger } from "../logging/log-util";
-import Date from "./date"
+import { getLogger } from "../../logging/log-util";
+import Date from "../date"
 import { onAuthStateChanged } from "@firebase/auth";
-import { isAdminUUID } from "../scripts/utils";
-import { auth } from "../scripts/firebase";
+import { isAdminUUID } from "../../scripts/utils";
+import { auth } from "../../scripts/firebase";
 import Link from "next/link";
 import { faSearch, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -42,7 +42,7 @@ function closeModal(updateMethod) {
     updateMethod({ name: "placeholder" })
 }
 
-function Modal({ clickedImage, updateMethod }) {
+function ImageModal({ clickedImage, updateMethod }) {
 
     const [user, setUser] = useState(null);
 
@@ -220,7 +220,7 @@ export default function ArtGallery({ artData, galleryUpdateMethod, originalData,
     if (artData && artData.length != 0) {
         return (
             <section>
-                <Modal clickedImage={clickedImage} updateMethod={setClickedImage}></Modal>
+                <ImageModal clickedImage={clickedImage} updateMethod={setClickedImage}></ImageModal>
                 <div className="wrapper">
 
                     {!hideFilter ? <FilterSearch artData={artData} updateMethod={galleryUpdateMethod} originalData={originalData}></FilterSearch> : null}
