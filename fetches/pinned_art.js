@@ -3,7 +3,7 @@ import { collection, getDocs, orderBy, query, where } from 'firebase/firestore/l
 import { db } from '../scripts/firebase';
 import { artCollection } from '../collection_names';
 
-export const fetchPinnedArt = async () => {
+export async function fetchPinnedArt() {
     const q = query(
         collection(db, artCollection),
         where('pinned', '==', true),
