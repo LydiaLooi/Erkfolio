@@ -1,0 +1,1 @@
+export const longDedupingInterval = 1200000; // 120 seconds

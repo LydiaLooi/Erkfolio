@@ -22,8 +22,6 @@
         "next-env.d.ts",
         "**/*.ts",
         "**/*.tsx",
-        "scripts/image_resizing.js",
-        "fetches/pinned_art.js"
     ],
     "exclude": [
         "node_modules"
