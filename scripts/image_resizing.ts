@@ -27,7 +27,7 @@ let dataURLToBlob = function (dataURL: string): Blob {
 }
 /* End Utility function to convert a canvas to a BLOB      */
 
-interface ResizeImageProps { imageFile: Blob, eventName: string, maxWidth?: number, maxHeight?: number }
+interface ResizeImageProps { imageFile: Blob, maxWidth?: number, maxHeight?: number }
 
 const _maxWidth = parseInt(process.env.MAX_WIDTH || "0");
 const _maxHeight = parseInt(process.env.MAX_HEIGHT || "0");

@@ -6,13 +6,13 @@ export interface ArtInterface {
     pinned: boolean,
     dump: boolean,
     tagsArray: Array<string>,
-    url: string
+    url: string,
 }
 
 export interface ProjectImageInterface {
     title: string,
     url: string,
-    description: string
+    description: string,
 }
 
 
@@ -24,10 +24,10 @@ export interface ProjectDataInterface {
     pinned: boolean,
     main_image_url: string,
     date_created: string,
-    project_images: Array<ProjectImageInterface>
+    project_images: Array<ProjectImageInterface>,
 }
 
-
-export interface FirebaseUser {
-    uid: string
+export interface TagDataInterface {
+    id?: string,
+    name: string,
 }

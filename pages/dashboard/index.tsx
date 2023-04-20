@@ -1,4 +1,4 @@
-import { onAuthStateChanged } from 'firebase/auth';
+import { User, onAuthStateChanged } from 'firebase/auth';
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
 import Layout from '../../components/layout';
@@ -23,7 +23,7 @@ function UnauthorisedUser() {
     )
 }
 
-function DashboardHome({ currentUser }) {
+function DashboardHome({ currentUser }: { currentUser: User }) {
     return (
         <div>
             <Link href="/dashboard/project">Add a new project instead</Link>
@@ -36,14 +36,14 @@ function DashboardHome({ currentUser }) {
 
 export default function Dashboard() {
 
-    const [user, setUser] = useState(null);
+    const [user, setUser] = useState<User>();
 
     useEffect(() => {
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 setUser(user);
             } else {
-                setUser(null);
+                setUser(undefined);
             }
         });
     }, []);

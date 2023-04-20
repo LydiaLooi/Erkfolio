@@ -1,4 +1,4 @@
-import { onAuthStateChanged } from "@firebase/auth";
+import { onAuthStateChanged, User } from "@firebase/auth";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -6,7 +6,6 @@ import { auth } from "../scripts/firebase";
 import { isAdminUUID } from "../scripts/utils";
 import modalStyles from '../styles/modal.module.css';
 import Date from "./date";
-import { FirebaseUser } from "../interfaces/firebase_interfaces";
 
 import { getLogger } from "../logging/log-util";
 import { ModalDisplayImage } from "../interfaces/modals";
@@ -58,14 +57,14 @@ interface ImageModalProps {
 
 export function ImageModal({ clickedImage, updateMethod, editAvailable = true }: ImageModalProps) {
 
-    const [user, setUser] = useState<FirebaseUser | null>(null);
+    const [user, setUser] = useState<User>();
 
     useEffect(() => {
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 setUser(user);
             } else {
-                setUser(null);
+                setUser(undefined);
             }
         });
     }, []);
