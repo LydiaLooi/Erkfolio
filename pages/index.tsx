@@ -22,8 +22,7 @@ const Home = () => {
         dedupingInterval: longDedupingInterval,
     })
     if (error) {
-        logger.error("An error occured")
-        logger.error(error)
+        logger.error("An error occured: ", error)
     }
     if (!data) {
         logger.info("Loading data...")
@@ -50,7 +49,12 @@ const Home = () => {
             <h2 className={utilStyles.underline} >
                 Pinned Works
             </h2>
-            <ArtGallery artData={artData} hideFilter={true} />
+            <ArtGallery
+                artData={artData}
+                hideFilter={true}
+                galleryUpdateMethod={null}
+                originalData={null}
+            />
 
             <div className={utilStyles.marginBottom50px}>
                 <Link className='cool-button centred' href="/gallery" > See Full Gallery </Link>
