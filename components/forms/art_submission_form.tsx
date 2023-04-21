@@ -1,5 +1,5 @@
 import { addDoc, collection, deleteDoc, doc, setDoc } from 'firebase/firestore/lite';
-import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import { getDownloadURL, ref, updateMetadata, uploadBytes } from 'firebase/storage';
 import { ChangeEvent, FormEvent, MouseEvent, useEffect, useRef } from 'react';
 import { db, storage } from '../../scripts/firebase';
 
@@ -85,6 +85,14 @@ async function uploadImageAndSave({ id, name, date_created, description, pinned,
     const storageRef = ref(storage, `${artCollection}/${image.name}`)
 
     try {
+        // UPDATE METADATA
+        const newMetadata = {
+            cacheControl: 'public,max-age=86400'
+        };
+
+        // Update metadata properties
+        await updateMetadata(storageRef, newMetadata)
+        logger.info("Updated metadata")
         const data = await resizeImage({ imageFile: image })
         logger.info("uploadImageAndSave Done!", data);
 
