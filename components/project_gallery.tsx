@@ -55,11 +55,12 @@ export default function ProjectGallery({ projectData, projectDataUpdateMethod }:
 
                     <div className="gallery">
 
-                        {projectData.map(({ id, name, description, date_created, main_image_url }) => (
+                        {projectData.map(({ id, name, description, date_created, main_image_url }, index) => (
                             <div key={id} className={artStyles.artImageContainer}>
                                 <Image
                                     src={main_image_url}
                                     height={500}
+                                    loading={index < 3 ? "eager" : "lazy"} // Eager load the first three images, then lazily load the rest.
                                     width={500}
                                     alt={name}
                                     onClick={() => {

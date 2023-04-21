@@ -143,12 +143,13 @@ export default function ArtGallery({ artData, galleryUpdateMethod, originalData,
 
                     <div className="gallery">
 
-                        {artData.map(({ id, name, description, date_created, pinned, tagsArray, url }) => (
+                        {artData.map(({ id, name, description, date_created, pinned, tagsArray, url }, index) => (
                             <div key={id} className={artStyles.artImageContainer}>
                                 <Image
                                     src={url}
                                     height={500}
                                     width={500}
+                                    loading={index < 3 ? "eager" : "lazy"} // Eager load the first three images, then lazily load the rest.
                                     sizes="(max-width: 700px) 100vw,
                                     500px"
                                     alt={name}
@@ -160,6 +161,7 @@ export default function ArtGallery({ artData, galleryUpdateMethod, originalData,
                                 />
                                 <div className={artStyles.imageOverlay}>
                                     <span>{name}</span><br />
+                                    <p>{index}</p><br />
                                     <small><Date dateString={date_created} /></small>
                                 </div>
 
