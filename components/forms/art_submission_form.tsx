@@ -140,7 +140,7 @@ async function saveOrEditData(artData: UploadArtInterface) {
             await addDoc(collection(db, artCollection), artData)
             logger.info("Successfully added to art collection... Either need to refresh or wait for update.")
         }
-        // window.location.reload();
+        window.location.reload();
 
     } catch (error) {
         logger.error(error)
