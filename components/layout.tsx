@@ -22,7 +22,9 @@ function TopProfile() {
                 className={`${utilStyles.borderCircle} ${utilStyles.block} ${utilStyles.marginAuto} ${utilStyles.profileImage} `}
                 height={144}
                 width={144}
-                alt=""
+                alt="Erkfir's drawing of witch Erk"
+                sizes="(max-width: 700px) 100px,
+                144px"
             />
             <h1 className={`${utilStyles.heading2Xl} ${utilStyles.textAlignCentre}`}>{name}</h1>
         </div>

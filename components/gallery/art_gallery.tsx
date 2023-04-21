@@ -149,6 +149,8 @@ export default function ArtGallery({ artData, galleryUpdateMethod, originalData,
                                     src={url}
                                     height={500}
                                     width={500}
+                                    sizes="(max-width: 700px) 100vw,
+                                    500px"
                                     alt={name}
                                     onClick={() => {
                                         setClickedImage({ id, description, url, name, date_created, tagsArray });
