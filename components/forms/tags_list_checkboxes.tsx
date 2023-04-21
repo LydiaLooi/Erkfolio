@@ -1,14 +1,20 @@
-import { useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import useSWR from 'swr';
 import { fetchTags } from '../../fetches/tags_list';
 import { getLogger } from '../../logging/log-util';
 import styles from './form.module.css';
 import { longDedupingInterval } from '../../fetches/swr_config';
+import { TagDataInterface } from '../../interfaces/firebase_interfaces';
 const logger = getLogger('tags-checkboxes')
 
-export default function TagsListCheckboxes({ handleCheckboxChangeMethod }) {
 
-    const [tagNames, setTagNames] = useState([]);
+interface TagsListCheckboxesProps {
+    handleCheckboxChangeMethod: (e: ChangeEvent<HTMLInputElement>) => void
+}
+
+export default function TagsListCheckboxes({ handleCheckboxChangeMethod }: TagsListCheckboxesProps) {
+
+    const [tagNames, setTagNames] = useState<Array<TagDataInterface>>([]);
 
 
     const { data, error } = useSWR('fetchTags', fetchTags, {
@@ -25,7 +31,18 @@ export default function TagsListCheckboxes({ handleCheckboxChangeMethod }) {
     useEffect(() => {
         if (data) {
             logger.info("Data:", data)
-            data.sort((a, b) => { return a.name > b.name }) // Sort alphabetically by name
+            data.sort((a, b) => {
+                const nameA = a.name.toLowerCase();
+                const nameB = b.name.toLowerCase();
+                if (nameA < nameB) {
+                    return -1;
+                }
+                if (nameA > nameB) {
+                    return 1;
+                }
+                return 0;
+            });
+
             setTagNames(data)
         }
     }, [data]);
