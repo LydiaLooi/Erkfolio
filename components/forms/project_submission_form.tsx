@@ -1,5 +1,5 @@
 import { addDoc, collection, setDoc, doc, deleteDoc } from 'firebase/firestore/lite';
-import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import { getDownloadURL, ref, updateMetadata, uploadBytes } from 'firebase/storage';
 import { FormEvent, MouseEvent, useEffect, useRef, useState } from 'react';
 import { db, storage } from '../../scripts/firebase';
 
@@ -18,6 +18,7 @@ import ImageThumbnailGrid from './image_thumbnail_grid';
 import { getCurrentUnixTimestamp } from '../../scripts/utils'
 import { ProjectDataInterface, ProjectImageInterface } from '../../interfaces/firebase_interfaces';
 import { testResize } from './form_utils';
+import newMetadata from '../../scripts/firebase_storage_metadata';
 
 
 interface ProjectSubmissionFormProps {
@@ -78,6 +79,8 @@ export default function ProjectSubmissionForm({ editMode = false, existingData }
                 logger.info("Obtained snapshot")
                 const downloadUrl = await getDownloadURL(snapshot.ref);
                 logger.info("Obtained downloadUrl")
+                let results = await updateMetadata(storageRef, newMetadata)
+                logger.info("Updated metadata", results)
                 saveOrEditData({
                     id,
                     name,
@@ -109,8 +112,9 @@ export default function ProjectSubmissionForm({ editMode = false, existingData }
             }
 
             let snapshot = await uploadBytes(storageRef, image.resized.blob)
-
             let downloadUrl = await getDownloadURL(snapshot.ref)
+            let results = await updateMetadata(storageRef, newMetadata)
+            logger.info("Updated metadata:", results)
 
             image.url = downloadUrl
 

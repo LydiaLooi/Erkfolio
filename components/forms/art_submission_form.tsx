@@ -15,6 +15,8 @@ import styles from "./form.module.css";
 import { artCollection, tagsCollection } from '../../collection_names';
 import { ArtInterface, TagDataInterface } from '../../interfaces/firebase_interfaces';
 import { testResize } from './form_utils';
+import { getCurrentUnixTimestamp } from '../../scripts/utils';
+import newMetadata from '../../scripts/firebase_storage_metadata';
 
 const saveNewTag = async (tagData: TagDataInterface) => {
     logger.debug("tagData", tagData)
@@ -82,24 +84,23 @@ interface UploadImageAndSaveProps {
 
 async function uploadImageAndSave({ id, name, date_created, description, pinned, dump, image, tagsArray }: UploadImageAndSaveProps) {
     logger.debug("uploadImageAndSave...", name, description)
-    const storageRef = ref(storage, `${artCollection}/${image.name}`)
+    const storageRef = ref(storage, `${artCollection}/${image.name}-${name}-${getCurrentUnixTimestamp()}`)
+    // UPDATE METADATA
 
     try {
-        // UPDATE METADATA
-        const newMetadata = {
-            cacheControl: 'public,max-age=86400'
-        };
-
         // Update metadata properties
-        await updateMetadata(storageRef, newMetadata)
-        logger.info("Updated metadata")
+
         const data = await resizeImage({ imageFile: image })
         logger.info("uploadImageAndSave Done!", data);
 
         if (data.blob && data.dataUrl) {
             const snapshot = await uploadBytes(storageRef, data.blob);
+
             logger.info("Obtained snapshot")
             const downloadUrl = await getDownloadURL(snapshot.ref);
+            let results = await updateMetadata(storageRef, newMetadata)
+            logger.info("Updated metadata", results)
+
             logger.info("Obtained downloadUrl")
             saveOrEditData({ id, name, description, tagsArray, date_created, pinned, dump, url: downloadUrl });
         }
@@ -139,7 +140,7 @@ async function saveOrEditData(artData: UploadArtInterface) {
             await addDoc(collection(db, artCollection), artData)
             logger.info("Successfully added to art collection... Either need to refresh or wait for update.")
         }
-        window.location.reload();
+        // window.location.reload();
 
     } catch (error) {
         logger.error(error)
