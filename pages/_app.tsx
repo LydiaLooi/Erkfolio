@@ -31,7 +31,6 @@ export default function App({ Component, pageProps }: AppProps<CustomPageProps>)
                 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
             </Head>
             <Component {...pageProps} />
-            <Script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js" integrity="sha384-UG8ao2jwOWB7/oDdObZc6ItJmwUkR/PfMyt9Qs5AwX7PsnYn1CRKCTWyncPTWvaS" crossOrigin="anonymous"></Script>
 
             <footer className="footer"><small>Copyright &copy; 2023 Erkfir. All Rights Reserved</small></footer>
         </>
