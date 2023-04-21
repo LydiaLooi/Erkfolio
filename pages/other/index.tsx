@@ -5,13 +5,14 @@ import { useState } from 'react';
 import ProjectGallery from '../../components/project_gallery';
 import { getLogger } from '../../logging/log-util';
 import utilStyles from '../../styles/utils.module.css';
+import { ProjectDataInterface } from '../../interfaces/firebase_interfaces';
 const logger = getLogger("gallery-home")
 
 
 export default function OtherProjectsHome() {
     const heading = "Other Projects"
 
-    const [projectData, setProjectData] = useState([])
+    const [projectData, setProjectData] = useState<Array<ProjectDataInterface>>([])
 
 
     return (

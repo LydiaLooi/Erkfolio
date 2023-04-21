@@ -14,6 +14,7 @@ import styles from "./form.module.css";
 
 import { artCollection, tagsCollection } from '../../collection_names';
 import { ArtInterface, TagDataInterface } from '../../interfaces/firebase_interfaces';
+import { testResize } from './form_utils';
 
 const saveNewTag = async (tagData: TagDataInterface) => {
     logger.debug("tagData", tagData)
@@ -234,45 +235,9 @@ export default function ArtSubmissionForm({ editMode = false, existingData }: Ar
         imageInput.current!.value = "";
     }
 
-    async function testResize() {
-        let image;
-        image = imageInput.current?.files![0];
-
-
-        if (!image) {
-            logger.warn("No image has been selected yet")
-            return
-        }
-
-        let resizedImageDiv = document.getElementById("resized-image");
-
-        if (!resizedImageDiv) {
-            throw new Error("Element resized-image could not be found")
-        }
-
-        // Select all <img> elements within the <div>
-        let images = resizedImageDiv.querySelectorAll('img');
-
-        // Loop through each <img> element and remove it from the <div>
-        images.forEach(function (image) {
-            image.remove();
-        });
-
-        let data = await resizeImage({ imageFile: image })
-        logger.info("Done!", data)
-
-        // Check if the <div> element already contains an <img> element
-
-
-
-        // Create a new <img> element and set its src attribute to the data URL of the resized image
-        let img = document.createElement('img');
-        img.src = data.dataUrl;
-
-        // Append the <img> element to the <div> element with the id "resized-image"
-        resizedImageDiv.appendChild(img);
+    function handleTestResize() {
+        testResize(imageInput.current?.files![0])
     }
-
 
     function handleDelete(e: MouseEvent<HTMLButtonElement>) {
         const button = e.currentTarget;
@@ -327,7 +292,7 @@ export default function ArtSubmissionForm({ editMode = false, existingData }: Ar
 
 
                 <div id="resized-image"></div>
-                <button className='cool-button centred' type="button" onClick={testResize}>Test Resize</button>
+                <button className='cool-button centred' type="button" onClick={handleTestResize}>Test Resize</button>
 
 
                 <p className={`${styles.required} ${styles.field}`}>

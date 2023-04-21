@@ -3,7 +3,7 @@ import { collection, getDocs, orderBy, query, where } from 'firebase/firestore/l
 import { db } from '../scripts/firebase';
 import { artCollection } from '../collection_names';
 import { ArtInterface } from '../interfaces/firebase_interfaces';
-import { getArtInterfaceFromDocumentData } from '../components/gallery/utils';
+import { getArtInterfaceFromDocumentData } from './utils';
 
 export const fetchAllArtByRecent = async () => {
     const q = query(

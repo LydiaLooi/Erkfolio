@@ -3,7 +3,7 @@ import { collection, getDocs, limit, orderBy, query, startAt, where, documentId 
 import { db } from '../scripts/firebase';
 import { artCollection } from '../collection_names';
 import { ArtInterface } from '../interfaces/firebase_interfaces';
-import { getArtInterfaceFromDocumentData } from '../components/gallery/utils';
+import { getArtInterfaceFromDocumentData } from './utils';
 
 export const fetchPaginatedArtByRecent = async ([unique, lastID, lastDate, limitNum]: [unqiue: string, lastID: string, lastDate: string, limitNum: number]) => {
     let q;

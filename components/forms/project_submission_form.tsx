@@ -1,6 +1,6 @@
 import { addDoc, collection, setDoc, doc, deleteDoc } from 'firebase/firestore/lite';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
-import { useEffect, useRef, useState } from 'react';
+import { FormEvent, MouseEvent, useEffect, useRef, useState } from 'react';
 import { db, storage } from '../../scripts/firebase';
 
 import { getLogger } from "../../logging/log-util";
@@ -12,40 +12,61 @@ import styles from "./form.module.css"
 import Image from 'next/image';
 
 import { projectCollection } from '../../collection_names';
-import ImagePicker from './image_picker';
+import ImagePicker, { ImagePickerData } from './image_picker';
 import ImageThumbnailGrid from './image_thumbnail_grid';
 
 import { getCurrentUnixTimestamp } from '../../scripts/utils'
+import { ProjectDataInterface, ProjectImageInterface } from '../../interfaces/firebase_interfaces';
+import { testResize } from './form_utils';
 
 
-export default function ProjectSubmissionForm({ editMode = false, existingData }) {
+interface ProjectSubmissionFormProps {
+    editMode?: boolean,
+    existingData?: ProjectDataInterface
+}
 
-    const form = useRef();
-    const mainImageInput = useRef()
-    const nameInput = useRef()
-    const dateCreatedInput = useRef()
-    const descriptionInput = useRef()
-    const linkInput = useRef()
-    const pinnedInput = useRef();
+interface UploadProjectInterface {
+    id?: string,
+    name: string,
+    date_created: string,
+    description: string,
+    pinned: boolean,
+    link: string,
+    main_image_url?: string,
+    mainImage?: Blob,
+    project_images: Array<ProjectImageInterface>,
+}
 
-    const [projectImages, setProjectImages] = useState([])
+export default function ProjectSubmissionForm({ editMode = false, existingData }: ProjectSubmissionFormProps) {
 
-    const finalProjectImagesData = useRef([]);
+    const mainImageInput = useRef<HTMLInputElement | null>(null)
+    const nameInput = useRef<HTMLInputElement | null>(null)
+    const dateCreatedInput = useRef<HTMLInputElement | null>(null)
+    const descriptionInput = useRef<HTMLTextAreaElement | null>(null)
+    const linkInput = useRef<HTMLInputElement | null>(null)
+    const pinnedInput = useRef<HTMLInputElement | null>(null)
+
+    const [projectImages, setProjectImages] = useState<Array<ImagePickerData>>([])
+
+    const finalProjectImagesData = useRef<Array<ProjectImageInterface>>([]);
 
 
     useEffect(() => {
         if (editMode && existingData) { // Prefill fields with existing data
-            nameInput.current.value = existingData.name
-            dateCreatedInput.current.value = existingData.date_created
-            descriptionInput.current.value = existingData.description
-            linkInput.current.value = existingData.link
-            pinnedInput.current.checked = existingData.pinned
+            nameInput.current!.value = existingData.name
+            dateCreatedInput.current!.value = existingData.date_created
+            descriptionInput.current!.value = existingData.description
+            linkInput.current!.value = existingData.link
+            pinnedInput.current!.checked = existingData.pinned
         }
     }, [existingData])
 
 
-    async function uploadImageAndSave({ id, name, date_created, description, pinned, link, mainImage, project_images }) {
+    async function uploadImageAndSave({ id, name, date_created, description, pinned, link, mainImage, project_images }: UploadProjectInterface) {
 
+        if (!mainImage) {
+            throw new Error("Attempting to upload and save with no mainImage")
+        }
 
         const storageRef = ref(storage, `${projectCollection}/${mainImage.name}`) // Resize and save the mainImage... which hasn't been done yet.
 
@@ -70,6 +91,7 @@ export default function ProjectSubmissionForm({ editMode = false, existingData }
             }
         } catch (error) {
             logger.error(error);
+            let btn = document.getElementById("submit-button") as HTMLButtonElement;
             alert("Could not save...");
             btn.disabled = false;
         }
@@ -78,38 +100,45 @@ export default function ProjectSubmissionForm({ editMode = false, existingData }
     async function uploadImages() {
         logger.info("Uploading project images...")
 
-        for (let image of projectImages) {
+        for (let projImage of projectImages) {
+            let image = projImage
             let storageRef = ref(storage, `${projectCollection}/${image.title}-${getCurrentUnixTimestamp()}`)
+
+            if (!image.resized) {
+                throw new Error("Can't upload image with no blob")
+            }
 
             let snapshot = await uploadBytes(storageRef, image.resized.blob)
 
             let downloadUrl = await getDownloadURL(snapshot.ref)
 
             image.url = downloadUrl
+
             delete image.resized
             delete image.file
-            finalProjectImagesData.current.push(image)
+
+            finalProjectImagesData.current.push(image as ProjectImageInterface)
             logger.debug("Uploaded... ", downloadUrl)
         }
     }
 
-    async function submitData(e) {
+    async function submitData(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
 
         await uploadImages()
 
         logger.info(finalProjectImagesData.current)
 
-        let btn = document.getElementById("submit-button");
+        let btn = document.getElementById("submit-button") as HTMLButtonElement;
         btn.disabled = true;
 
-        const name = nameInput.current?.value;
-        const date_created = dateCreatedInput.current?.value;
-        const description = descriptionInput.current?.value;
-        const link = linkInput.current?.value;
-        const pinned = pinnedInput.current?.checked;
+        const name = nameInput.current!.value;
+        const date_created = dateCreatedInput.current!.value;
+        const description = descriptionInput.current!.value;
+        const link = linkInput.current!.value;
+        const pinned = pinnedInput.current!.checked;
 
-        let data = {
+        let data: UploadProjectInterface = {
             name,
             date_created,
             description,
@@ -125,7 +154,7 @@ export default function ProjectSubmissionForm({ editMode = false, existingData }
 
 
         let mainImage;
-        mainImage = mainImageInput.current?.files[0];
+        mainImage = mainImageInput.current?.files![0];
         if (mainImage) {
             data.mainImage = mainImage
         }
@@ -140,51 +169,25 @@ export default function ProjectSubmissionForm({ editMode = false, existingData }
     }
 
     function removeUploadedImage() {
-        mainImageInput.current.value = "";
+        mainImageInput.current!.value = "";
     }
 
-    async function testResize() {
-        let mainImage;
-        mainImage = mainImageInput.current?.files[0];
-
-
-        if (!mainImage) {
-            logger.warn("No image has been selected yet")
-            return
-        }
-
-        let div = document.getElementById("resized-image");
-
-        // Select all <img> elements within the <div>
-        let images = div.querySelectorAll('img');
-
-        // Loop through each <img> element and remove it from the <div>
-        images.forEach(function (image) {
-            image.remove();
-        });
-
-        let data = await resizeImage({ imageFile: mainImage })
-        logger.info("Done!", data)
-
-        // Check if the <div> element already contains an <img> element
-        let resizedImageDiv = document.getElementById('resized-image');
-        // Create a new <img> element and set its src attribute to the data URL of the resized image
-        let img = document.createElement('img');
-        img.src = data.dataUrl;
-
-        // Append the <img> element to the <div> element with the id "resized-image"
-        resizedImageDiv.appendChild(img);
+    function handleTestResize() {
+        testResize(mainImageInput.current?.files![0])
     }
 
-
-    function handleDelete(e) {
-        e.target.disabled = true;
+    function handleDelete(e: MouseEvent<HTMLButtonElement>) {
+        const button = e.currentTarget;
+        button.disabled = true;
 
         let result = confirm("Are you sure you want to delete this?");
         if (result) {
+            if (!existingData) {
+                throw new Error("Attempting to delete when no existing data has been passed in")
+            }
             deleteData(existingData.id)
         } else {
-            e.target.disabled = false;
+            e.currentTarget.disabled = false;
         }
     }
 
@@ -193,7 +196,7 @@ export default function ProjectSubmissionForm({ editMode = false, existingData }
      * Will either save or edit the data. Will edit the data if artData has an id
      * @param {*} data 
      */
-    const saveOrEditData = async (data, collectionName) => {
+    const saveOrEditData = async (data: UploadProjectInterface, collectionName: string) => {
         logger.debug(data)
         delete data.mainImage
 
@@ -221,7 +224,7 @@ export default function ProjectSubmissionForm({ editMode = false, existingData }
         }
     }
 
-    const deleteData = async (id) => {
+    const deleteData = async (id: string) => {
         logger.debug("DELETE", id)
         try {
             const docRef = doc(db, projectCollection, id);
@@ -235,8 +238,12 @@ export default function ProjectSubmissionForm({ editMode = false, existingData }
         }
     }
 
-    async function handleImagePicked(imageData) {
+    async function handleImagePicked(imageData: ImagePickerData) {
         logger.debug("AN IMAGE HAS BEEN PICKED??? current", projectImages)
+
+        if (!imageData.file) {
+            throw new Error("Image picked has no file associated")
+        }
 
         // Do some resizing, on resizedone, set project images..
         let data = await resizeImage({
@@ -244,13 +251,13 @@ export default function ProjectSubmissionForm({ editMode = false, existingData }
         })
 
         imageData.resized = data
-        setProjectImages(projectImages.concat([imageData]))
+        setProjectImages(projectImages.concat([imageData] as never))
     }
 
 
     return (
         <div>
-            <form className={styles.form} ref={form} onSubmit={submitData}>
+            <form className={styles.form} onSubmit={submitData}>
 
                 {
                     editMode && existingData ? <Image src={existingData.main_image_url} width={100} height={100} alt={existingData.name} /> : null
@@ -276,7 +283,7 @@ export default function ProjectSubmissionForm({ editMode = false, existingData }
 
 
                 <div id="resized-image"></div>
-                <button className='cool-button centred' type="button" onClick={testResize}>Test Resize</button>
+                <button className='cool-button centred' type="button" onClick={handleTestResize}>Test Resize</button>
 
 
                 <p className={`${styles.required} ${styles.field}`}>
@@ -286,7 +293,7 @@ export default function ProjectSubmissionForm({ editMode = false, existingData }
                     <label>Date created*</label><input name='date_created' ref={dateCreatedInput} type="date" required />
                 </p>
                 <p className={`${styles.field}`}>
-                    <label>Project Description</label><textarea name='description' ref={descriptionInput} type="text" placeholder="Description" />
+                    <label>Project Description</label><textarea name='description' ref={descriptionInput} placeholder="Description" />
                 </p>
                 <p className={`${styles.field}`}>
                     <label>Project Link</label><input name='link' ref={linkInput} type="text" placeholder="URL" />

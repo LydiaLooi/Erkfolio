@@ -1,13 +1,19 @@
 import { useRef, useState } from "react"
 import styles from "./form.module.css"
 
+export interface ImagePickerData {
+    title: string,
+    description: string,
+    file?: File,
+    resized?: { blob: Blob, dataUrl: string },
+    url?: string,
+}
 
-export default function ImagePicker({ handleData }) {
+export default function ImagePicker({ handleData }: { handleData: (arg: ImagePickerData) => void }) {
 
-    const imageTitleInput = useRef()
-    const imageDescriptionInput = useRef()
-    const newImageInput = useRef()
-
+    const imageTitleInput = useRef<HTMLInputElement | null>(null)
+    const imageDescriptionInput = useRef<HTMLTextAreaElement | null>(null)
+    const newImageInput = useRef<HTMLInputElement | null>(null)
     const [message, setMessage] = useState("")
 
     function imageChanged() {
@@ -15,16 +21,16 @@ export default function ImagePicker({ handleData }) {
     }
 
     function imagePicked() {
-        let title = imageTitleInput.current?.value;
-        let description = imageDescriptionInput.current?.value;
-        let file = newImageInput.current?.files[0];
+        let title = imageTitleInput.current!.value;
+        let description = imageDescriptionInput.current!.value;
+        let file = newImageInput.current!.files![0];
 
         if (!file) {
             setMessage("No file picked.")
             return
         }
 
-        let data = {
+        let data: ImagePickerData = {
             title,
             description,
             file,
@@ -42,7 +48,7 @@ export default function ImagePicker({ handleData }) {
                 <label>Image Title</label><input name='imageTitle' ref={imageTitleInput} type="text" placeholder="Title" />
             </p>
             <p className={`${styles.field}`}>
-                <label>Image Description</label><textarea name='imageDescription' ref={imageDescriptionInput} type="text" placeholder="Description" />
+                <label>Image Description</label><textarea name='imageDescription' ref={imageDescriptionInput} placeholder="Description" />
             </p>
             {message ? <p><small>{message}</small></p> : null}
             <button type="button" className="cool-button-mini" onClick={imagePicked}>Add new image</button>

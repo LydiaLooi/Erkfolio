@@ -2,7 +2,7 @@
 import { collection, getDocs, orderBy, query, where } from 'firebase/firestore/lite';
 import { db } from '../scripts/firebase';
 import { artCollection } from '../collection_names';
-import { getArtInterfaceFromDocumentData } from '../components/gallery/utils';
+import { getArtInterfaceFromDocumentData } from './utils';
 import { ArtInterface } from '../interfaces/firebase_interfaces';
 
 export async function fetchPinnedArt() {
