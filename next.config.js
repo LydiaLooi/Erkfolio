@@ -8,7 +8,7 @@ module.exports = {
                 pathname: '/v0/b/erkfolio.appspot.com/**',
             },
         ],
-        minimumCacheTTL: 31536000,
+        minimumCacheTTL: 86400,
     },
     env: {
         FIREBASE_API_KEY: process.env.FIREBASE_API_KEY,

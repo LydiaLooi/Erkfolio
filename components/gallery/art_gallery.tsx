@@ -150,6 +150,7 @@ export default function ArtGallery({ artData, galleryUpdateMethod, originalData,
                                     height={500}
                                     width={500}
                                     loading={index < 3 ? "eager" : "lazy"} // Eager load the first three images, then lazily load the rest.
+                                    priority={index == 0 ? true : false}
                                     sizes="(max-width: 700px) 100vw,
                                     500px"
                                     alt={name}
@@ -161,7 +162,6 @@ export default function ArtGallery({ artData, galleryUpdateMethod, originalData,
                                 />
                                 <div className={artStyles.imageOverlay}>
                                     <span>{name}</span><br />
-                                    <p>{index}</p><br />
                                     <small><Date dateString={date_created} /></small>
                                 </div>
 
