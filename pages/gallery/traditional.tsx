@@ -12,6 +12,7 @@ export default function TraditionalGallery() {
     const limitNumber = 9
     const heading = "Traditional Art Gallery"
     const tagName = process.env.TRADITIONAL_GALLERY_TAG
+    const description = "This category is for the art that I create with non-digital mediums (such as pencils/pens, paints, ...). "
     return (
         <div>
             <Layout>
@@ -21,6 +22,7 @@ export default function TraditionalGallery() {
             </Layout>
             <PaginatedArtGallery
                 title={heading}
+                description={description}
                 limitAmount={limitNumber}
                 fetchArtMethod={fetchArtWithTagByRecent}
                 fetchArtMethodName={`fetchArtWithTagByRecent-${tagName}`}

@@ -6,20 +6,21 @@ import { getLogger } from "../../../logging/log-util";
 const logger = getLogger("edit-art")
 
 import { useRouter } from 'next/router'
-import { fetchProjectById } from "../../../fetches/fetch_project_by_id";
+import { fetchArtByUid } from "../../../fetches/fetch_art_by_id";
 import { longDedupingInterval } from "../../../fetches/swr_config";
+import ArtSubmissionForm from "../../../components/forms/art_submission_form";
 import utilStyles from "../../../styles/utils.module.css"
 
 import { auth } from "../../../scripts/firebase";
 import { isAdminUUID } from "../../../scripts/utils";
-import { onAuthStateChanged } from "@firebase/auth";
-import ProjectSubmissionForm from "../../../components/forms/project_submission_form";
+import { onAuthStateChanged, User } from "@firebase/auth";
+import { ArtInterface } from "../../../interfaces/firebase_interfaces";
 
-export default function EditProject() {
+export default function EditArt() {
     const router = useRouter()
 
-    const [projectData, setProject] = useState()
-    const [user, setUser] = useState(null);
+    const [artData, setArt] = useState<ArtInterface>()
+    const [user, setUser] = useState<User>();
     const [shouldFetch, setShouldFetch] = useState(false)
 
     useEffect(() => {
@@ -32,17 +33,17 @@ export default function EditProject() {
                     router.push('/dashboard', undefined, { shallow: true })
                 }
             } else {
-                setUser(null);
+                setUser(undefined);
                 router.push('/dashboard', undefined, { shallow: true })
             }
         });
     }, []);
 
-    const { proj_uid } = router.query
+    const { uid } = router.query
 
     const { data, error } = useSWR(
-        shouldFetch ? proj_uid : null,
-        fetchProjectById,
+        shouldFetch ? uid : null,
+        fetchArtByUid,
         {
             dedupingInterval: longDedupingInterval,
             onSuccess: () => {
@@ -69,7 +70,7 @@ export default function EditProject() {
 
         if (data) {
             logger.info("SUCCESS", data)
-            setProject(data);
+            setArt(data);
         }
     }, [data]);
 
@@ -78,8 +79,8 @@ export default function EditProject() {
         <Layout>
             {user && isAdminUUID(user.uid) ?
                 <div>
-                    <h2 className={utilStyles.underline}>Editing Project...</h2>
-                    <ProjectSubmissionForm editMode={true} existingData={projectData} />
+                    <h2 className={utilStyles.underline}>Editing Artwork...</h2>
+                    <ArtSubmissionForm editMode={true} existingData={artData}></ArtSubmissionForm>
                 </div>
                 : <p>Loading...</p>
             }

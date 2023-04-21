@@ -12,6 +12,7 @@ export default function DigitalGallery() {
     const limitNumber = 9
     const heading = "Digital Art Gallery"
     const tagName = process.env.DIGITAL_GALLERY_TAG
+    const description = "This gallery is for the art that I create digitally - often using some sort of software (often FireAlpaca or Photoshop) and my drawing tablet."
     return (
         <div>
             <Layout>
@@ -21,6 +22,7 @@ export default function DigitalGallery() {
             </Layout>
             <PaginatedArtGallery
                 title={heading}
+                description={description}
                 limitAmount={limitNumber}
                 fetchArtMethod={fetchArtWithTagByRecent}
                 fetchArtMethodName={`fetchArtWithTagByRecent-${tagName}`}

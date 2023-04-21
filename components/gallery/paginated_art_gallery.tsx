@@ -12,7 +12,7 @@ interface PaginatedArtGalleryProps {
     title: string,
     description: string,
     limitAmount: number,
-    fetchArtMethod: () => Array<ArtInterface>,
+    fetchArtMethod: (args: any) => Promise<Array<ArtInterface>>,
     fetchArtMethodName: string,
 }
 
@@ -106,7 +106,7 @@ export default function PaginatedArtGallery({ title, description, limitAmount, f
         return btn
     }
 
-    async function callToGetMore() {
+    async function methodToFetchMoreData() {
         logger.debug("Get more!", shouldFetch)
         setShouldFetch(true)
     }
@@ -120,7 +120,7 @@ export default function PaginatedArtGallery({ title, description, limitAmount, f
                 displayData={displayData}
                 originalData={originalData}
                 hideFilter={false}
-                methodToFetchMoreData={callToGetMore}
+                methodToFetchMoreData={methodToFetchMoreData}
             />
         </div>
     );

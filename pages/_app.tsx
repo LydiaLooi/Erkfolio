@@ -1,3 +1,4 @@
+import { AppProps } from 'next/app';
 import Script from 'next/script';
 import '../styles/globals.css';
 import Head from 'next/head';
@@ -9,7 +10,11 @@ import { config } from "@fortawesome/fontawesome-svg-core";
 // since it's already imported above
 config.autoAddCss = false;
 
-export default function App({ Component, pageProps }) {
+interface CustomPageProps { // https://stackoverflow.com/a/64722865
+    // Props if needed go here
+}
+
+export default function App({ Component, pageProps }: AppProps<CustomPageProps>) {
     return (
         <>
             <Head>

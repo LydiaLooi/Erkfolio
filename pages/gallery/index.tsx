@@ -10,6 +10,7 @@ const logger = getLogger("gallery-home")
 export default function GalleryHome() {
     const limitNumber = 9
     const heading = "Gallery"
+    const description = "Welcome to my art gallery! This is where I showcase my 'finished' works."
     return (
         <div>
             <Layout>
@@ -19,6 +20,7 @@ export default function GalleryHome() {
             </Layout>
             <PaginatedArtGallery
                 title={heading}
+                description={description}
                 limitAmount={limitNumber}
                 fetchArtMethod={fetchPaginatedArtByRecent}
                 fetchArtMethodName={"fetchPaginatedArtByRecent"}
