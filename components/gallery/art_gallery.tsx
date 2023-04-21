@@ -59,7 +59,7 @@ export default function ArtGallery({ artData, galleryUpdateMethod, originalData,
                 }
             }
         }
-        logger.warn(finalArray)
+        logger.info("Finalarray", finalArray)
         setExistingTags(finalArray)
         filterIfAvailable()
     }, [originalData])
