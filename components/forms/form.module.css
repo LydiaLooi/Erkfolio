@@ -85,10 +85,14 @@
     margin: 0;
     list-style-type: none;
     overflow: hidden;
+    display: flex;
+    flex-wrap: wrap;
+    text-align: center;
+    justify-content: center;
 }
 
+
 .checkbox {
-    float: left;
     margin: 1px;
 }
 
@@ -106,7 +110,6 @@
     width: 1px;
 }
 
-/** ------------------------ **/
 
 .checkboxInput+label {
     padding: 0.75em 1em;
@@ -121,6 +124,11 @@
     color: #4E4E4E;
     position: relative;
     user-select: none;
+}
+
+.altCheckbox+label {
+    padding: 0.15em 0.8em;
+
 }
 
 .checkboxInput+label:hover {

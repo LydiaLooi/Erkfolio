@@ -54,7 +54,6 @@ export default function FilterSearch({ updateMethod, artResultsData }: FilterSea
             msg.style.opacity = "0";
             filterClient(tag_word)
         }
-
     }
 
     function filterClient(tag_word: string) {
