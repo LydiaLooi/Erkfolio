@@ -122,7 +122,7 @@ https://templateyou.com/free-html-css-horizontal-menus/
 **/
 nav {
     max-width: 960px;
-    mask-image: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, #362BCF 25%, #170F40 75%, rgba(255, 255, 255, 0) 100%);
+    mask-image: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, #362BCF 15%, #170F40 85%, rgba(255, 255, 255, 0) 100%);
     margin: 0 auto;
 }
 
@@ -162,6 +162,13 @@ nav ul li a {
 nav ul li a:hover {
     background: rgba(242, 138, 61, 0.1);
     color: #F6B46F;
+}
+
+@media only screen and (max-width: 700px) {
+    nav ul {
+        padding-right: 10px;
+        padding-left: 10px;
+    }
 }
 
 
