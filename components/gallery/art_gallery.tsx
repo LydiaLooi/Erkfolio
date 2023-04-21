@@ -135,7 +135,7 @@ export default function ArtGallery({ artData, galleryUpdateMethod, originalData,
 
                     {!hideFilter ?
                         <div className={searchStyles.searchContainer}>
-                            <span><i>Click on tag(s) below to filter the results:</i></span>
+                            <small><i>Tags you can filter by:</i></small>
                             <TagsListCheckboxes handleCheckboxChangeMethod={handleCheckboxChange} existingTags={existingTags} />
                             <i id="filter-error-msg" className="errorMessage">No results</i>
                         </div>
