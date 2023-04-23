@@ -11,15 +11,41 @@ const logger = getLogger("dashboard");
 import styles from "./form.module.css"
 import Image from 'next/image';
 
-import { projectCollection } from '../../collection_names';
+import { activityCollection, projectCollection } from '../../collection_names';
 import ImagePicker, { ImagePickerData } from './image_picker';
 import ImageThumbnailGrid from './image_thumbnail_grid';
 
-import { getCurrentUnixTimestamp } from '../../scripts/utils'
-import { ProjectDataInterface, ProjectImageInterface } from '../../interfaces/firebase_interfaces';
+import { getCurrentUnixTimestamp, getTodaysDate } from '../../scripts/utils'
+import { ProjectDataInterface, ProjectImageInterface, UploadRecentActivityInterface } from '../../interfaces/firebase_interfaces';
 import { testResize } from './form_utils';
 import newMetadata from '../../scripts/firebase_storage_metadata';
 
+
+async function addRecentActivity(name: string, action: string) {
+    logger.info("Attempting to addRecentActivity")
+
+    let type = "project"
+
+    let uploadActivity: UploadRecentActivityInterface = {
+        action: action,
+        type: type,
+        title: name,
+        collection: projectCollection,
+        date_created: getTodaysDate()
+    }
+    logger.info("GAHH to addRecentActivity", uploadActivity, activityCollection)
+
+    try {
+        logger.debug("activityCollection...", activityCollection)
+        await addDoc(collection(db, activityCollection), uploadActivity)
+        logger.info(`Added ${action} activity`)
+
+
+    } catch (error) {
+        logger.error(error)
+        alert('Failed to add to addRecentActivity')
+    }
+}
 
 interface ProjectSubmissionFormProps {
     editMode?: boolean,
@@ -219,6 +245,7 @@ export default function ProjectSubmissionForm({ editMode = false, existingData }
 
                 await addDoc(collection(db, collectionName), data)
                 logger.info("Successfully added to project collection... Either need to refresh or wait for update.")
+                await addRecentActivity(data.name, "upload")
             }
             window.location.reload();
 

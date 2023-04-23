@@ -50,8 +50,9 @@ export default function ArtGallery({ artData, galleryUpdateMethod, originalData,
     useEffect(() => {
         let tagsSet: Set<string> = new Set();
         let finalArray: Array<TagDataInterface> = [];
-
+        logger.info("OriginalData:", originalData)
         for (const data of originalData) {
+
             for (const tagName of data.tagsArray) {
                 if (!tagsSet.has(tagName)) {
                     tagsSet.add(tagName);

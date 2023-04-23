@@ -12,10 +12,10 @@ const logger = getLogger("dashboard");
 import Image from 'next/image';
 import styles from "./form.module.css";
 
-import { artCollection, tagsCollection } from '../../collection_names';
-import { ArtInterface, TagDataInterface } from '../../interfaces/firebase_interfaces';
+import { activityCollection, artCollection, tagsCollection } from '../../collection_names';
+import { ArtInterface, RecentActivityInterface, TagDataInterface, UploadRecentActivityInterface } from '../../interfaces/firebase_interfaces';
 import { testResize } from './form_utils';
-import { getCurrentUnixTimestamp } from '../../scripts/utils';
+import { getCurrentUnixTimestamp, getTodaysDate } from '../../scripts/utils';
 import newMetadata from '../../scripts/firebase_storage_metadata';
 
 const saveNewTag = async (tagData: TagDataInterface) => {
@@ -44,13 +44,49 @@ function addTags(newTagsArray: Array<string>, tagsArray: Array<string>) {
     }
 }
 
+async function addRecentActivity(name: string, action: string, tags?: Array<string>, dump?: boolean) {
+    logger.info("Attempting to addRecentActivity")
 
-async function deleteArtData(id: string) {
+    let type = "art"
+
+    if (action != "delete" && tags) {
+        if (dump) {
+            type = "misc"
+        } else if (tags.includes(process.env.DIGITAL_GALLERY_TAG!)) {
+            type = process.env.DIGITAL_GALLERY_TAG!
+        } else if (tags.includes(process.env.TRADITIONAL_GALLERY_TAG!)) {
+            type = process.env.TRADITIONAL_GALLERY_TAG!
+        }
+    }
+
+    let uploadActivity: UploadRecentActivityInterface = {
+        action: action,
+        type: type,
+        title: name,
+        collection: artCollection,
+        date_created: getTodaysDate()
+    }
+    logger.info("GAHH to addRecentActivity", uploadActivity, activityCollection)
+
+    try {
+        logger.debug("activityCollection...", activityCollection)
+        await addDoc(collection(db, activityCollection), uploadActivity)
+        logger.info(`Added ${action} activity`)
+
+
+    } catch (error) {
+        logger.error(error)
+        alert('Failed to add to addRecentActivity')
+    }
+}
+
+async function deleteArtData(id: string, name: string) {
     logger.debug("DELETE", id)
     try {
         const docRef = doc(db, artCollection, id);
         await deleteDoc(docRef)
         logger.info("Successfully deleted... Going back to dashboard...")
+        await addRecentActivity(name, "delete")
         window.location.reload();
 
     } catch (error) {
@@ -133,12 +169,15 @@ async function saveOrEditData(artData: UploadArtInterface) {
             logger.debug("Final data..", artData)
             await setDoc(docRef, artData)
             logger.info("Successfully edited... Reloading...")
+            await addRecentActivity(artData.name, "edit", artData.tagsArray, artData.dump)
 
         } else {
             delete artData.id
 
             await addDoc(collection(db, artCollection), artData)
             logger.info("Successfully added to art collection... Either need to refresh or wait for update.")
+            await addRecentActivity(artData.name, "upload", artData.tagsArray, artData.dump)
+
         }
         window.location.reload();
 
@@ -254,7 +293,7 @@ export default function ArtSubmissionForm({ editMode = false, existingData }: Ar
 
         let result = confirm("Are you sure you want to delete this?");
         if (result && existingData) {
-            deleteArtData(existingData.id)
+            deleteArtData(existingData.id, existingData.name)
         } else {
             button.disabled = false;
         }

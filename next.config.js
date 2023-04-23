@@ -17,8 +17,10 @@ module.exports = {
         MAX_WIDTH: process.env.MAX_WIDTH,
         ART_COLLECTION: process.env.ART_COLLECTION,
         TAG_COLLECTION: process.env.TAG_COLLECTION,
+        ACTIVITY_COLLECTION: process.env.ACTIVITY_COLLECTION,
         PROJECT_COLLECTION: process.env.PROJECT_COLLECTION,
         DIGITAL_GALLERY_TAG: process.env.DIGITAL_GALLERY_TAG,
         TRADITIONAL_GALLERY_TAG: process.env.TRADITIONAL_GALLERY_TAG,
+
     }
 }

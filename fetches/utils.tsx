@@ -1,5 +1,5 @@
 import { DocumentData, DocumentSnapshot, QueryDocumentSnapshot } from "firebase/firestore/lite";
-import { ArtInterface, ProjectDataInterface, TagDataInterface } from "../interfaces/firebase_interfaces";
+import { ArtInterface, ProjectDataInterface, TagDataInterface, RecentActivityInterface } from "../interfaces/firebase_interfaces";
 
 export function getArtInterfaceFromDocumentData(doc: QueryDocumentSnapshot<DocumentData> | DocumentSnapshot<DocumentData>): ArtInterface {
 
@@ -46,4 +46,23 @@ export function getTagDataInterfaceFromDocumentData(doc: QueryDocumentSnapshot<D
         id: doc.id,
         name: data.name,
     }
+}
+
+export function getRecentActivityInterfaceFromDocumentData(doc: QueryDocumentSnapshot<DocumentData> | DocumentSnapshot<DocumentData>): RecentActivityInterface {
+    let data = doc.data();
+    if (!data) {
+        throw new Error("Data is undefined from DocumentData")
+    }
+    return {
+        id: doc.id,
+        action: data.action,
+        type: data.type,
+        title: data.title,
+        collection: data.collection,
+        date_created: data.date_created,
+    }
+}
+
+export function capitalizeFirstLetter(string: string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
 }

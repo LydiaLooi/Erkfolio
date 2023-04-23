@@ -121,7 +121,8 @@ export function ImageModal({ clickedImage, updateMethod, editAvailable = true }:
                             id="modal-image"
                             fill={true}
                             alt={alt}
-                            sizes="(max-width: 1200px) 50vw, 100vw"
+                            sizes={alt != "placeholder" ? "(max-width: 1200px) 50vw, 100vw" : "10px"}
+                            quality={alt != "placeholder" ? 100 : 1}
                         />
                     </div>
                     <div className={modalStyles.modalCaption}>

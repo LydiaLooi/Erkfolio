@@ -55,17 +55,19 @@ function Socials() {
     )
 }
 
-export default function Layout({ children }: { children: ReactNode }) {
+export default function Layout({ children, showHeader = true }: { children: ReactNode, showHeader?: boolean }) {
     return (
         <div className={styles.container}>
+            {showHeader ?
+                <header className={styles.header}>
+                    <TopProfile />
+                    <Socials />
 
-            <header className={styles.header}>
+                    <NavBar />
+                </header>
 
-                <TopProfile />
-                <Socials />
+                : null}
 
-                <NavBar />
-            </header>
             <main>{children}</main>
         </div >
     );

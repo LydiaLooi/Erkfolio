@@ -31,3 +31,21 @@ export interface TagDataInterface {
     id?: string,
     name: string,
 }
+
+export interface RecentActivityInterface {
+    id: string,
+    action: string, // upload, edit, delete
+    type: string, // digital, traditional, general, project
+    title: string, // Title of the thing
+    collection: string, //art, projects, ...
+    date_created: string,
+}
+
+export interface UploadRecentActivityInterface {
+    id?: string,
+    action: string, // upload, edit, delete
+    type: string, // digital, traditional, general, project
+    title: string, // Title of the thing
+    collection: string, //art, projects, ...
+    date_created: string,
+}
