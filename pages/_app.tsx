@@ -16,7 +16,7 @@ interface CustomPageProps { // https://stackoverflow.com/a/64722865
 
 export default function App({ Component, pageProps }: AppProps<CustomPageProps>) {
     return (
-        <>
+        <div lang="en">
             <Head>
                 <link rel="icon" href="/favicon.ico" />
 
@@ -33,6 +33,6 @@ export default function App({ Component, pageProps }: AppProps<CustomPageProps>)
             <Component {...pageProps} />
 
             <footer className="footer"><small>Copyright &copy; 2023 Erkfir. All Rights Reserved</small></footer>
-        </>
+        </div>
     );
 }

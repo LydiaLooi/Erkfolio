@@ -36,7 +36,7 @@ function Socials() {
         <div id="social-test">
             <ul className="social">
                 <li>
-                    <a href="https://www.instagram.com/erkfir">
+                    <a href="https://www.instagram.com/erkfir" aria-label="Visit Erkfir's Instagram page">
                         <FontAwesomeIcon
                             icon={faInstagram}
                         />
@@ -44,7 +44,7 @@ function Socials() {
                     </a>
                 </li>
                 <li>
-                    <a href="https://www.twitter.com/erkfir">
+                    <a href="https://www.twitter.com/erkfir" aria-label="Visit Erkfir's Twitter profile">
                         <FontAwesomeIcon
                             icon={faTwitter}
                         />
