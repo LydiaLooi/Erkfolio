@@ -9,6 +9,11 @@ module.exports = {
             },
         ],
     },
+    // https://dev.to/dawsoncodes/how-to-set-html-lang-attribute-in-nextjs-39bg
+    i18n: {
+        locales: ["en"],
+        defaultLocale: "en",
+    },
     env: {
         FIREBASE_API_KEY: process.env.FIREBASE_API_KEY,
         LOG_LEVEL: process.env.LOG_LEVEL,
