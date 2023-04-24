@@ -7,6 +7,8 @@ import { isAdminUUID } from "../scripts/utils";
 import modalStyles from '../styles/modal.module.css';
 import Date from "./date";
 
+import { motion } from "framer-motion"
+
 import { getLogger } from "../logging/log-util";
 import { ModalDisplayImage } from "../interfaces/modals";
 
@@ -114,17 +116,26 @@ export function ImageModal({ clickedImage, updateMethod, editAvailable = true }:
                 }}>
 
 
-                    <div className={modalStyles.imageContainer}>
-                        <Image
-                            className={modalStyles.modalImage}
-                            src={url}
-                            id="modal-image"
-                            fill={true}
-                            alt={alt}
-                            sizes={alt != "placeholder" ? "(max-width: 1200px) 50vw, 100vw" : "10px"}
-                            quality={alt != "placeholder" ? 100 : 1}
-                        />
-                    </div>
+                    <motion.div key={url} className={modalStyles.imageContainer}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                    >
+
+                        {alt != "placeholder" ?
+
+                            <Image
+                                className={modalStyles.modalImage}
+                                src={url}
+                                id="modal-image"
+                                fill={true}
+                                alt={alt}
+                                sizes={alt != "placeholder" ? "(max-width: 1200px) 50vw, 100vw" : "10px"}
+                                quality={alt != "placeholder" ? 100 : 1}
+                            />
+
+                            : <div className={modalStyles.placeholderDiv} />}
+
+                    </motion.div>
                     <div className={modalStyles.modalCaption}>
                         <h3>{clickedImage.name}</h3>
                         <Date dateString={clickedImage.date_created}></Date>

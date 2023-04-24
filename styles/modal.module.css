@@ -101,7 +101,7 @@
 
 .imageContainer {
     width: 50vw;
-    max-width: 850px;
+    max-width: 800px;
     padding: 40px;
     display: grid;
     place-items: center;
@@ -160,4 +160,11 @@
     object-fit: contain;
     border-radius: 10px;
     transition: ease 0.2s;
+}
+
+.placeholderDiv {
+    background-color: #180E2E;
+    height: 800px;
+    width: 800px;
+    border-radius: 5px;
 }
