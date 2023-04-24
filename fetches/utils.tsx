@@ -66,3 +66,11 @@ export function getRecentActivityInterfaceFromDocumentData(doc: QueryDocumentSna
 export function capitalizeFirstLetter(string: string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
+
+export function toPastTense(word: string): string {
+    if (word.endsWith("e")) {
+        return `${word}d`;
+    } else {
+        return `${word}ed`;
+    }
+}

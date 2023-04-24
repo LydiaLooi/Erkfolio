@@ -8,7 +8,7 @@ import useSWR from 'swr'
 import { fetchRecentActivity } from "../fetches/fetch_recent_activity";
 import { longDedupingInterval } from "../fetches/swr_config";
 import { getLogger } from "../logging/log-util";
-import { capitalizeFirstLetter } from "../fetches/utils";
+import { capitalizeFirstLetter, toPastTense } from "../fetches/utils";
 
 const logger = getLogger("recent-activity")
 
@@ -32,6 +32,22 @@ export default function RecentActivity() {
         }
     }, [data]);
 
+    function getGalleryLink(type: string) {
+        switch (type) {
+            case "art":
+                return { linkText: "the gallery", linkPath: "gallery" };
+            case process.env.DIGITAL_GALLERY_TAG:
+                return { linkText: "the digital gallery", linkPath: "gallery/digital" };
+            case process.env.TRADITIONAL_GALLERY_TAG:
+                return { linkText: "the traditional gallery", linkPath: "gallery/traditional" };
+            case "misc":
+                return { linkText: "the misc. gallery", linkPath: "gallery/misc" };
+            case "project":
+                return { linkText: "other", linkPath: "other" };
+            default:
+                return { linkText: "... something?", linkPath: "" };
+        }
+    }
 
 
     return (
@@ -42,18 +58,11 @@ export default function RecentActivity() {
                 <ul className={recentStyles.recentContainer}>
                     {activityData.map(({ id, title, action, type, date_created }) => (
                         <li key={id}>
-                            <small><Date dateString={date_created} /> - {capitalizeFirstLetter(action)}ed <b>{title}</b> to
-                                {type === "art" ? (
-                                    <Link href="/gallery"> the gallery</Link>
-                                ) : type === process.env.DIGITAL_GALLERY_TAG ? (
-                                    <Link href="/gallery/digital"> the digital gallery</Link>
-                                ) : type === process.env.TRADITIONAL_GALLERY_TAG ? (
-                                    <Link href="/gallery/traditional"> the traditional gallery</Link>
-                                ) : type === "misc" ? (
-                                    <Link href="/gallery/misc"> the misc. gallery</Link>
-                                ) : type === "project" ? (
-                                    <Link href="/other"> other</Link>
-                                ) : null}
+                            <small><Date dateString={date_created} /> - {toPastTense(capitalizeFirstLetter(action))} <b>{title}</b> to{" "}
+                                {type &&
+                                    <Link href={`/${getGalleryLink(type).linkPath}`}>{" "}
+                                        {`${getGalleryLink(type).linkText}`}
+                                    </Link>}
                             </small>
                         </li>
                     ))}
