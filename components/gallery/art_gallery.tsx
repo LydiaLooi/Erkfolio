@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 import Image from "next/image";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { ArtInterface, TagDataInterface } from "../../interfaces/firebase_interfaces";
@@ -128,62 +129,66 @@ export default function ArtGallery({ artData, galleryUpdateMethod, originalData,
     }
 
 
-    if (artData && artData.length != 0) {
-        return (
-            <section>
-                <ImageModal clickedImage={clickedImage} updateMethod={setClickedImage} />
-                <div className="wrapper">
+    return (
+        <section>
+            <ImageModal clickedImage={clickedImage} updateMethod={setClickedImage} />
 
-                    {!hideFilter ?
-                        <div className={searchStyles.searchContainer}>
-                            <small><i>Tags you can filter by:</i></small>
-                            <TagsListCheckboxes handleCheckboxChangeMethod={handleCheckboxChange} existingTags={existingTags} />
-                            <i id="filter-error-msg" className="errorMessage">No results</i>
-                        </div>
-                        : null}
+            <div className="wrapper">
 
-                    <div className="gallery">
+                {artData && artData.length > 0 ?
+                    <div>
 
-                        {artData.map(({ id, name, description, date_created, pinned, tagsArray, url }, index) => (
-                            <div key={id} className={artStyles.artImageContainer}>
-                                <Image
-                                    src={url}
-                                    height={500}
-                                    width={500}
-                                    loading={index < 3 ? "eager" : "lazy"} // Eager load the first three images, then lazily load the rest.
-                                    priority={index == 0 ? true : false}
-                                    sizes="(max-width: 700px) 100vw,
-                                    500px"
-                                    alt={name}
-                                    onClick={() => {
-                                        setClickedImage({ id, description, url, name, date_created, tagsArray });
-                                        showModal()
-                                        disableBodyScroll()
-                                    }}
-                                />
-                                <div className={artStyles.imageOverlay}>
-                                    <span>{name}</span><br />
-                                    <small><Date dateString={date_created} /></small>
-                                </div>
-
+                        {!hideFilter ?
+                            <div className={searchStyles.searchContainer}>
+                                <small><i>Tags you can filter by:</i></small>
+                                <TagsListCheckboxes handleCheckboxChangeMethod={handleCheckboxChange} existingTags={existingTags} />
+                                <i id="filter-error-msg" className="errorMessage">No results</i>
                             </div>
-                        ))}
+                            : null}
 
+                        <div className="gallery">
+
+                            {artData.map(({ id, name, description, date_created, pinned, tagsArray, url }, index) => (
+                                <motion.div className={artStyles.artImageContainer} key={id}
+                                    initial={{ y: 100, opacity: 0 }}
+                                    animate={{ y: 0, opacity: 1 }}
+                                    transition={{ duration: 0.4 }}
+                                    exit={{ y: 200, opacity: 0 }}
+                                    layout
+                                >
+                                    <Image
+                                        src={url}
+                                        height={500}
+                                        width={500}
+                                        loading={index < 3 ? "eager" : "lazy"} // Eager load the first three images, then lazily load the rest.
+                                        priority={index == 0 ? true : false}
+                                        sizes="(max-width: 700px) 100vw,
+                                    500px"
+                                        alt={name}
+                                        onClick={() => {
+                                            setClickedImage({ id, description, url, name, date_created, tagsArray });
+                                            showModal()
+                                            disableBodyScroll()
+                                        }}
+                                    />
+                                    <div className={artStyles.imageOverlay}>
+                                        <span>{name}</span><br />
+                                        <small><Date dateString={date_created} /></small>
+                                    </div>
+
+                                </motion.div>
+                            ))}
+
+                        </div>
                     </div>
-                </div>
-            </section>
-        )
-    } else {
-        return (
-            <section>
-                <div className="wrapper">
+                    :
                     <div className="gallery">
                         <div className="placeholder"></div>
                         <div className="placeholder"></div>
                         <div className="placeholder"></div>
                     </div>
-                </div>
-            </section>
-        )
-    }
+                }
+            </div>
+        </section >
+    )
 }

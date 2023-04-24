@@ -1,15 +1,16 @@
 import Head from 'next/head';
-import Layout, { siteTitle } from '../components/layout';
-import utilStyles from '../styles/utils.module.css';
-import { useEffect, useState } from 'react';
-import ArtGallery from '../components/gallery/art_gallery';
 import Link from 'next/link';
-import useSWR from 'swr'
+import { useEffect, useState } from 'react';
+import useSWR from 'swr';
+import ArtGallery from '../components/gallery/art_gallery';
+import Layout from '../components/layout';
+import RecentActivity from '../components/recent_activity';
+import Transition from '../components/transition';
 import { fetchPinnedArt } from '../fetches/pinned_art';
 import { longDedupingInterval } from '../fetches/swr_config';
-import { getLogger } from "../logging/log-util";
 import { ArtInterface } from '../interfaces/firebase_interfaces';
-import RecentActivity from '../components/recent_activity';
+import { getLogger } from "../logging/log-util";
+import utilStyles from '../styles/utils.module.css';
 
 const logger = getLogger("home");
 
@@ -49,19 +50,21 @@ export default function Home() {
             <h2 className={utilStyles.underline} >
                 Pinned Works
             </h2>
-            <ArtGallery
-                artData={artData}
-                hideFilter={true}
-                galleryUpdateMethod={undefined}
-                originalData={artData}
-            />
+            <Transition>
+                <ArtGallery
+                    artData={artData}
+                    hideFilter={true}
+                    galleryUpdateMethod={undefined}
+                    originalData={artData}
+                />
 
-            <div className={utilStyles.marginBottom50px}>
-                <Link className='cool-button centred' href="/gallery" > See Full Gallery </Link>
-            </div>
-            <Layout showHeader={false}>
-                <RecentActivity />
-            </Layout>
+                <div className={utilStyles.marginBottom50px}>
+                    <Link className='cool-button centred' href="/gallery" > See Full Gallery </Link>
+                </div>
+                <Layout showHeader={false}>
+                    <RecentActivity />
+                </Layout>
+            </Transition>
         </div>
     );
 }

@@ -8,6 +8,7 @@ import { getLogger } from "../logging/log-util";
 import artStyles from './gallery/art_gallery.module.css';
 import Date from "./date";
 import { ProjectDataInterface } from "../interfaces/firebase_interfaces";
+import { motion } from "framer-motion"
 
 const logger = getLogger("project-gallery");
 
@@ -56,7 +57,15 @@ export default function ProjectGallery({ projectData, projectDataUpdateMethod }:
                     <div className="gallery">
 
                         {projectData.map(({ id, name, description, date_created, main_image_url }, index) => (
-                            <div key={id} className={artStyles.artImageContainer}>
+                            <motion.div key={id} className={artStyles.artImageContainer}
+
+                                initial={{ y: 100, opacity: 0 }}
+                                animate={{ y: 0, opacity: 1 }}
+                                transition={{ duration: 0.4 }}
+                                exit={{ y: 200, opacity: 0 }}
+                                layout
+
+                            >
                                 <Image
                                     src={main_image_url}
                                     height={500}
@@ -72,7 +81,7 @@ export default function ProjectGallery({ projectData, projectDataUpdateMethod }:
                                     <small><Date dateString={date_created} /></small>
                                 </div>
 
-                            </div>
+                            </motion.div>
                         ))}
 
                     </div>

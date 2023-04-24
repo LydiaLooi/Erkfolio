@@ -1,9 +1,8 @@
-import Head from 'next/head';
-import Image from 'next/image';
-import styles from './layout.module.css';
-import utilStyles from '../styles/utils.module.css';
-import NavBar from './navbar';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Image from 'next/image';
+import utilStyles from '../styles/utils.module.css';
+import styles from './layout.module.css';
+import NavBar from './navbar';
 
 import {
     faInstagram,
@@ -67,8 +66,7 @@ export default function Layout({ children, showHeader = true }: { children: Reac
                 </header>
 
                 : null}
-
-            <main>{children}</main>
+            {children}
         </div >
     );
 }

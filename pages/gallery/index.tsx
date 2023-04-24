@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import Layout from '../../components/layout';
-import { fetchPaginatedArtByRecent } from '../../fetches/paginated_all_art_by_recent'
+import { fetchPaginatedArtByRecent } from '../../fetches/paginated_all_art_by_recent';
 
 import PaginatedArtGallery from '../../components/gallery/paginated_art_gallery';
 

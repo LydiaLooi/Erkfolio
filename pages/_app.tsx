@@ -1,8 +1,8 @@
-import { AppProps } from 'next/app';
-import Script from 'next/script';
-import '../styles/globals.css';
-import Head from 'next/head';
 import "@fortawesome/fontawesome-svg-core/styles.css";
+import { AnimatePresence } from 'framer-motion';
+import { AppProps } from 'next/app';
+import Head from 'next/head';
+import '../styles/globals.css';
 
 // https://www.slingacademy.com/article/how-to-use-font-awesome-with-next-js/
 import { config } from "@fortawesome/fontawesome-svg-core";
@@ -30,8 +30,12 @@ export default function App({ Component, pageProps }: AppProps<CustomPageProps>)
 
                 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
             </Head>
-            <Component {...pageProps} />
-
+            <AnimatePresence
+                key="app-animate-presence"
+                initial={true}
+                mode="wait">
+                <Component {...pageProps} />
+            </AnimatePresence>
             <footer className="footer"><small>Copyright &copy; 2023 Erkfir. All Rights Reserved</small></footer>
         </>
     );
