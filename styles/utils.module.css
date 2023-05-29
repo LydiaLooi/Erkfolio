@@ -157,3 +157,9 @@
     border-radius: 10px;
     transition: ease 0.2s;
 }
+
+.banner {
+    width: 100%;
+    /* background-color: #362BCF; */
+    text-align: center;
+}

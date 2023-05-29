@@ -44,7 +44,7 @@ export default function Home() {
                     <title>Erkfir</title>
                 </Head>
                 <section >
-                    <p className={utilStyles.paddingX15px} > Welcome to my art portfolio! This site is mainly for me to easily organise and show the different types of artwork that I do (i.e., traditional vs.digital). Enjoy~!</p>
+                    <p className={utilStyles.paddingX15px} > Welcome to my art portfolio! This site is mainly for me to easily organise and show the different types of artwork that I do (i.e., traditional vs. digital). Enjoy~!</p>
                 </section>
             </Layout>
             <h2 className={utilStyles.underline} >

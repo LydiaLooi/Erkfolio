@@ -36,9 +36,9 @@ export default function NavBar() {
                     <li>
                         <Link href="/other">Other</Link>
                     </li>
-                    {/*<li>
-                    <Link href="/commissions">Commissions</Link>
-                </li> */}
+                    <li>
+                        <Link href="/commissions">Commissions</Link>
+                    </li>
                     {user && isAdminUUID(user.uid) ?
                         <motion.li key="dashboard-nav" className={`absolute`}
                             initial={{ opacity: 0 }}
