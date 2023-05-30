@@ -6,6 +6,7 @@ import '../styles/globals.css';
 
 // https://www.slingacademy.com/article/how-to-use-font-awesome-with-next-js/
 import { config } from "@fortawesome/fontawesome-svg-core";
+import KoFi from "../components/kofi/kofi";
 // Tell Font Awesome to skip adding the CSS automatically 
 // since it's already imported above
 config.autoAddCss = false;
@@ -36,6 +37,7 @@ export default function App({ Component, pageProps }: AppProps<CustomPageProps>)
                 mode="wait">
                 <Component {...pageProps} />
             </AnimatePresence>
+            <KoFi color="#F6B46F" id="Erkfir" label="Support Me"/>
             <footer className="footer"><small>Copyright &copy; 2023 Erkfir. All Rights Reserved</small></footer>
         </>
     );
