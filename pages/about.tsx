@@ -19,7 +19,7 @@ export default function AboutPage() {
                     <p>I've been pretty inconsistent with drawing and painting, but I figured that creating a cool portfolio site might encourage me to create more art!</p>
 
                     <h3 className={utilStyles.underline}>Contact Me</h3>
-                    Flick me a DM on <a href="https://instagram.com/erkfir">Instagram (@erkfir)</a> or Discord (Erkfir#9999)
+                    Flick me a DM on <a href="https://instagram.com/erkfir">Instagram (@erkfir)</a> or Discord (@erkfir)
 
 
                     <h3 className={utilStyles.underline}>What I Use</h3>

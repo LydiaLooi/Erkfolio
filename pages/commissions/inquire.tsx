@@ -24,7 +24,7 @@ export default function CommissionInquiry() {
 
                     If you'd like the inquire about a commission, contact me on one of the following platforms:
                     <ul>
-                        <li>Discord: <i>Erkfir#9999</i> or <i>@erkfir</i> after Discord name change</li>
+                        <li>Discord: <i>@erkfir</i></li>
                         <li>Instagram: <i><a href="https://www.instagram.com/erkfir">@erkfir</a></i></li>
                         <li>Email: <i>erkfir@gmail.com</i></li>
                     </ul>
