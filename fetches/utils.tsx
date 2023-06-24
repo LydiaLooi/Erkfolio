@@ -16,7 +16,9 @@ export function getArtInterfaceFromDocumentData(doc: QueryDocumentSnapshot<Docum
         pinned: data.pinned,
         dump: data.dump,
         tagsArray: data.tagsArray,
-        url: data.url
+        url: data.url,
+        linkText: data.linkText,
+        linkUrl: data.linkUrl
     }
 }
 

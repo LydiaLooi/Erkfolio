@@ -7,6 +7,8 @@ export interface ArtInterface {
     dump: boolean,
     tagsArray: Array<string>,
     url: string,
+    linkText: string,
+    linkUrl: string
 }
 
 export interface ProjectImageInterface {
