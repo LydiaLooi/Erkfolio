@@ -4,5 +4,7 @@ export interface ModalDisplayImage {
     url?: string,
     description?: string,
     date_created?: string,
-    tagsArray?: Array<string>
+    tagsArray?: Array<string>,
+    linkText?: string,
+    linkUrl?: string
 }

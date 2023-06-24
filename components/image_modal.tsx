@@ -140,6 +140,8 @@ export function ImageModal({ clickedImage, updateMethod, editAvailable = true }:
                         <h3>{clickedImage.name}</h3>
                         <Date dateString={clickedImage.date_created}></Date>
                         <p>{clickedImage.description}</p>
+                        <p><strong>{clickedImage.linkText}</strong></p>
+                        <i><a href={clickedImage.linkUrl}>{clickedImage.linkUrl}</a></i>
 
                         {tags.length > 0 ? <p><small>Tags: <i>{tags}</i></small></p> : null}
 

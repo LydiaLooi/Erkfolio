@@ -148,7 +148,7 @@ export default function ArtGallery({ artData, galleryUpdateMethod, originalData,
 
                         <div className="gallery">
 
-                            {artData.map(({ id, name, description, date_created, pinned, tagsArray, url }, index) => (
+                            {artData.map(({ id, name, description, date_created, pinned, tagsArray, url, linkText, linkUrl }, index) => (
                                 <motion.div className={artStyles.artImageContainer} key={id}
                                     initial={{ y: 100, opacity: 0 }}
                                     animate={{ y: 0, opacity: 1 }}
@@ -166,7 +166,7 @@ export default function ArtGallery({ artData, galleryUpdateMethod, originalData,
                                     500px"
                                         alt={name}
                                         onClick={() => {
-                                            setClickedImage({ id, description, url, name, date_created, tagsArray });
+                                            setClickedImage({ id, description, url, name, date_created, tagsArray, linkText, linkUrl  });
                                             showModal()
                                             disableBodyScroll()
                                         }}

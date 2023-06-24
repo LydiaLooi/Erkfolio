@@ -104,7 +104,9 @@ interface UploadArtInterface {
     dump: boolean,
     url?: string,
     image?: Blob,
-    tagsArray: Array<string>
+    tagsArray: Array<string>,
+    linkText?: string,
+    linkUrl?: string
 }
 
 interface UploadImageAndSaveProps {
@@ -115,10 +117,12 @@ interface UploadImageAndSaveProps {
     pinned: boolean,
     dump: boolean,
     image: Blob,
-    tagsArray: Array<string>
+    tagsArray: Array<string>,
+    linkText: string,
+    linkUrl: string
 }
 
-async function uploadImageAndSave({ id, name, date_created, description, pinned, dump, image, tagsArray }: UploadImageAndSaveProps) {
+async function uploadImageAndSave({ id, name, date_created, description, pinned, dump, image, tagsArray, linkText, linkUrl }: UploadImageAndSaveProps) {
     logger.debug("uploadImageAndSave...", name, description)
     const storageRef = ref(storage, `${artCollection}/${image.name}-${name}-${getCurrentUnixTimestamp()}`)
     // UPDATE METADATA
@@ -138,7 +142,7 @@ async function uploadImageAndSave({ id, name, date_created, description, pinned,
             logger.info("Updated metadata", results)
 
             logger.info("Obtained downloadUrl")
-            saveOrEditData({ id, name, description, tagsArray, date_created, pinned, dump, url: downloadUrl });
+            await saveOrEditData({ id, name, description, tagsArray, date_created, pinned, dump, url: downloadUrl, linkText, linkUrl });
         }
 
     } catch (error) {
@@ -219,6 +223,8 @@ export default function ArtSubmissionForm({ editMode = false, existingData }: Ar
     const pinnedInput = useRef<HTMLInputElement | null>(null);
     const dumpInput = useRef<HTMLInputElement | null>(null);
     const checkedTags = useRef<Array<string>>([]);
+    const linkTextInput = useRef<HTMLInputElement | null>(null);
+    const linkUrlInput = useRef<HTMLInputElement | null>(null);
 
     function prefillTags() {
         logger.debug("Prefilling...", checkedTags.current)
@@ -239,6 +245,8 @@ export default function ArtSubmissionForm({ editMode = false, existingData }: Ar
             pinnedInput.current!.checked = existingData.pinned
             dumpInput.current!.checked = existingData.dump
             checkedTags.current = existingData.tagsArray
+            linkTextInput.current!.value = existingData.linkText
+            linkUrlInput.current!.value = existingData.linkUrl
             prefillTags()
         }
     }, [existingData])
@@ -257,12 +265,14 @@ export default function ArtSubmissionForm({ editMode = false, existingData }: Ar
         const newTags = newTagsInput.current!.value;
         const pinned = pinnedInput.current!.checked;
         const dump = dumpInput.current!.checked;
+        const linkText = linkTextInput.current!.value;
+        const linkUrl = linkUrlInput.current!.value;
 
         let newTagsArray = newTags.split(",").map(tag => tag.trim());
 
         addTags(newTagsArray, checkedTags.current);
 
-        let data: UploadArtInterface = { name, date_created, description, tagsArray: checkedTags.current, pinned, dump }
+        let data: UploadArtInterface = { name, date_created, description, tagsArray: checkedTags.current, pinned, dump, linkText, linkUrl}
         if (editMode && existingData) {
             data.id = existingData.id
             data.url = existingData.url
@@ -353,6 +363,12 @@ export default function ArtSubmissionForm({ editMode = false, existingData }: Ar
                     <label>Description</label><textarea name='description' ref={descriptionInput} placeholder="Description" />
                 </p>
 
+                <p className={`${styles.field}`}>
+                    <label>Link Text</label><input name='linkText' ref={linkTextInput} type="text" placeholder="Link Text" />
+                </p>
+                <p className={`${styles.field}`}>
+                    <label>Link URL (make sure you put the https://)</label><input name='linkUrl' ref={linkUrlInput} type="text" placeholder="Link URL" />
+                </p>
                 <TagsListCheckboxes handleCheckboxChangeMethod={checkboxHandler}></TagsListCheckboxes>
 
                 <p className={`${styles.field}`}>
